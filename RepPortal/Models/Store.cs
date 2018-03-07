@@ -85,7 +85,12 @@ namespace RepPortal.Models
         [Display(Name = "Last Order Paid Date")]
         public DateTime LastOrderPaidDate { get; set; }
 
-    
+        
+        public int Lat { get; set; }
+        
+        public int Long { get; set; }
+
+
         public virtual ICollection<StoreFlag> StoreFlags { get; set; }
         public virtual ICollection<StoreNote> StoreNotes { get; set; }
 
