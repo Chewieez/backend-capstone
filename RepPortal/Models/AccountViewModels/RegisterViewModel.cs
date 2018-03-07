@@ -23,5 +23,17 @@ namespace RepPortal.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Company if Applicable")]
+        [StringLength(50, ErrorMessage = "Please shorten Company Name to less than 50 characters.")]
+        public string Company { get; set; }
     }
 }

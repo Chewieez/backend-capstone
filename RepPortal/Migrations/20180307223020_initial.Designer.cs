@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using RepPortal.Data;
 using System;
 
-namespace RepPortal.Data.Migrations
+namespace RepPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180307210138_initial")]
+    [Migration("20180307223020_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
