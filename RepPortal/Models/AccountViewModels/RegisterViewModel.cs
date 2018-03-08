@@ -35,5 +35,8 @@ namespace RepPortal.Models.AccountViewModels
         [Display(Name = "Company if Applicable")]
         [StringLength(50, ErrorMessage = "Please shorten Company Name to less than 50 characters.")]
         public string Company { get; set; }
+
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
     }
 }

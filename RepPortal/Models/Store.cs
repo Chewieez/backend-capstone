@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RepPortal.Models
 {
@@ -29,7 +30,6 @@ namespace RepPortal.Models
 
         [Required]
         [Display(Name = "State")]
-        [StringLength(60, ErrorMessage = "Please shorten Street Address to less than 60 characters.")]
         public int StateId { get; set; }
 
         public State State { get; set; }
@@ -53,10 +53,11 @@ namespace RepPortal.Models
 
         [Required]
         [DataType(DataType.Date)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Please select a status from list.")]
+        //[Range(1, int.MaxValue, ErrorMessage = "Please select a status from list.")]
         public int StatusId { get; set; }
 
         public Status Status { get; set; }
@@ -67,6 +68,7 @@ namespace RepPortal.Models
         public DateTime? DateClosed { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [Display(Name = "Last Order Total")]
         public double LasterOrderTotal { get; set; }
 
