@@ -1,0 +1,120 @@
+﻿@model RepPortal.Models.Store
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Store</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StreetAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StreetAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Zipcode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Zipcode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WebsiteURL)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WebsiteURL)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateAdded)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateAdded)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateClosed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateClosed)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LasterOrderTotal)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LasterOrderTotal)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastOrderDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastOrderDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastOrderShipDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastOrderShipDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastOrderPaidDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastOrderPaidDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Lat)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Lat)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Long)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Long)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.State.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status.Color)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.StoreId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -71,6 +71,35 @@ namespace RepPortal.Data
                     context.SaveChanges();
                 }
 
+                if (!context.Status.Any())
+                {
+                    var statuses = new Status[]
+                    {
+                        new Status {
+                            Name = "Active",
+                            Color = "Green"
+                        },
+                        new Status {
+                            Name = "Warn",
+                            Color = "Yellow"
+                        },
+                        new Status {
+                            Name = "Inactive",
+                            Color = "Red"
+                        },
+                        new Status {
+                            Name = "Closed",
+                            Color = "Grey"
+                        }
+                    };
+
+                    foreach (Status s in statuses)
+                    {
+                        context.Status.Add(s);
+                    }
+                    context.SaveChanges();
+                }
+
             }
         }
     }

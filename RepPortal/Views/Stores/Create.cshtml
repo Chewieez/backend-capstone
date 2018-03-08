@@ -1,0 +1,99 @@
+﻿@model RepPortal.Models.Store
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Add A Store</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StreetAddress" class="control-label"></label>
+                <input asp-for="StreetAddress" class="form-control" />
+                <span asp-validation-for="StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateId" class="control-label"></label>
+                <select asp-for="StateId" class ="form-control" asp-items="ViewBag.StateId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Zipcode" class="control-label"></label>
+                <input asp-for="Zipcode" class="form-control" />
+                <span asp-validation-for="Zipcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WebsiteURL" class="control-label"></label>
+                <input asp-for="WebsiteURL" class="form-control" />
+                <span asp-validation-for="WebsiteURL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateAdded" class="control-label"></label>
+                <input asp-for="DateAdded" class="form-control" />
+                <span asp-validation-for="DateAdded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusId" class="control-label"></label>
+                <select asp-for="StatusId" class ="form-control" asp-items="ViewBag.StatusId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateClosed" class="control-label"></label>
+                <input asp-for="DateClosed" class="form-control" />
+                <span asp-validation-for="DateClosed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LasterOrderTotal" class="control-label"></label>
+                <input asp-for="LasterOrderTotal" class="form-control" />
+                <span asp-validation-for="LasterOrderTotal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastOrderDate" class="control-label"></label>
+                <input asp-for="LastOrderDate" class="form-control" />
+                <span asp-validation-for="LastOrderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastOrderShipDate" class="control-label"></label>
+                <input asp-for="LastOrderShipDate" class="form-control" />
+                <span asp-validation-for="LastOrderShipDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastOrderPaidDate" class="control-label"></label>
+                <input asp-for="LastOrderPaidDate" class="form-control" />
+                <span asp-validation-for="LastOrderPaidDate" class="text-danger"></span>
+            </div>
+            <input asp-for="Lat" type="hidden" id="Map-Lat" />
+            <input asp-for="Long" type="hidden" id="Map-Long"/>
+           
+            <div class="form-group">
+                <input type="submit" value="Create" id="CreateStoreBtn" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

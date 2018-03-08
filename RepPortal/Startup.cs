@@ -36,6 +36,14 @@ namespace RepPortal
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
+            /*
+                Create a service for DI that will return the ApplicationConfiguration
+                section of appsettings.
+             */
+            services.AddSingleton<IApplicationConfiguration, ApplicationConfiguration>(
+                e => Configuration.GetSection("ApplicationConfiguration")
+                        .Get<ApplicationConfiguration>());
+
             services.AddMvc();
         }
 
