@@ -20,25 +20,38 @@ function initMap() {
 
 //get geocode data of the new store upon creation 
 $("#CreateStoreBtn").click(evt => {
-    evt.preventDefault()
-    //ajax request to get location
-    const address = $("#formStreetAddress").val()
-    const city = $("#formCity").val()
-    //const state = $("#formState").val()
-    const zip = $("#formZipcode").val()
-    $.ajax({
-        method: "GET",
-        url: `https://maps.googleapis.com/maps/api/geocode/json?address=${address}+${city}+${zip}&key=${googleAPI.key}`
-    }).then(res => {
-        //geolocation of the address entered
-        let geoLocation = res.results["0"].geometry.location
+    // get the value out of the address fields
+    const address = $("#formStreetAddress").val() || ""
+    const city = $("#formCity").val() || ""
+    const zip = $("#formZipcode").val() || ""
 
-        //assign to position input
-        //let geo = JSON.stringify(geoLocation)
-        $("#Map-Lat").val(geoLocation.lat)
-        $("#Map-Long").val(geoLocation.lng)
+    // check that all fields are entered
+    if (address !== "" && city !== "" && zip !== "") {
+        // prevent form from submitting
+        evt.preventDefault()
 
-        //submit form
-        $('form').submit()
-    })
+        //ajax request to get geolocation data for address
+        $.ajax({
+            method: "GET",
+            url: `https://maps.googleapis.com/maps/api/geocode/json?address=${address}+${city}+${zip}&key=${googleAPI.key}`
+        }).then(res => {
+            if (res.results.length === 1) {
+                //geolocation of the address entered
+                let geoLocation = res.results["0"].geometry.location
+                if (geoLocation) {
+                    //assign to form fields
+                    $("#Map-Lat").val(geoLocation.lat)
+                    $("#Map-Long").val(geoLocation.lng)
+
+                }
+
+                //submit form
+                $('form').submit()
+            } else {
+                alert("Error retrieving geolocation coordinates. Check your address and try again.")
+            }
+
+        })
+    }
+
 })
