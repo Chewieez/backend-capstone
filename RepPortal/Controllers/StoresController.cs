@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -54,6 +55,7 @@ namespace RepPortal.Controllers
         }
 
         // GET: Stores/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name");

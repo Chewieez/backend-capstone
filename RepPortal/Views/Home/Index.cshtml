@@ -1,16 +1,20 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@if (SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
 {
     <div>
 
         <a asp-controller="Stores" asp-action="Create" class="btn btn-default">Add A Store</a>
     </div>
-
-    <div id="map"></div>
 }
 
+@if (SignInManager.IsSignedIn(User))
+{
+<div id="map"></div>
+}

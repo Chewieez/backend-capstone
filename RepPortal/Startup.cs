@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using RepPortal.Data;
 using RepPortal.Models;
 using RepPortal.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace RepPortal
 {
