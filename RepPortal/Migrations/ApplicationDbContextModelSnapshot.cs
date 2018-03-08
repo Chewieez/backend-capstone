@@ -241,20 +241,20 @@ namespace RepPortal.Migrations
                     b.Property<DateTime?>("DateClosed");
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
                     b.Property<DateTime>("LastOrderDate");
 
-                    b.Property<DateTime>("LastOrderPaidDate");
+                    b.Property<DateTime?>("LastOrderPaidDate");
 
                     b.Property<DateTime>("LastOrderShipDate");
 
-                    b.Property<double>("LasterOrderTotal");
+                    b.Property<double>("LastOrderTotal");
 
-                    b.Property<int>("Lat");
+                    b.Property<string>("Lat");
 
-                    b.Property<int>("Long");
+                    b.Property<string>("Long");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -264,8 +264,7 @@ namespace RepPortal.Migrations
                         .IsRequired()
                         .HasMaxLength(11);
 
-                    b.Property<int>("StateId")
-                        .HasMaxLength(60);
+                    b.Property<int>("StateId");
 
                     b.Property<int>("StatusId");
 

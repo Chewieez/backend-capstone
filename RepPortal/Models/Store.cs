@@ -70,7 +70,7 @@ namespace RepPortal.Models
         [Required]
         [DisplayFormat(DataFormatString = "{0:C}")]
         [Display(Name = "Last Order Total")]
-        public double LasterOrderTotal { get; set; }
+        public double LastOrderTotal { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -82,15 +82,14 @@ namespace RepPortal.Models
         [Display(Name = "Last Order Ship Date")]
         public DateTime LastOrderShipDate { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Last Order Paid Date")]
-        public DateTime LastOrderPaidDate { get; set; }
+        public DateTime? LastOrderPaidDate { get; set; }
 
         
-        public int Lat { get; set; }
+        public string Lat { get; set; }
         
-        public int Long { get; set; }
+        public string Long { get; set; }
 
 
         public virtual ICollection<StoreFlag> StoreFlags { get; set; }
