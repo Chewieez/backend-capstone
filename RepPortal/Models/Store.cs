@@ -40,7 +40,7 @@ namespace RepPortal.Models
 
         [Required]
         [Display(Name = "Phone Number")]
-        [StringLength(11, ErrorMessage = "The phone number is too long.")]
+        [StringLength(11, ErrorMessage = "Please use numbers only, no dashes or symbols.")]
         public string PhoneNumber { get; set; }
         
         [Display(Name = "Website")]

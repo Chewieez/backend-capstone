@@ -30,8 +30,17 @@ namespace RepPortal.Controllers
         // GET: Stores
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Store.Include(s => s.State).Include(s => s.Status);
-            return View(await applicationDbContext.ToListAsync());
+            // get current user
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            //only lists stores that the current user is attached to
+
+
+            var stores = _context.Store.Include(s => s.State).Include(s => s.Status).Where(s => s.User == user);
+            return View(await stores.ToListAsync());
+
+            //var applicationDbContext = _context.Store.Include(s => s.State).Include(s => s.Status);
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Stores/Details/5
@@ -177,6 +186,22 @@ namespace RepPortal.Controllers
         private bool StoreExists(int id)
         {
             return _context.Store.Any(e => e.StoreId == id);
+        }
+
+        // GET: Stores
+        // This is used in javascript to retrieve all the stores that are attached to the current user, to be added to the Google Map view
+        public JsonResult StoresList()
+        {
+            // get current user
+            string user = _userManager.GetUserName(HttpContext.User);
+
+
+
+            //only lists stores that the current user is attached to
+            var stores = _context.Store.Include("State").Include("Status").Where(s => s.User.UserName == user).ToList();
+            Console.WriteLine(stores);
+            // return a json formatted response to be used in javascript
+            return Json(stores);
         }
     }
 }

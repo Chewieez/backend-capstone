@@ -27,6 +27,11 @@
 }
 
 /* Google Maps Styles */
+.mapContainer {
+    width: 600px;
+    height: 400px;
+}
+
 #map {
     height: 400px;
     width: 100%;
