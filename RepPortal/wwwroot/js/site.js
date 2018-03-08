@@ -10,8 +10,8 @@ $(document).ready(function () {
         let stores = response
         // parse the lat and long and create an object to pass to google api
         let latLong = {
-            "lat": parseInt(stores[0].lat),
-            "lng": parseInt(stores[0].long)
+            "lat": parseFloat(stores[0].lat),
+            "lng": parseFloat(stores[0].long)
         }
 
         
@@ -25,8 +25,8 @@ $(document).ready(function () {
         response.forEach(s => {
             // parse the lat and long and create an object to pass to google api
             const latLong = {
-                "lat": parseInt(s.lat),
-                "lng": parseInt(s.long)
+                "lat": parseFloat(s.lat),
+                "lng": parseFloat(s.long)
             }
 
             let marker = new google.maps.Marker({
