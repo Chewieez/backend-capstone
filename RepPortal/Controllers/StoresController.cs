@@ -220,8 +220,6 @@ namespace RepPortal.Controllers
             // get current user
             string user = _userManager.GetUserName(HttpContext.User);
 
-
-
             //only lists stores that the current user is attached to
             var stores = _context.Store.Include("State").Include("Status").Where(s => s.User.UserName == user).ToList();
             Console.WriteLine(stores);

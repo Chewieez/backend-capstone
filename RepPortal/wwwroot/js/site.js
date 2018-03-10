@@ -10,24 +10,21 @@ $(document).ready(function () {
         let stores = response
 
         // check if the respone contains coordinates
-        if (stores.lat) {
+        if (stores[0].lat) {
 
-            // parse the lat and long and create an object to pass to google api
-            let latLong = {
-                "lat": parseFloat(stores[0].lat),
-                "lng": parseFloat(stores[0].long)
-            }
-
-        
-            //create map and center around the user's house
+            //create map and center around the user's Stores
             let storeMap = new google.maps.Map(document.getElementById('map'), {
-                zoom: 15,
-                center: latLong
+                //zoom: 15,
+                //center: latLong
             });
 
-            //creates markers for all of the houses associated with that user
-            response.forEach(s => {
-                // parse the lat and long and create an object to pass to google api
+            // create a bounds object to tell Google Maps where to set the center of the map
+            bounds = new google.maps.LatLngBounds();
+
+            //create markers for all of the stores associated with the current user
+            stores.forEach(s => {
+
+                // parse the lat and long and create a marker
                 const latLong = {
                     "lat": parseFloat(s.lat),
                     "lng": parseFloat(s.long)
@@ -38,13 +35,28 @@ $(document).ready(function () {
                     //put markers on map created above
                     map: storeMap
                 });
+                
+                // add marker to the bounds method to set Google Maps center to include all pins
+                const loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+                bounds.extend(loc);
+
             })
+
+
+            storeMap.fitBounds(bounds);
+            storeMap.panToBounds(bounds);
+
         }
     })
 
 });
 
 
+            // parse the lat and long and create an object to pass to google api
+            //let latLong = {
+            //    "lat": parseFloat(stores[0].lat),
+            //    "lng": parseFloat(stores[0].long)
+            //}
 
 
 
