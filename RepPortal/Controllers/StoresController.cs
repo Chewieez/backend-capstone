@@ -218,13 +218,26 @@ namespace RepPortal.Controllers
         public async Task<IActionResult> StoresList()
         {
             // get current user
-            // string user = _userManager.GetUserName(HttpContext.User);
             ApplicationUser user = await GetCurrentUserAsync();
 
-            //only lists stores that the current user is attached to
-            var stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();
+            // Get the roles for the user
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // create a list of stores
+            var stores = new List<Store>();
+
+            if (roles.Contains("Administrator"))
+            {
+                // retrieve all stores to display on map (for site administrator)
+                stores = _context.Store.Include("State").Include("Status").ToList();
+            } else
+            {
+                // retrieve all matching stores where current user is the Sales Rep attached to the store
+                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();     
+            }
+
             Console.WriteLine(stores);
-            // return a json formatted response to be used in javascript
+            // return a json formatted response to be used in javascript ajax call
             return Json(stores);
         }
     }
