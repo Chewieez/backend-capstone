@@ -86,17 +86,18 @@ $("#CreateStoreBtn").click(evt => {
                     $("#Map-Lat").val(geoLocation.lat)
                     $("#Map-Long").val(geoLocation.lng)
 
+                    // submit form
+                    $('form').submit()
                 }
 
-                //submit form
             } else {
                 alert("Error retrieving geolocation coordinates. Check your address and try again.")
             }
 
         })
+    } else {
+        // if store location data not present, submit form so asp.net model validaton can catch error and alert user
+        $('form').submit()
     }
-
-    $('form').submit()
-
-
+   
 })
