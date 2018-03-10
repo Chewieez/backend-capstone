@@ -51,18 +51,169 @@ namespace RepPortal.Data
 
                 if (!context.State.Any())
                 {
-                    var states = new State[]
+                    State[] states = new State[]
                     {
                         new State {
-                            Name = "TN",
+                            Name = "AL",
+                        },
+                        new State {
+                            Name = "AK",
+                        },
+    
+    
+                        new State {
+                            Name = "AR",
+                        },
+                        new State {
+                            Name = "CA",
+                        },
+                        new State {
+                            Name = "CO",
+                        },
+                        new State {
+                            Name = "CT",
+                        },
+                        new State {
+                            Name = "DE",
+                        },
+                        new State {
+                            Name = "Washington DC",
+                        },
+                        new State {
+                            Name = "FL",
+                        },
+                        new State {
+                            Name = "GA",
+                        },
+                        new State {
+                            Name = "GU",
+                        },
+                        new State {
+                            Name = "HI",
+                        },
+                        new State {
+                            Name = "ID",
+                        },
+                        new State {
+                            Name = "IL",
+                        },
+                        new State {
+                            Name = "IN",
+                        },
+                        new State {
+                            Name = "IA",
+                        },
+                        new State {
+                            Name = "KS",
+                        },
+                        new State {
+                            Name = "KY",
+                        },
+                        new State {
+                            Name = "LA",
+                        },
+                        new State {
+                            Name = "ME",
+                        },
+                        new State {
+                            Name = "MD",
+                        },
+                        new State {
+                            Name = "MH",
+                        },
+                        new State {
+                            Name = "MI",
+                        },
+                        new State {
+                            Name = "MN",
                         },
                         new State {
                             Name = "MS",
                         },
                         new State {
-                            Name = "AL",
-                        }
+                            Name = "MO",
+                        },
+                        new State {
+                            Name = "MT",
+                        },
+                        new State {
+                            Name = "NE"
+                        },
+                        new State {
+                            Name = "NV",
+                        },
+                        new State {
+                            Name = "NH",
+                        },
+                        new State {
+                            Name = "NJ",
+                        },
+                        new State {
+                            Name = "NM",
+                        },
+                        new State {
+                            Name = "NY",
+                        },
+                        new State {
+                            Name = "NC",
+                        },
+                        new State {
+                            Name = "ND",
+                        },
+                        new State {
+                            Name = "OH",
+                        },
+                        new State {
+                            Name = "OK",
+                        },
+                        new State {
+                            Name = "OR",
+                        },
+                        new State {
+                            Name = "PA",
+                        },
+                        new State {
+                            Name = "PR",
+                        },
+                        new State {
+                            Name = "RH",
+                        },
+                        new State {
+                            Name = "SC",
+                        },
+                        new State {
+                            Name = "SD",
+                        },
+                        new State {
+                            Name = "TN",
+                        },
+                        new State {
+                            Name = "TX",
+                        },
+                        new State {
+                            Name = "UT",
+                        },
+                        new State {
+                            Name = "VT",
+                        },
+                        new State {
+                            Name = "VI",
+                        },
+                        new State {
+                            Name = "WA",
+                        },
+                        new State {
+                            Name = "WV",
+                        },
+                        new State {
+                            Name = "WI",
+                        },
+                        new State {
+                            Name = "WY",
+                        },
                     };
+
+                    states = states.OrderBy(s => s.Name).ToArray();
 
                     foreach (State s in states)
                     {
@@ -99,7 +250,6 @@ namespace RepPortal.Data
                     }
                     context.SaveChanges();
                 }
-
             }
         }
     }

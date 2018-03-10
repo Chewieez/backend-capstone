@@ -8,22 +8,25 @@ $(document).ready(function () {
         method: "GET"
     }).then(response => {
         let stores = response
-        // parse the lat and long and create an object to pass to google api
-        let latLong = {
-            "lat": parseFloat(stores[0].lat),
-            "lng": parseFloat(stores[0].long)
-        }
+
+        // check if the respone contains coordinates
+        if (stores.lat) {
+
+            // parse the lat and long and create an object to pass to google api
+            let latLong = {
+                "lat": parseFloat(stores[0].lat),
+                "lng": parseFloat(stores[0].long)
+            }
 
         
-        //create map and center it around the users first store
-        let storeMap = new google.maps.Map(document.getElementById('map'), {
-            zoom: 15,
-            center: latLong
-        });
+            //create map and center around the user's house
+            let storeMap = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: latLong
+            });
 
-        //creates markers for all of the stores associated with that user
-        response.forEach(s => {
-            if (s.lat && s.lng) {
+            //creates markers for all of the houses associated with that user
+            response.forEach(s => {
                 // parse the lat and long and create an object to pass to google api
                 const latLong = {
                     "lat": parseFloat(s.lat),
@@ -35,11 +38,9 @@ $(document).ready(function () {
                     //put markers on map created above
                     map: storeMap
                 });
-
-            }
-        })
+            })
+        }
     })
-
 
 });
 
