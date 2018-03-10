@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RepPortal.Data;
 using RepPortal.Models;
+using RepPortal.Models.StoreViewModels;
 
 namespace RepPortal.Controllers
 {
@@ -65,11 +66,23 @@ namespace RepPortal.Controllers
 
         // GET: Stores/Create
         [Authorize(Roles = "Administrator")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel(_context);
+
+            var CurrentUser = await GetCurrentUserAsync();
+            //var SalesReps = _context.Users.Where(user => user != CurrentUser).ToList();
+
+            //ViewData["Users"] = new SelectList(_context.Users.Where(user => user != CurrentUser), "UserId", "UserName");
+            //ViewBag.SalesReps = SalesReps;
+
+            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
+                .Select(u => new SelectListItem() { Text = u.FirstName, Value = u.Id}).ToList();
+
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name");
-            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color");
-            return View();
+            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
+            
+            return View(createStoreViewModel);
         }
 
         // POST: Stores/Create
@@ -77,14 +90,18 @@ namespace RepPortal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StoreId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Create([Bind("StoreId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store, CreateStoreViewModel CSViewModel)
         {
             ModelState.Remove("User");
+
 
             if (ModelState.IsValid)
             {
                 // Get the current user
-                var user = await GetCurrentUserAsync();
+                // var user = await GetCurrentUserAsync();
+
+                ApplicationUser user = _context.Users.Where(u => u.Id == CSViewModel.RepId).SingleOrDefault();
 
                 store.User = user;
 
@@ -92,9 +109,17 @@ namespace RepPortal.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel(_context);
+
+            var CurrentUser = await GetCurrentUserAsync();
+            
+            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
+                .Select(u => new SelectListItem() { Text = u.FirstName, Value = u.Id }).ToList();
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
-            return View(store);
+
+            return View(createStoreViewModel);
         }
 
         // GET: Stores/Edit/5

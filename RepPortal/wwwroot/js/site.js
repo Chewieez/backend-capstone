@@ -15,25 +15,28 @@ $(document).ready(function () {
         }
 
         
-        //create map and center around the user's house
+        //create map and center it around the users first store
         let storeMap = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
             center: latLong
         });
 
-        //creates markers for all of the houses associated with that user
+        //creates markers for all of the stores associated with that user
         response.forEach(s => {
-            // parse the lat and long and create an object to pass to google api
-            const latLong = {
-                "lat": parseFloat(s.lat),
-                "lng": parseFloat(s.long)
-            }
+            if (s.lat && s.lng) {
+                // parse the lat and long and create an object to pass to google api
+                const latLong = {
+                    "lat": parseFloat(s.lat),
+                    "lng": parseFloat(s.long)
+                }
 
-            let marker = new google.maps.Marker({
-                position: latLong,
-                //put markers on map created above
-                map: storeMap
-            });
+                let marker = new google.maps.Marker({
+                    position: latLong,
+                    //put markers on map created above
+                    map: storeMap
+                });
+
+            }
         })
     })
 
@@ -42,17 +45,7 @@ $(document).ready(function () {
 
 
 
-// Loop through the results array and place a marker for each
-// set of coordinates.
-//window.eqfeed_callback = function (results) {
-//    for (var i = 0; i < results.features.length; i++) {
-//        var coords = results.features[i].geometry.coordinates;
-//        var latLng = new google.maps.LatLng(coords[1], coords[0]);
-//        var marker = new google.maps.Marker({
-//            position: latLng,
-//            map: map
-//        });
-//    }
+
 
 //function initMap() {
 //    var uluru = { "lat": 41.3345876, "lng": -73.06000929999999 };
@@ -95,12 +88,14 @@ $("#CreateStoreBtn").click(evt => {
                 }
 
                 //submit form
-                $('form').submit()
             } else {
                 alert("Error retrieving geolocation coordinates. Check your address and try again.")
             }
 
         })
     }
+
+    $('form').submit()
+
 
 })

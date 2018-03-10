@@ -1,4 +1,4 @@
-﻿@model RepPortal.Models.Store
+﻿@model RepPortal.Models.StoreViewModels.CreateStoreViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -12,77 +12,87 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @*@Html.DropDownList("User",
+        new SelectList((System.Collections.IEnumerable)ViewData["User"], "Id", "Name"))*@
+
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                @Html.LabelFor(model => model.RepId)
+                @Html.DropDownListFor(model => model.Store.User,
+                ViewBag.SalesReps as IEnumerable<SelectListItem>, "Select")
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Store.Name" class="control-label"></label>
+                <input asp-for="@Model.Store.Name" class="form-control" />
+                <span asp-validation-for="@Model.Store.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StreetAddress" class="control-label" ></label>
-                <input asp-for="StreetAddress" class="form-control" id="formStreetAddress" />
-                <span asp-validation-for="StreetAddress" class="text-danger"></span>
+                <label asp-for="@Model.Store.StreetAddress" class="control-label"></label>
+                <input asp-for="@Model.Store.StreetAddress" class="form-control" id="formStreetAddress" />
+                <span asp-validation-for="@Model.Store.StreetAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" id="formCity"/>
-                <span asp-validation-for="City" class="text-danger"></span>
+                <label asp-for="@Model.Store.City" class="control-label"></label>
+                <input asp-for="@Model.Store.City" class="form-control" id="formCity" />
+                <span asp-validation-for="@Model.Store.City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StateId" class="control-label"></label>
-                <select asp-for="StateId" class ="form-control" asp-items="ViewBag.StateId"></select>
+                <label asp-for="@Model.Store.StateId" class="control-label"></label>
+                <select asp-for="@Model.Store.StateId" class="form-control" asp-items="ViewBag.StateId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Zipcode" class="control-label"></label>
-                <input asp-for="Zipcode" class="form-control" id="formZipcode" />
-                <span asp-validation-for="Zipcode" class="text-danger"></span>
+                <label asp-for="@Model.Store.Zipcode" class="control-label"></label>
+                <input asp-for="@Model.Store.Zipcode" class="form-control" id="formZipcode" />
+                <span asp-validation-for="@Model.Store.Zipcode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <label asp-for="@Model.Store.PhoneNumber" class="control-label"></label>
+                <input asp-for="@Model.Store.PhoneNumber" class="form-control" />
+                <span asp-validation-for="@Model.Store.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="WebsiteURL" class="control-label"></label>
-                <input asp-for="WebsiteURL" class="form-control" />
-                <span asp-validation-for="WebsiteURL" class="text-danger"></span>
+                <label asp-for="@Model.Store.WebsiteURL" class="control-label"></label>
+                <input asp-for="@Model.Store.WebsiteURL" class="form-control" />
+                <span asp-validation-for="@Model.Store.WebsiteURL" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateAdded" class="control-label"></label>
-                <input asp-for="DateAdded" class="form-control" />
-                <span asp-validation-for="DateAdded" class="text-danger"></span>
+                <label asp-for="@Model.Store.DateAdded" class="control-label"></label>
+                <input asp-for="@Model.Store.DateAdded" class="form-control" />
+                <span asp-validation-for="@Model.Store.DateAdded" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
-                <select asp-for="StatusId" class ="form-control" asp-items="ViewBag.StatusId"></select>
+                <label asp-for="@Model.Store.StatusId" class="control-label"></label>
+                <select asp-for="@Model.Store.StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="DateClosed" class="control-label"></label>
-                <input asp-for="DateClosed" class="form-control" />
-                <span asp-validation-for="DateClosed" class="text-danger"></span>
+                <label asp-for="@Model.Store.DateClosed" class="control-label"></label>
+                <input asp-for="@Model.Store.DateClosed" class="form-control" />
+                <span asp-validation-for="@Model.Store.DateClosed" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastOrderTotal" class="control-label"></label>
-                <input asp-for="LastOrderTotal" class="form-control" />
-                <span asp-validation-for="LastOrderTotal" class="text-danger"></span>
+                <label asp-for="@Model.Store.LastOrderTotal" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderTotal" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderTotal" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastOrderDate" class="control-label"></label>
-                <input asp-for="LastOrderDate" class="form-control" />
-                <span asp-validation-for="LastOrderDate" class="text-danger"></span>
+                <label asp-for="@Model.Store.LastOrderDate" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderDate" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastOrderShipDate" class="control-label"></label>
-                <input asp-for="LastOrderShipDate" class="form-control" />
-                <span asp-validation-for="LastOrderShipDate" class="text-danger"></span>
+                <label asp-for="@Model.Store.LastOrderShipDate" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderShipDate" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderShipDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastOrderPaidDate" class="control-label"></label>
-                <input asp-for="LastOrderPaidDate" class="form-control" />
-                <span asp-validation-for="LastOrderPaidDate" class="text-danger"></span>
+                <label asp-for="@Model.Store.LastOrderPaidDate" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderPaidDate" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderPaidDate" class="text-danger"></span>
             </div>
-            <input asp-for="Lat" type="hidden" id="Map-Lat" />
-            <input asp-for="Long" type="hidden" id="Map-Long"/>
-           
+            <input asp-for="@Model.Store.Lat" type="hidden" id="Map-Lat" />
+            <input asp-for="@Model.Store.Long" type="hidden" id="Map-Long" />
+
             <div class="form-group">
                 <input type="submit" value="Create" id="CreateStoreBtn" class="btn btn-default" />
             </div>
