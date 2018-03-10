@@ -8,33 +8,38 @@ $(document).ready(function () {
         method: "GET"
     }).then(response => {
         let stores = response
-        // parse the lat and long and create an object to pass to google api
-        let latLong = {
-            "lat": parseFloat(stores[0].lat),
-            "lng": parseFloat(stores[0].long)
-        }
 
-        
-        //create map and center around the user's house
-        let storeMap = new google.maps.Map(document.getElementById('map'), {
-            zoom: 15,
-            center: latLong
-        });
+        // check if the respone contains coordinates
+        if (stores.lat) {
 
-        //creates markers for all of the houses associated with that user
-        response.forEach(s => {
             // parse the lat and long and create an object to pass to google api
-            const latLong = {
-                "lat": parseFloat(s.lat),
-                "lng": parseFloat(s.long)
+            let latLong = {
+                "lat": parseFloat(stores[0].lat),
+                "lng": parseFloat(stores[0].long)
             }
 
-            let marker = new google.maps.Marker({
-                position: latLong,
-                //put markers on map created above
-                map: storeMap
+        
+            //create map and center around the user's house
+            let storeMap = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: latLong
             });
-        })
+
+            //creates markers for all of the houses associated with that user
+            response.forEach(s => {
+                // parse the lat and long and create an object to pass to google api
+                const latLong = {
+                    "lat": parseFloat(s.lat),
+                    "lng": parseFloat(s.long)
+                }
+
+                let marker = new google.maps.Marker({
+                    position: latLong,
+                    //put markers on map created above
+                    map: storeMap
+                });
+            })
+        }
     })
 
 
