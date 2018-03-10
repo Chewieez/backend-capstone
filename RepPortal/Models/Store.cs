@@ -13,6 +13,9 @@ namespace RepPortal.Models
         [Required]
         public ApplicationUser User { get; set; }
 
+        [Display(Name="Sales Rep")]
+        public string SalesRepId { get; set; }
+
         [Required]
         [Display(Name="Store Name")]
         [StringLength(50, ErrorMessage = "Please shorten Store Name.")]

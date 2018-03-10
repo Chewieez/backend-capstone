@@ -68,13 +68,9 @@ namespace RepPortal.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create()
         {
-            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel(_context);
+            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
             var CurrentUser = await GetCurrentUserAsync();
-            //var SalesReps = _context.Users.Where(user => user != CurrentUser).ToList();
-
-            //ViewData["Users"] = new SelectList(_context.Users.Where(user => user != CurrentUser), "UserId", "UserName");
-            //ViewBag.SalesReps = SalesReps;
 
             ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
                 .Select(u => new SelectListItem() { Text = u.FirstName, Value = u.Id}).ToList();
@@ -91,26 +87,30 @@ namespace RepPortal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([Bind("StoreId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store, CreateStoreViewModel CSViewModel)
+        public async Task<IActionResult> Create([Bind("StoreId,SalesRepId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
         {
-            ModelState.Remove("User");
+            ModelState.Remove("store.user");
 
 
             if (ModelState.IsValid)
             {
                 // Get the current user
-                // var user = await GetCurrentUserAsync();
+                ApplicationUser user = await GetCurrentUserAsync();
 
-                ApplicationUser user = _context.Users.Where(u => u.Id == CSViewModel.RepId).SingleOrDefault();
+                //ApplicationUser user = _context.Users.Where(u => u.Id == CSViewModel.RepId).SingleOrDefault();
 
+                // Add current user to store listing
                 store.User = user;
 
+                // save store to context
                 _context.Add(store);
+                // save context file to database
                 await _context.SaveChangesAsync();
+                // redirect user to list of all stores
                 return RedirectToAction(nameof(Index));
             }
 
-            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel(_context);
+            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
             var CurrentUser = await GetCurrentUserAsync();
             

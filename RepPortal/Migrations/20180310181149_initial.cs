@@ -240,6 +240,7 @@ namespace RepPortal.Migrations
                     Long = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 11, nullable: false),
+                    SalesRepId = table.Column<string>(nullable: true),
                     StateId = table.Column<int>(nullable: false),
                     StatusId = table.Column<int>(nullable: false),
                     StreetAddress = table.Column<string>(maxLength: 60, nullable: false),

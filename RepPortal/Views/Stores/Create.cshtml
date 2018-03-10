@@ -17,8 +17,8 @@
         new SelectList((System.Collections.IEnumerable)ViewData["User"], "Id", "Name"))*@
 
             <div class="form-group">
-                @Html.LabelFor(model => model.RepId)
-                @Html.DropDownListFor(model => model.Store.User,
+                @Html.LabelFor(model => model.Store.SalesRepId)
+                @Html.DropDownListFor(model => model.Store.SalesRepId,
                 ViewBag.SalesReps as IEnumerable<SelectListItem>, "Select")
             </div>
 

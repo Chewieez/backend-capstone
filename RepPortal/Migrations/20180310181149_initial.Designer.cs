@@ -11,7 +11,7 @@ using System;
 namespace RepPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180308155855_initial")]
+    [Migration("20180310181149_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -265,6 +265,8 @@ namespace RepPortal.Migrations
                         .IsRequired()
                         .HasMaxLength(11);
 
+                    b.Property<string>("SalesRepId");
+
                     b.Property<int>("StateId");
 
                     b.Property<int>("StatusId");
@@ -404,7 +406,7 @@ namespace RepPortal.Migrations
             modelBuilder.Entity("RepPortal.Models.Store", b =>
                 {
                     b.HasOne("RepPortal.Models.State", "State")
-                        .WithMany()
+                        .WithMany("Stores")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade);
 
