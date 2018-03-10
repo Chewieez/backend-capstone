@@ -12,51 +12,54 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.StreetAddress)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.City)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Zipcode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.WebsiteURL)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateAdded)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DateClosed)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastOrderTotal)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastOrderDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastOrderShipDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastOrderPaidDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Lat)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Long)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StreetAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Zipcode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WebsiteURL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesRepId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateClosed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastOrderTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastOrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastOrderShipDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastOrderPaidDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Long)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.State)
             </th>
@@ -86,6 +89,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.WebsiteURL)
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.SalesRepId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateAdded)

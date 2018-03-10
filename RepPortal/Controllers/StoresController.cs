@@ -34,11 +34,26 @@ namespace RepPortal.Controllers
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
 
-            //only lists stores that the current user is attached to
+            // Get the roles for the user
+            var roles = await _userManager.GetRolesAsync(user);
 
+            // create a list of stores
+            var stores = new List<Store>();
 
-            var stores = _context.Store.Include(s => s.State).Include(s => s.Status).Where(s => s.User == user);
-            return View(await stores.ToListAsync());
+            // check if the user is an Administrator
+            if (roles.Contains("Administrator"))
+            {
+                // retrieve all stores to display (for site administrator)
+                stores = _context.Store.Include("State").Include("Status").ToList();
+            }
+            else
+            {
+                // retrieve only matching stores where current user is the Sales Rep attached to the store
+                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();
+            }
+
+            
+            return View(stores);
 
             //var applicationDbContext = _context.Store.Include(s => s.State).Include(s => s.Status);
             //return View(await applicationDbContext.ToListAsync());
@@ -73,7 +88,7 @@ namespace RepPortal.Controllers
             var CurrentUser = await GetCurrentUserAsync();
 
             ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
-                .Select(u => new SelectListItem() { Text = u.FirstName, Value = u.Id}).ToList();
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id}).ToList();
 
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name");
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
@@ -97,8 +112,6 @@ namespace RepPortal.Controllers
                 // Get the current user
                 ApplicationUser user = await GetCurrentUserAsync();
 
-                //ApplicationUser user = _context.Users.Where(u => u.Id == CSViewModel.RepId).SingleOrDefault();
-
                 // Add current user to store listing
                 store.User = user;
 
@@ -111,9 +124,10 @@ namespace RepPortal.Controllers
             }
 
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
-
+            // get current user
             var CurrentUser = await GetCurrentUserAsync();
-            
+            // populate SaleReps dropdown list by retrieving all users that are not the current user. 
+            // Only administrator will be allowed to create a new store listing, so they will be current User.
             ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
                 .Select(u => new SelectListItem() { Text = u.FirstName, Value = u.Id }).ToList();
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
@@ -226,13 +240,14 @@ namespace RepPortal.Controllers
             // create a list of stores
             var stores = new List<Store>();
 
+            // check if the user is an Administrator
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display on map (for site administrator)
                 stores = _context.Store.Include("State").Include("Status").ToList();
             } else
             {
-                // retrieve all matching stores where current user is the Sales Rep attached to the store
+                // retrieve only matching stores where current user is the Sales Rep attached to the store
                 stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();     
             }
 
