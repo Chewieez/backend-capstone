@@ -12,11 +12,8 @@ $(document).ready(function () {
         // check if the respone contains coordinates
         if (stores[0].lat) {
 
-            //create map and center around the user's Stores
-            let storeMap = new google.maps.Map(document.getElementById('map'), {
-                //zoom: 15,
-                //center: latLong
-            });
+            // create map
+            let storeMap = new google.maps.Map(document.getElementById('map'));
 
             // create a bounds object to tell Google Maps where to set the center of the map
             bounds = new google.maps.LatLngBounds();

@@ -215,13 +215,14 @@ namespace RepPortal.Controllers
 
         // GET: Stores
         // This is used in javascript to retrieve all the stores that are attached to the current user, to be added to the Google Map view
-        public JsonResult StoresList()
+        public async Task<IActionResult> StoresList()
         {
             // get current user
-            string user = _userManager.GetUserName(HttpContext.User);
+            // string user = _userManager.GetUserName(HttpContext.User);
+            ApplicationUser user = await GetCurrentUserAsync();
 
             //only lists stores that the current user is attached to
-            var stores = _context.Store.Include("State").Include("Status").Where(s => s.User.UserName == user).ToList();
+            var stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();
             Console.WriteLine(stores);
             // return a json formatted response to be used in javascript
             return Json(stores);
