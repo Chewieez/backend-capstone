@@ -1,76 +1,58 @@
 ﻿// Write your JavaScript code.
 
 $(document).ready(function () {
-   
+    
+    if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+    
+        $.ajax({
+            url: "/Stores/StoresList",
+            method: "GET"
+        }).then(response => {
+            let stores = response
 
-    $.ajax({
-        url: "/Stores/StoresList",
-        method: "GET"
-    }).then(response => {
-        let stores = response
+            // check if the respone contains coordinates
+            if (stores[0].lat) {
 
-        // check if the respone contains coordinates
-        if (stores[0].lat) {
+                // create map
+                let storeMap = new google.maps.Map(document.getElementById('map'));
 
-            // create map
-            let storeMap = new google.maps.Map(document.getElementById('map'));
+                // create a bounds object to tell Google Maps where to set the center of the map
+                bounds = new google.maps.LatLngBounds();
 
-            // create a bounds object to tell Google Maps where to set the center of the map
-            bounds = new google.maps.LatLngBounds();
+                //create markers for all of the stores associated with the current user
+                stores.forEach(s => {
 
-            //create markers for all of the stores associated with the current user
-            stores.forEach(s => {
+                    // parse the lat and long and create a marker
+                    const latLong = {
+                        "lat": parseFloat(s.lat),
+                        "lng": parseFloat(s.long)
+                    }
 
-                // parse the lat and long and create a marker
-                const latLong = {
-                    "lat": parseFloat(s.lat),
-                    "lng": parseFloat(s.long)
-                }
-
-                let marker = new google.maps.Marker({
-                    position: latLong,
-                    //put markers on map created above
-                    map: storeMap
-                });
+                    let marker = new google.maps.Marker({
+                        position: latLong,
+                        //put markers on map created above
+                        map: storeMap
+                    });
                 
-                // add marker to the bounds method to set Google Maps center to include all pins
-                const loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-                bounds.extend(loc);
+                    // add marker to the bounds method to set Google Maps center to include all pins
+                    const loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+                    bounds.extend(loc);
 
-            })
+                })
 
 
-            storeMap.fitBounds(bounds);
-            storeMap.panToBounds(bounds);
+                storeMap.fitBounds(bounds);
+                storeMap.panToBounds(bounds);
 
-        }
-    })
+            }
+        })
 
+    }
 });
 
 
-            // parse the lat and long and create an object to pass to google api
-            //let latLong = {
-            //    "lat": parseFloat(stores[0].lat),
-            //    "lng": parseFloat(stores[0].long)
-            //}
-
-
-
-//function initMap() {
-//    var uluru = { "lat": 41.3345876, "lng": -73.06000929999999 };
-//    var map = new google.maps.Map(document.getElementById('map'), {
-//        zoom: 15,
-//        center: uluru
-//    });
-//    var marker = new google.maps.Marker({
-//        position: uluru,
-//        map: map
-//    });
-//}
-
 //get geocode data of the new store upon creation 
-$("#CreateStoreBtn").click(evt => {
+$(".CreateStoreBtn").click(evt => {
     // get the value out of the address fields
     const address = $("#formStreetAddress").val() || ""
     const city = $("#formCity").val() || ""

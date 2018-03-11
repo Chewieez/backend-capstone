@@ -87,10 +87,10 @@ namespace RepPortal.Controllers
 
             var CurrentUser = await GetCurrentUserAsync();
 
-            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
+            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser).OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id}).ToList();
 
-            ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name");
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy( s=> s.Name), "StateId", "Name");
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
             
             return View(createStoreViewModel);
@@ -137,6 +137,7 @@ namespace RepPortal.Controllers
         }
 
         // GET: Stores/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -149,6 +150,14 @@ namespace RepPortal.Controllers
             {
                 return NotFound();
             }
+
+            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
+
+            var CurrentUser = await GetCurrentUserAsync();
+
+            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
+
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
             return View(store);
@@ -186,6 +195,14 @@ namespace RepPortal.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
+
+            var CurrentUser = await GetCurrentUserAsync();
+
+            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
+
+
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
             return View(store);

@@ -1,6 +1,8 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
+@inject RepPortal.Services.IApplicationConfiguration AppSettings;
+
 
 @{
     ViewData["Title"] = "Home Page";
@@ -20,3 +22,13 @@
         <div id="map"></div>
     </div>
 }
+
+<script type="text/javascript">
+    const googleAPI = Object.create(null, {
+        "key": {
+            get: () => '@AppSettings.GoogleAPIKey'
+        }
+    })
+    Object.freeze(googleAPI)
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.GoogleAPIKey)"></script>
