@@ -87,7 +87,7 @@ namespace RepPortal.Controllers
 
             var CurrentUser = await GetCurrentUserAsync();
 
-            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser).OrderBy(u => u.FirstName)
+            ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id}).ToList();
 
             ViewData["StateId"] = new SelectList(_context.State.OrderBy( s=> s.Name), "StateId", "Name");
@@ -102,7 +102,7 @@ namespace RepPortal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([Bind("StoreId,SalesRepId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
+        public async Task<IActionResult> Create([Bind("StoreId,SalesRepId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,ContactName,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
         {
             ModelState.Remove("store.user");
 
@@ -128,7 +128,7 @@ namespace RepPortal.Controllers
             var CurrentUser = await GetCurrentUserAsync();
             // populate SaleReps dropdown list by retrieving all users that are not the current user. 
             // Only administrator will be allowed to create a new store listing, so they will be current User.
-            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
+            ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = u.FirstName, Value = u.Id }).ToList();
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
@@ -168,7 +168,7 @@ namespace RepPortal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StoreId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
+        public async Task<IActionResult> Edit(int id, [Bind("StoreId,SalesRepId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,ContactName,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
         {
             if (id != store.StoreId)
             {

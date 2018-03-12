@@ -22,7 +22,7 @@ namespace RepPortal.Models
         public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Street Address")]
+        [Display(Name = "Store Street Address")]
         [StringLength(60, ErrorMessage = "Please shorten Street Address to less than 60 characters.")]
         public string StreetAddress { get; set; }
 
@@ -49,6 +49,9 @@ namespace RepPortal.Models
         [Display(Name = "Website")]
         [StringLength(100, ErrorMessage = "The website URL is too long.")]
         public string WebsiteURL { get; set; }
+
+        [Display(Name = "Store Contact Name")]
+        public string ContactName { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

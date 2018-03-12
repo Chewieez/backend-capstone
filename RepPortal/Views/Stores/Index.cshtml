@@ -31,6 +31,9 @@
                 @Html.DisplayNameFor(model => model.WebsiteURL)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ContactName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.SalesRepId)
             </th>
             <th>
@@ -91,7 +94,10 @@
                 @Html.DisplayFor(modelItem => item.WebsiteURL)
             </td>
             <td>
-                 @Html.DisplayFor(modelItem => item.SalesRepId)
+                @Html.DisplayFor(modelItem => item.ContactName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesRepId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateAdded)

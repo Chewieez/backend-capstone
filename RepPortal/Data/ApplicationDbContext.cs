@@ -22,6 +22,7 @@ namespace RepPortal.Data
         public DbSet<Flag> Flag { get; set; }
         public DbSet<StoreFlag> StoreFlag { get; set; }
         public DbSet<StoreNote> StoreNote { get; set; }
+        public DbSet<Note> Note { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,16 +32,21 @@ namespace RepPortal.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
+            // Have database make the DateCreated for each new db entry automactically when a new entry is created. 
             builder.Entity<Store>()
                 .Property(s => s.DateCreated)
                 .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
             builder.Entity<StoreNote>()
-               .Property(s => s.DateCreated)
+               .Property(sn => sn.DateCreated)
                .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
             builder.Entity<StoreFlag>()
-               .Property(s => s.DateCreated)
+               .Property(sf => sf.DateCreated)
+               .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+
+            builder.Entity<Note>()
+               .Property(n => n.DateCreated)
                .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
         }
     }
