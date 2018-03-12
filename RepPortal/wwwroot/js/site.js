@@ -19,6 +19,25 @@ $(document).ready(function () {
                 // create a bounds object to tell Google Maps where to set the center of the map
                 bounds = new google.maps.LatLngBounds();
 
+                //var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+                var icons = {
+                    1: {
+                        name: 'Active',
+                        icon: '/images/map-icons/Shopping_Bag_6.svg'
+                    },
+                    2: {
+                        name: 'No Orders > 6 months',
+                        icon: '/images/map-icons/Shopping_Bag_7.svg'
+                    },
+                    3: {
+                        name: 'No Orders > 12 months',
+                        icon: '/images/map-icons/Shopping_Bag_5.svg'
+                    },
+                    4: {
+                        name: 'Closed',
+                        icon: '/images/map-icons/Shopping_Bag_2.svg'
+                    }
+                }
                 //create markers for all of the stores associated with the current user
                 stores.forEach(s => {
 
@@ -30,7 +49,12 @@ $(document).ready(function () {
 
                     let marker = new google.maps.Marker({
                         position: latLong,
-                        //put markers on map created above
+                        animation: google.maps.Animation.DROP,
+                        title: s.name,
+                        icon: {
+                            url: icons[s.statusId].icon,
+                            scaledSize: new google.maps.Size(64, 64)
+                        },
                         map: storeMap
                     });
                 
@@ -44,12 +68,33 @@ $(document).ready(function () {
                 storeMap.fitBounds(bounds);
                 storeMap.panToBounds(bounds);
 
+                var legendInnerContainer = document.getElementById('legend-innerContainer');
+                for (var key in icons) {
+                    var type = icons[key];
+                    var name = type.name;
+                    var icon = type.icon;
+                    var div = document.createElement('div');
+                    div.id = "legend-icons";
+                    div.innerHTML = '<img src="' + icon + '"> ' + name;
+                    legendInnerContainer.appendChild(div);
+                }
+
+                //storeMap.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+
             }
         })
 
     }
 });
 
+// Sets a timeout delay on dropping pins onto the map
+//function drop() {
+//    for (var i = 0; i < markerArray.length; i++) {
+//        setTimeout(function () {
+//            addMarkerMethod();
+//        }, i * 200);
+//    }
+//}
 
 //get geocode data of the new store upon creation 
 $(".CreateStoreBtn").click(evt => {
