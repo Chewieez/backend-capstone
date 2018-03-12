@@ -37,6 +37,9 @@ namespace RepPortal.Controllers
             _logger = logger;
         }
 
+        // This task retrieves the currently authenticated user
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         [TempData]
         public string ErrorMessage { get; set; }
 
@@ -64,6 +67,13 @@ namespace RepPortal.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    // get current User
+                    var user =await _userManager.FindByEmailAsync(model.Email);
+                    // add the current date to LastLoggedInDate
+                    user.LastLoggedInDate = DateTime.Now;
+                    // save user
+                    var setUser = await _userManager.UpdateAsync(user);
+                    
 
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);

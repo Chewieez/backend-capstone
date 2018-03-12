@@ -121,7 +121,7 @@ namespace RepPortal.Controllers
             {
                 throw new ApplicationException($"Unexpected error occurred saving updated profile data.");
             }
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             
         
             StatusMessage = "Your profile has been updated";
