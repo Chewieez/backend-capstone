@@ -11,7 +11,7 @@ using System;
 namespace RepPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180312152749_initial")]
+    [Migration("20180312155808_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,6 +149,8 @@ namespace RepPortal.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired();
+
+                    b.Property<DateTime?>("LastLoggedInDate");
 
                     b.Property<string>("LastName")
                         .IsRequired();

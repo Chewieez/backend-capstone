@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RepPortal.Data;
 using RepPortal.Models;
 using RepPortal.Models.ManageViewModels;
 using RepPortal.Services;
@@ -25,6 +26,7 @@ namespace RepPortal.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private readonly ApplicationDbContext _context;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
@@ -34,13 +36,16 @@ namespace RepPortal.Controllers
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _context = context;
+
         }
 
         [TempData]
@@ -106,6 +111,19 @@ namespace RepPortal.Controllers
                 }
             }
 
+            user.Company = model.Company;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.CommissionRate = model.CommissionRate;
+
+            var setUser = await _userManager.UpdateAsync(user);
+            if (!setUser.Succeeded)
+            {
+                throw new ApplicationException($"Unexpected error occurred saving updated profile data.");
+            }
+            await _context.SaveChangesAsync();
+            
+        
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
         }

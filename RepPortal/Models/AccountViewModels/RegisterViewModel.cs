@@ -36,8 +36,8 @@ namespace RepPortal.Models.AccountViewModels
         [StringLength(50, ErrorMessage = "Please shorten Company Name to less than 50 characters.")]
         public string Company { get; set; }
 
-        [Display(Name = "Commision Rate")]
-        public double CommisionRate { get; set; }
+        [Display(Name = "Commission Rate")]
+        public double CommissionRate { get; set; }
 
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }

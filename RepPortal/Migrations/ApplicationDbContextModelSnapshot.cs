@@ -149,6 +149,8 @@ namespace RepPortal.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired();
 
+                    b.Property<DateTime?>("LastLoggedInDate");
+
                     b.Property<string>("LastName")
                         .IsRequired();
 

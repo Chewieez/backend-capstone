@@ -64,6 +64,7 @@ namespace RepPortal.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -227,7 +228,8 @@ namespace RepPortal.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber,
-                    Company = model.Company
+                    Company = model.Company,
+                    CommissionRate = model.CommissionRate
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

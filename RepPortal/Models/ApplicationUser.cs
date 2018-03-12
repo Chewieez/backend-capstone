@@ -25,6 +25,8 @@ namespace RepPortal.Models
         [Display(Name = "Commission Rate")]
         public double CommissionRate { get; set; }
 
+        public DateTime? LastLoggedInDate { get; set; }
+
         public virtual ICollection<Store> Stores { get; set; }
         public virtual ICollection<UserState> UserStates { get; set; }
     }
