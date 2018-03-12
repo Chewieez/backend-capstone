@@ -11,7 +11,7 @@ using System;
 namespace RepPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180310181149_initial")]
+    [Migration("20180312152749_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,6 +134,8 @@ namespace RepPortal.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<double>("CommissionRate");
+
                     b.Property<string>("Company")
                         .HasMaxLength(50);
 
@@ -199,6 +201,30 @@ namespace RepPortal.Migrations
                     b.ToTable("Flag");
                 });
 
+            modelBuilder.Entity("RepPortal.Models.Note", b =>
+                {
+                    b.Property<int>("NoteId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content")
+                        .IsRequired();
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+
+                    b.Property<string>("ToUserId");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("NoteId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Note");
+                });
+
             modelBuilder.Entity("RepPortal.Models.State", b =>
                 {
                     b.Property<int>("StateId")
@@ -236,6 +262,8 @@ namespace RepPortal.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(40);
+
+                    b.Property<string>("ContactName");
 
                     b.Property<DateTime>("DateAdded");
 
@@ -323,18 +351,23 @@ namespace RepPortal.Migrations
                     b.Property<int>("StoreNoteId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Content")
+                        .IsRequired();
+
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
-                    b.Property<string>("Note")
-                        .IsRequired();
-
                     b.Property<int>("StoreId");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("StoreNoteId");
 
                     b.HasIndex("StoreId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("StoreNote");
                 });
@@ -403,6 +436,14 @@ namespace RepPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("RepPortal.Models.Note", b =>
+                {
+                    b.HasOne("RepPortal.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("RepPortal.Models.Store", b =>
                 {
                     b.HasOne("RepPortal.Models.State", "State")
@@ -439,6 +480,11 @@ namespace RepPortal.Migrations
                     b.HasOne("RepPortal.Models.Store", "Store")
                         .WithMany("StoreNotes")
                         .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RepPortal.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -20,6 +20,23 @@ namespace RepPortal.Models.ManageViewModels
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
 
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Company if Applicable")]
+        [StringLength(50, ErrorMessage = "Please shorten Company Name to less than 50 characters.")]
+        public string Company { get; set; }
+
+        [Display(Name = "Commission Rate")]
+        public double CommissionRate { get; set; }
+
         public string StatusMessage { get; set; }
+
+
     }
 }

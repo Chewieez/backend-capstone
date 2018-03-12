@@ -28,6 +28,7 @@ namespace RepPortal.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    CommissionRate = table.Column<double>(nullable: false),
                     Company = table.Column<string>(maxLength: 50, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -197,6 +198,28 @@ namespace RepPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Note",
+                columns: table => new
+                {
+                    NoteId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Content = table.Column<string>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
+                    ToUserId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Note", x => x.NoteId);
+                    table.ForeignKey(
+                        name: "FK_Note_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserState",
                 columns: table => new
                 {
@@ -229,6 +252,7 @@ namespace RepPortal.Migrations
                     StoreId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     City = table.Column<string>(maxLength: 40, nullable: false),
+                    ContactName = table.Column<string>(nullable: true),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     DateClosed = table.Column<DateTime>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
@@ -304,9 +328,10 @@ namespace RepPortal.Migrations
                 {
                     StoreNoteId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Content = table.Column<string>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
-                    Note = table.Column<string>(nullable: false),
-                    StoreId = table.Column<int>(nullable: false)
+                    StoreId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -316,6 +341,12 @@ namespace RepPortal.Migrations
                         column: x => x.StoreId,
                         principalTable: "Store",
                         principalColumn: "StoreId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StoreNote_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -357,6 +388,11 @@ namespace RepPortal.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Note_UserId",
+                table: "Note",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Store_StateId",
                 table: "Store",
                 column: "StateId");
@@ -387,6 +423,11 @@ namespace RepPortal.Migrations
                 column: "StoreId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StoreNote_UserId",
+                table: "StoreNote",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserState_StateId",
                 table: "UserState",
                 column: "StateId");
@@ -413,6 +454,9 @@ namespace RepPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Note");
 
             migrationBuilder.DropTable(
                 name: "StoreFlag");

@@ -22,8 +22,8 @@ namespace RepPortal.Models
         [StringLength(50, ErrorMessage = "Please shorten Company Name to less than 50 characters.")]
         public string Company { get; set; }
 
-        [Display(Name = "Commision Rate")]
-        public double CommisionRate { get; set; }
+        [Display(Name = "Commission Rate")]
+        public double CommissionRate { get; set; }
 
         public virtual ICollection<Store> Stores { get; set; }
         public virtual ICollection<UserState> UserStates { get; set; }

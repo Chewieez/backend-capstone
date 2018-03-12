@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Threading.Tasks;
 using RepPortal.Models;
+using System.Collections.Generic;
 
 namespace RepPortal.Data
 {
@@ -26,12 +27,12 @@ namespace RepPortal.Data
                     await roleStore.CreateAsync(RepRole);
                 }
 
-                if (!context.ApplicationUser.Any(u => u.FirstName == "admin"))
+                if (!context.ApplicationUser.Any(u => u.LastName == "admin"))
                 {
                     //  This method will be called after migrating to the latest version.
                     ApplicationUser user = new ApplicationUser
                     {
-                        FirstName = "admin",
+                        FirstName = "House",
                         LastName = "admin",
                         UserName = "admin@admin.com",
                         NormalizedUserName = "ADMIN@ADMIN.COM",
@@ -51,7 +52,7 @@ namespace RepPortal.Data
 
                 if (!context.State.Any())
                 {
-                    State[] states = new State[]
+                    List<State> states = new List<State>
                     {
                         new State {
                             Name = "AL",
@@ -59,8 +60,6 @@ namespace RepPortal.Data
                         new State {
                             Name = "AK",
                         },
-    
-    
                         new State {
                             Name = "AR",
                         },
@@ -75,9 +74,6 @@ namespace RepPortal.Data
                         },
                         new State {
                             Name = "DE",
-                        },
-                        new State {
-                            Name = "Washington DC",
                         },
                         new State {
                             Name = "FL",
@@ -203,17 +199,20 @@ namespace RepPortal.Data
                             Name = "WA",
                         },
                         new State {
-                            Name = "WV",
+                            Name = "Washington DC"
                         },
                         new State {
                             Name = "WI",
                         },
                         new State {
-                            Name = "WY",
+                            Name = "WV",
                         },
+                        new State {
+                            Name = "WY",
+                        }
                     };
 
-                    states = states.OrderBy(s => s.Name).ToArray();
+                    states.Sort((a, b) => a.Name.CompareTo(b.Name));
 
                     foreach (State s in states)
                     {
