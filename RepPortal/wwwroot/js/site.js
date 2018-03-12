@@ -47,6 +47,17 @@ $(document).ready(function () {
                         "lng": parseFloat(s.long)
                     }
 
+                    var infowindow = new google.maps.InfoWindow({
+                        content: `<div>
+
+                                <h5>${s.name}</h5>
+                                <div>${s.streetAddress}</div>
+                                <div>${s.city}</div>
+                                <div>${s.zipcode}</div>
+                                        
+                                </div>`
+                    });
+
                     let marker = new google.maps.Marker({
                         position: latLong,
                         animation: google.maps.Animation.DROP,
@@ -62,6 +73,9 @@ $(document).ready(function () {
                     const loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
                     bounds.extend(loc);
 
+                    marker.addListener('click', function () {
+                        infowindow.open(storeMap, marker);
+                    });
                 })
 
 
