@@ -153,6 +153,8 @@ namespace RepPortal.Controllers
 
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
+            createStoreViewModel.Store = store;
+
             var CurrentUser = await GetCurrentUserAsync();
 
             ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
@@ -160,7 +162,7 @@ namespace RepPortal.Controllers
 
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
-            return View(store);
+            return View(createStoreViewModel);
         }
 
         // POST: Stores/Edit/5
@@ -175,8 +177,14 @@ namespace RepPortal.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove("store.User");
+
             if (ModelState.IsValid)
             {
+                var user = await GetCurrentUserAsync();
+
+                store.User = user;
+
                 try
                 {
                     _context.Update(store);
@@ -197,15 +205,15 @@ namespace RepPortal.Controllers
             }
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-            var CurrentUser = await GetCurrentUserAsync();
+            createStoreViewModel.Store = store;
 
-            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
+            ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
 
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
-            return View(store);
+            return View(createStoreViewModel);
         }
 
         // GET: Stores/Delete/5

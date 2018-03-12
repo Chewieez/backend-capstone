@@ -1,4 +1,5 @@
 ﻿@model RepPortal.Models.StoreViewModels.CreateStoreViewModel
+@inject RepPortal.Services.IApplicationConfiguration AppSettings;
 
 @{
     ViewData["Title"] = "Add A Store";
@@ -28,7 +29,7 @@
             <div class="form-group">
                 <label asp-for="@Model.Store.StateId" class="control-label"></label>
                 @Html.DropDownListFor(model => model.Store.StateId,
-             ViewBag.StateId as IEnumerable<SelectListItem>, "Select a State", new { @class = "form-control" })
+                  ViewBag.StateId as IEnumerable<SelectListItem>, "Select a State", new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <label asp-for="@Model.Store.Zipcode" class="control-label"></label>
@@ -53,7 +54,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Store.SalesRepId)
                 @Html.DropDownListFor(model => model.Store.SalesRepId,
-             ViewBag.SalesReps as IEnumerable<SelectListItem>, "Select a Sales Rep", new { @class = "form-control" })
+                  ViewBag.SalesReps as IEnumerable<SelectListItem>, "Select a Sales Rep", new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <label asp-for="@Model.Store.DateAdded" class="control-label"></label>
@@ -107,3 +108,12 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script type="text/javascript">
+    const googleAPI = Object.create(null, {
+        "key": {
+            get: () => '@AppSettings.GoogleAPIKey'
+        }
+    })
+    Object.freeze(googleAPI)
+</script>
