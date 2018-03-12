@@ -6,8 +6,8 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 /* Carousel */
@@ -28,12 +28,12 @@
 
 /* Google Maps Styles */
 .mapContainer {
-    width: 800px;
+    margin: 5px;
     height: 600px;
 }
 
 #map {
-    height: 400px;
+    height: 80%;
     width: 100%;
 }
 
@@ -60,6 +60,12 @@
 
 #legend img {
     vertical-align: middle;
+}
+
+#notes {
+    height: 400px;
+    width: 100%;
+    border: 1px solid rgba(128, 128, 128, 0.86);
 }
 
 /* Hide/rearrange for smaller screens */
