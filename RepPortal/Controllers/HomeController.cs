@@ -24,7 +24,7 @@ namespace RepPortal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var notes = await _context.Note.ToListAsync();
+            var notes = await _context.Note.Include("User").ToListAsync();
 
             return View(notes);
         }

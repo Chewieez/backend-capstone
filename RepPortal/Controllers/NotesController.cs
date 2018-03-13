@@ -54,6 +54,10 @@ namespace RepPortal.Controllers
         // GET: Notes/Create
         public IActionResult Create()
         {
+            ViewBag.Users = _context.Users.OrderBy(u => u.FirstName)
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
+
+
             return View();
         }
 

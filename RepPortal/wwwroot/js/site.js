@@ -49,13 +49,11 @@ $(document).ready(function () {
 
                     var infowindow = new google.maps.InfoWindow({
                         content: `<div>
-
                                 <h5>${s.name}</h5>
                                 <div>${s.streetAddress}</div>
                                 <div>${s.city}, ${s.state.name}</div>
                                 <div>${s.zipcode}</div>
-                                <a href="./Stores/Details/${s.storeId}">Details</a>
-                                        
+                                <a href='./Stores/Details/${s.storeId}'>Details</a>                                     
                                 </div>`
                     });
 
