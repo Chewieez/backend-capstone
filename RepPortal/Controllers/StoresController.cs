@@ -137,7 +137,7 @@ namespace RepPortal.Controllers
         }
 
         // GET: Stores/Edit/5
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

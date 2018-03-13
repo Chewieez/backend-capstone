@@ -26,8 +26,12 @@
             <h3>Notes:</h3>
             <div id="notes" class="">
                 <p>Notes go here:</p>
+                @await Html.PartialAsync("_NotesViewPartial")
             </div>
-            <button class="btn btn-primary">Add Note</button>
+            <div id="createNote">
+                @await Html.PartialAsync("_CreateNotePartial")
+            </div>
+            <asp type="button" class="btn btn-primary" asp-controller="Notes" asp-action="Create" value="Add Note"/>
         </div>
     </div>
 

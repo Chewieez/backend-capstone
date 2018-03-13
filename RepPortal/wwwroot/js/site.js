@@ -53,8 +53,8 @@ $(document).ready(function () {
                                 <h5>${s.name}</h5>
                                 <div>${s.streetAddress}</div>
                                 <div>${s.city}, ${s.state.name}</div>
-
                                 <div>${s.zipcode}</div>
+                                <a href="./Stores/Details/${s.storeId}">Details</a>
                                         
                                 </div>`
                     });
