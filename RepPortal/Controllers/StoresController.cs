@@ -55,8 +55,6 @@ namespace RepPortal.Controllers
             
             return View(stores);
 
-            //var applicationDbContext = _context.Store.Include(s => s.State).Include(s => s.Status);
-            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Stores/Details/5
@@ -68,6 +66,7 @@ namespace RepPortal.Controllers
             }
 
             var store = await _context.Store
+                .Include(s => s.SalesRep)
                 .Include(s => s.State)
                 .Include(s => s.Status)
                 .SingleOrDefaultAsync(m => m.StoreId == id);
@@ -150,20 +149,17 @@ namespace RepPortal.Controllers
                 return NotFound();
             }
 
-            var store = await _context.Store.SingleOrDefaultAsync(m => m.StoreId == id);
+            var store = await _context.Store.Include("User").Include("SalesRep").Include("State").Include("Status").SingleOrDefaultAsync(m => m.StoreId == id);
             if (store == null)
             {
                 return NotFound();
             }
 
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
-
+            createStoreViewModel.SalesRepId = store.SalesRep.Id;
             createStoreViewModel.Store = store;
 
-            var CurrentUser = await GetCurrentUserAsync();
-
-            ViewBag.SalesReps = _context.Users.Where(user => user != CurrentUser)
-                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
+            ViewBag.SalesReps = _context.Users.Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
             ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
