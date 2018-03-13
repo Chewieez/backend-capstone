@@ -26,7 +26,7 @@ namespace RepPortal.Controllers
         {
             var notes = await _context.Note.ToListAsync();
 
-            return View("_NotesViewPartial", notes);
+            return View(notes);
         }
 
         public IActionResult About()
