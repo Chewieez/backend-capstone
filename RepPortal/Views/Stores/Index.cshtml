@@ -42,15 +42,12 @@
             @if (User.IsInRole("Administrator"))
             {
                 <th>
-                    @Html.DisplayNameFor(model => model.SalesRepId)
+                    @Html.DisplayNameFor(model => model.SalesRep)
                 </th>
             }
-           
-                <th>
-                    @Html.DisplayNameFor(model => model.DateClosed)
-                </th>
-
-            
+            <th>
+                @Html.DisplayNameFor(model => model.DateClosed)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastOrderTotal)
             </th>
@@ -99,16 +96,10 @@
                 </td>
                 @if (User.IsInRole("Administrator"))
                 {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SalesRepId)
-                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SalesRep.FirstName) @Html.DisplayFor(modelItem => item.SalesRep.LastName)
+                </td>
                 }
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateAdded)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateClosed)
                 </td>

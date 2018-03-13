@@ -44,7 +44,7 @@ namespace RepPortal.Controllers
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display (for site administrator)
-                stores = _context.Store.Include("State").Include("Status").ToList();
+                stores = _context.Store.Include("SalesRep").Include("State").Include("Status").ToList();
             }
             else
             {
@@ -102,7 +102,7 @@ namespace RepPortal.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([Bind("StoreId,SalesRepId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,ContactName,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
+        public async Task<IActionResult> Create(CreateStoreViewModel storeModel)
         {
             ModelState.Remove("store.user");
 
@@ -112,11 +112,16 @@ namespace RepPortal.Controllers
                 // Get the current user
                 ApplicationUser user = await GetCurrentUserAsync();
 
+                // find making user for SalesRep in system
+                ApplicationUser SalesRep = _context.Users.Single(u => u.Id == storeModel.SalesRepId);
+
+                // store the sales rep on the store
+                storeModel.Store.SalesRep = SalesRep;
                 // Add current user to store listing
-                store.User = user;
+                storeModel.Store.User = user;
 
                 // save store to context
-                _context.Add(store);
+                _context.Add(storeModel.Store);
                 // save context file to database
                 await _context.SaveChangesAsync();
                 // redirect user to list of all stores
@@ -130,8 +135,8 @@ namespace RepPortal.Controllers
             // Only administrator will be allowed to create a new store listing, so they will be current User.
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = u.FirstName, Value = u.Id }).ToList();
-            ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
-            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
+            ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", storeModel.Store.StateId);
+            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", storeModel.Store.StatusId);
 
             return View(createStoreViewModel);
         }

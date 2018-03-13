@@ -9,7 +9,7 @@ namespace RepPortal.Models.StoreViewModels
 {
     public class CreateStoreViewModel
     {
-        public List<ApplicationUser> Users { get; set; }
+        public string SalesRepId { get; set; }
 
         public Store Store { get; set; }
     }

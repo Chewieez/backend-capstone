@@ -3,7 +3,7 @@
 @foreach (var item in Model)
 {
     <div id=@Html.DisplayFor(modelItem => item.NoteId)>
-        <div>@Html.DisplayFor(modelItem => item.ToUserId)</div>
+        <div>@Html.DisplayFor(modelItem => item.ToUser)</div>
         <span>@Html.DisplayFor(modelItem => item.DateCreated)</span> <span>@Html.DisplayFor(modelItem => item.Content)</span><span>@Html.DisplayFor(modelItem => item.User.FirstName) </span>
     </div>
 }
