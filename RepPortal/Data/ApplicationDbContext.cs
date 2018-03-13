@@ -32,7 +32,28 @@ namespace RepPortal.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
+            builder.Entity<Store>()
+                .HasOne(s => s.User)
+                .WithMany(s => s.Stores)
+                .HasForeignKey(s => s.ApplicationUserId);
+
+            builder.Entity<Store>()
+                .HasOne(s => s.SalesRep)
+                .WithMany(s => s.StoresRep)
+                .HasForeignKey(s => s.SalesRepId);
+
+            builder.Entity<Note>()
+                .HasOne(n => n.User)
+                .WithMany(n => n.Notes)
+                .HasForeignKey(n => n.ApplicationUserId);
+
+            builder.Entity<Note>()
+                .HasOne(n => n.ToUser)
+                .WithMany(n => n.ToNotes)
+                .HasForeignKey(n => n.ToUserId);
+
             // Have database make the DateCreated for each new db entry automactically when a new entry is created. 
+
             builder.Entity<Store>()
                 .Property(s => s.DateCreated)
                 .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
@@ -48,6 +69,8 @@ namespace RepPortal.Data
             builder.Entity<Note>()
                .Property(n => n.DateCreated)
                .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+
+
         }
     }
 }

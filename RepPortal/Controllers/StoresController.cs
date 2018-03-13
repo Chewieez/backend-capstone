@@ -49,7 +49,7 @@ namespace RepPortal.Controllers
             else
             {
                 // retrieve only matching stores where current user is the Sales Rep attached to the store
-                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();
+                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user).ToList();
             }
 
             
@@ -273,7 +273,7 @@ namespace RepPortal.Controllers
             } else
             {
                 // retrieve only matching stores where current user is the Sales Rep attached to the store
-                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();     
+                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user).ToList();     
             }
 
             // update the status of all stores by checking their last order date versus the current date

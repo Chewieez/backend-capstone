@@ -12,10 +12,14 @@ namespace RepPortal.Models
         public int NoteId { get; set; }
 
         [Required]
+        public Guid ApplicationUserId { get; set; }
+
+        [Required]
         public ApplicationUser User { get; set; }
 
+        public Guid ToUserId { get; set; }
         [Display(Name = "To User")]
-        public string ToUserId { get; set; }
+        public ApplicationUser ToUser { get; set; }
 
         [Required]
         [Display(Name = "Note")]

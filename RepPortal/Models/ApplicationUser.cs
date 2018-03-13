@@ -28,6 +28,11 @@ namespace RepPortal.Models
         public DateTime? LastLoggedInDate { get; set; }
 
         public virtual ICollection<Store> Stores { get; set; }
+        public virtual ICollection<Store> StoresRep { get; set; }
+
+        public virtual ICollection<Note> Notes { get; set; }
+        public virtual ICollection<Note> ToNotes { get; set; }
+
         public virtual ICollection<UserState> UserStates { get; set; }
     }
 }

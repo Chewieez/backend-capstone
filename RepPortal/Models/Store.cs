@@ -11,10 +11,14 @@ namespace RepPortal.Models
         public int StoreId { get; set; }
 
         [Required]
+        public Guid ApplicationUserId { get; set; }
+
+        [Required]
         public ApplicationUser User { get; set; }
 
+        public Guid SalesRepId { get; set; }
         [Display(Name="Sales Rep")]
-        public string SalesRepId { get; set; }
+        public ApplicationUser SalesRep { get; set; }
 
         [Required]
         [Display(Name="Store Name")]
