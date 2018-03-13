@@ -84,7 +84,7 @@ namespace RepPortal.Controllers
         {
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-            var CurrentUser = await GetCurrentUserAsync();
+            
 
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id}).ToList();
@@ -111,7 +111,7 @@ namespace RepPortal.Controllers
                 // Get the current user
                 ApplicationUser user = await GetCurrentUserAsync();
 
-                // find making user for SalesRep in system
+                // find matching user for SalesRep in system
                 ApplicationUser SalesRep = _context.Users.Single(u => u.Id == storeModel.SalesRepId);
 
                 // store the sales rep on the store

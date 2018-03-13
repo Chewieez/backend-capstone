@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RepPortal.Data;
 using RepPortal.Models;
+using RepPortal.Models.NotesViewModels;
 
 namespace RepPortal.Controllers
 {
@@ -54,11 +55,13 @@ namespace RepPortal.Controllers
         // GET: Notes/Create
         public IActionResult Create()
         {
+            CreateNoteViewModel CreateStoreViewModel = new CreateNoteViewModel();
+
             ViewBag.Users = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
 
-            return View();
+            return View(CreateStoreViewModel);
         }
 
         // POST: Notes/Create
@@ -66,23 +69,35 @@ namespace RepPortal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NoteId,ToUserId,Content,DateCreated")] Note note)
+        public async Task<IActionResult> Create( CreateNoteViewModel noteViewModel)
         {
-            ModelState.Remove("user");
+            ModelState.Remove("note.user");
 
             if (ModelState.IsValid)
             {
+                // find matching user for SalesRep in system
+                ApplicationUser ToUser = _context.Users.Single(u => u.Id == noteViewModel.ToUserId);
+
+                // store the sales rep on the store
+                noteViewModel.Note.ToUser = ToUser;
+
                 // get current user
                 ApplicationUser user = await GetCurrentUserAsync();
                 // add current user
-                note.User = user;
+                noteViewModel.Note.User = user;
 
-                _context.Add(note);
+                _context.Add(noteViewModel.Note);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
                 return RedirectToAction("Index", "Home");
             }
-            return View(note);
+
+            CreateNoteViewModel CreateStoreViewModel = new CreateNoteViewModel();
+
+            ViewBag.Users = _context.Users.OrderBy(u => u.FirstName)
+               .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
+
+            return View(noteViewModel);
         }
 
         // GET: Notes/Edit/5

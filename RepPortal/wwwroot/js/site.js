@@ -118,6 +118,8 @@ $(".CreateStoreBtn").click(evt => {
     const address = $("#formStreetAddress").val() || ""
     const city = $("#formCity").val() || ""
     const zip = $("#formZipcode").val() || ""
+    // Add more required fields to check
+
 
     // check that all fields are entered
     if (address !== "" && city !== "" && zip !== "") {
