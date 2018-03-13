@@ -276,6 +276,34 @@ namespace RepPortal.Controllers
                 stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRepId == user.Id).ToList();     
             }
 
+            // update the status of all stores by checking their last order date versus the current date
+            DateTime currentDate = DateTime.Now;
+
+            foreach (Store s in stores)
+            {
+                // calculate the time difference between current date and the store's last order date
+                TimeSpan interval = currentDate - s.LastOrderDate;
+                // store the store's current status
+                int storeStatusId = s.StatusId;
+                // check if the difference is greater than 6 months or 12 months
+                if ((interval.Days / 29) > 12)
+                {
+                    storeStatusId = 3;
+                }
+                else if ((interval.Days / 29) > 6)
+                {
+                    storeStatusId = 2;
+                }
+                
+                // if status has changed, save new status and write to database
+                if (storeStatusId != s.StatusId)
+                {
+                    s.StatusId = storeStatusId;
+                    _context.Update(s);
+                    _context.SaveChanges();
+                }
+            }
+
             Console.WriteLine(stores);
             // return a json formatted response to be used in javascript ajax call
             return Json(stores);

@@ -52,7 +52,8 @@ $(document).ready(function () {
 
                                 <h5>${s.name}</h5>
                                 <div>${s.streetAddress}</div>
-                                <div>${s.city}</div>
+                                <div>${s.city}, ${s.state.name}</div>
+
                                 <div>${s.zipcode}</div>
                                         
                                 </div>`
