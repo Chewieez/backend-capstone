@@ -11,12 +11,10 @@ namespace RepPortal.Models
         public int StoreId { get; set; }
 
         [Required]
-        public Guid ApplicationUserId { get; set; }
-
-        [Required]
+        [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        public Guid SalesRepId { get; set; }
+        [ForeignKey("SalesRepId")]
         [Display(Name="Sales Rep")]
         public ApplicationUser SalesRep { get; set; }
 

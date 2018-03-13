@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,13 +13,11 @@ namespace RepPortal.Models
         public int NoteId { get; set; }
 
         [Required]
-        public Guid ApplicationUserId { get; set; }
-
-        [Required]
+        [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        public Guid ToUserId { get; set; }
         [Display(Name = "To User")]
+        [ForeignKey("ToUserId")]
         public ApplicationUser ToUser { get; set; }
 
         [Required]

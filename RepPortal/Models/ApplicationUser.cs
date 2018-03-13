@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -27,10 +28,14 @@ namespace RepPortal.Models
 
         public DateTime? LastLoggedInDate { get; set; }
 
+        [InverseProperty("User")]
         public virtual ICollection<Store> Stores { get; set; }
+        [InverseProperty("SalesRep")]
         public virtual ICollection<Store> StoresRep { get; set; }
 
+        [InverseProperty("User")]
         public virtual ICollection<Note> Notes { get; set; }
+        [InverseProperty("ToUser")]
         public virtual ICollection<Note> ToNotes { get; set; }
 
         public virtual ICollection<UserState> UserStates { get; set; }
