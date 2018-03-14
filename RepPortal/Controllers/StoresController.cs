@@ -29,7 +29,7 @@ namespace RepPortal.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Stores
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
@@ -47,7 +47,11 @@ namespace RepPortal.Controllers
                 // retrieve all stores to display (for site administrator)
                 stores = _context.Store.Include("SalesRep").Include("State").Include("Status");
             }
-                        
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                stores = stores.Where(s => s.Name.Contains(searchString));
+            }
 
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";

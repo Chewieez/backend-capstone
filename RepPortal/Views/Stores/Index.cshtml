@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<RepPortal.Models.Store>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Stores In Your Territory";
 }
 
-<h2>Index</h2>
+<h2>Stores In Your Territory</h2>
 
 @if (User.IsInRole("Administrator"))
 {
@@ -12,6 +12,17 @@
         <a asp-action="Create">Create New</a>
     </p>
 }
+
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Search" class="btn btn-default" /> |
+                <a asp-action="Index">Back to Full List</a>
+            </p>
+        </div>
+    </form>
+
 <table class="table">
     <thead>
         <tr>
