@@ -36,15 +36,6 @@
                 @Html.DisplayNameFor(model => model.StreetAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Zipcode)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
@@ -71,12 +62,12 @@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.LastOrderDate)</a>
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.LastOrderShipDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastOrderPaidDate)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -91,22 +82,21 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StreetAddress)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.State.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Zipcode)
+                    <div>@Html.DisplayFor(modelItem => item.StreetAddress)</div>
+                   
+                    <div>
+                        @Html.DisplayFor(modelItem => item.City) 
+                        @Html.DisplayFor(modelItem => item.State.Name) 
+                        @Html.DisplayFor(modelItem => item.Zipcode)
+                    </div>
+
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.WebsiteURL)
+                    <a href="@Html.DisplayFor(modelItem => item.WebsiteURL)" target="_blank">@Html.DisplayFor(modelItem => item.WebsiteURL)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ContactName)
@@ -129,12 +119,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.LastOrderDate)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.LastOrderShipDate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LastOrderPaidDate)
-                </td>
+                </td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.StoreId">Details</a> |

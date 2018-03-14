@@ -56,7 +56,7 @@
             @Html.DisplayNameFor(model => model.WebsiteURL)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.WebsiteURL)
+            <a href="@Html.DisplayFor(model => model.WebsiteURL)" target="_blank">@Html.DisplayFor(model => model.WebsiteURL)</a>
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ContactName)

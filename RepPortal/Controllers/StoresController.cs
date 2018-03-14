@@ -320,8 +320,13 @@ namespace RepPortal.Controllers
                 TimeSpan interval = currentDate - s.LastOrderDate;
                 // store the store's current status
                 int storeStatusId = s.StatusId;
-                // check if the difference is greater than 6 months or 12 months
-                if ((interval.Days / 29) > 12)
+
+                // check if the store is already marked as closed, and if the time difference between last order date and current date is greater than 6 months or 12 months
+                if (s.StatusId == 4 || s.DateClosed != null)
+                {
+                    storeStatusId = 4;
+                }
+                else if ((interval.Days / 29) > 12)
                 {
                     storeStatusId = 3;
                 }
