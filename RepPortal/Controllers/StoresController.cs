@@ -31,6 +31,7 @@ namespace RepPortal.Controllers
         // GET: Stores
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+            
 
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
@@ -55,6 +56,7 @@ namespace RepPortal.Controllers
             }
 
             
+
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
             //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -86,21 +88,40 @@ namespace RepPortal.Controllers
                     break;
             }
 
+            // create a iQueryable collection of store view models
+            List<StoreListViewModel> StoresViewModels = new List<StoreListViewModel>();
 
+            var RetrievedStores = await stores.ToListAsync();
 
+            foreach (Store s in RetrievedStores)
+            {
+                // create a new view model instance
+                StoreListViewModel slvm = new StoreListViewModel();
 
-            return View(await stores.ToListAsync());
+                // find any flags for the store
+                var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == s.StoreId).SingleOrDefaultAsync();
+                // attach flag info to the view model
+                slvm.Flag1 = flag;
+                // attach the store to the view model
+                slvm.Store = s;
+                // add the view model to the StoresViewModels list
+                StoresViewModels.Add(slvm);
+
+            }
+
+            return View(StoresViewModels);
 
         }
 
         // GET: Stores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            // create a new view model instance
             StoreDetailViewModel sdvm = new StoreDetailViewModel();
 
             // find any flags for the store
             var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id ).SingleOrDefaultAsync();
-
+            // attach flag info to the view model
             sdvm.Flag1 = flag;
 
             if (id == null)
@@ -118,8 +139,10 @@ namespace RepPortal.Controllers
                 return NotFound();
             }
 
+            // attach the store to the view model
             sdvm.Store = store;
 
+            // return the view model
             return View(sdvm);
         }
 

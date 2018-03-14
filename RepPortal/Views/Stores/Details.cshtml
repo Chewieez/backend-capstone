@@ -9,7 +9,11 @@
 <div>
     <h4>Store</h4>
     <hr />
-    <a asp-controller="stores" asp-action="AddFlag" asp-route-id="@Model.Store.StoreId" >Add Reminder To Follow Up</a>
+    @if (Model.Flag1 == null)
+        {
+        <a asp-controller="stores" asp-action="AddFlag" asp-route-id="@Model.Store.StoreId" >Add Reminder To Follow Up</a>
+
+        }
 
     <dl class="dl-horizontal">
        <dt>Flags</dt>
