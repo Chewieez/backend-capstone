@@ -49,13 +49,17 @@ namespace RepPortal.Controllers
             }
                         
 
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["OrderDateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
+            ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
+            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
 
 
             switch (sortOrder)
             {
+                case "Name":
+                    stores = stores.OrderBy(s => s.Name);
+                    break;
                 case "name_desc":
                     stores = stores.OrderByDescending(s => s.Name);
                     break;
@@ -72,7 +76,7 @@ namespace RepPortal.Controllers
                     stores = stores.OrderByDescending(s => s.StatusId);
                     break;
                 default:
-                    stores = stores.OrderBy(s => s.Name);
+                    stores = stores.OrderByDescending(s => s.LastOrderDate);
                     break;
             }
 
