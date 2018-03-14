@@ -96,6 +96,13 @@ namespace RepPortal.Controllers
         // GET: Stores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            StoreDetailViewModel sdvm = new StoreDetailViewModel();
+
+            // find any flags for the store
+            var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id ).SingleOrDefaultAsync();
+
+            sdvm.Flag1 = flag;
+
             if (id == null)
             {
                 return NotFound();
@@ -111,7 +118,9 @@ namespace RepPortal.Controllers
                 return NotFound();
             }
 
-            return View(store);
+            sdvm.Store = store;
+
+            return View(sdvm);
         }
 
         // GET: Stores/Create

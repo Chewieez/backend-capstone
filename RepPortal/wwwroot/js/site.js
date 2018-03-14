@@ -154,17 +154,5 @@ $(".CreateStoreBtn").click(evt => {
         $('form').submit()
     }
 
-    // Add flag to store
-    $("#AddFlag").click(function (e) {
-
-        e.preventDefault();
-        $.ajax({
-            url: $(this).attr("href"), 
-            success: function () {
-                alert("Flag Added");  // or any other indication if you want to show
-            }
-
-        });
-
-    });
+   
 })
