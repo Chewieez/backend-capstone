@@ -29,7 +29,7 @@ namespace RepPortal.Controllers
         // GET: Notes
         public async Task<IActionResult> Index()
         {
-            var notes = await _context.Note.ToListAsync();
+            var notes = await _context.Note.Include("ToUser").ToListAsync();
 
             return View("_NotesViewPartial", notes);
         }
