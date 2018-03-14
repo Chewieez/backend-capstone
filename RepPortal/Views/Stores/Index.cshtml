@@ -26,6 +26,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Follow Up?</th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]">@Html.DisplayNameFor(model => model.Status)</a>
             </th>
@@ -68,7 +69,9 @@
     <tbody>
         @foreach (var item in Model)
         {
+
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.StoreFlags)</td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Status.Name)
 

@@ -54,6 +54,7 @@ namespace RepPortal.Controllers
                 stores = stores.Where(s => s.Name.Contains(searchString) || s.Status.Name.Contains(searchString));
             }
 
+            
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
             //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";

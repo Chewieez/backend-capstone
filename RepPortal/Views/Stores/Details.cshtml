@@ -18,7 +18,7 @@
     @*<input type="button" onclick="AddFlag" id="AddFlag" value="Remind To Follow Up"/>*@
 
     <dl class="dl-horizontal">
-
+       
         <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>
@@ -85,7 +85,7 @@
         <dd>
             @Html.DisplayFor(model => model.DateAdded)
         </dd>
-        @if (@Html.DisplayNameFor(model => model.Status) == "Closed")
+        @if (@Model.StatusId == 4)
         {
             <dt>
                 @Html.DisplayNameFor(model => model.DateClosed)
