@@ -16,10 +16,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]">@Html.DisplayNameFor(model => model.Status)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StreetAddress)
@@ -58,7 +58,7 @@
                 @Html.DisplayNameFor(model => model.LastOrderTotal)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastOrderDate)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.LastOrderDate)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastOrderShipDate)

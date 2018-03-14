@@ -29,7 +29,7 @@ namespace RepPortal.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Stores
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
@@ -38,22 +38,48 @@ namespace RepPortal.Controllers
             var roles = await _userManager.GetRolesAsync(user);
 
             // create a list of stores
-            var stores = new List<Store>();
+            // by default, only retrieve matching stores where current user is the Sales Rep attached to the store
+            var stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user);
 
             // check if the user is an Administrator
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display (for site administrator)
-                stores = _context.Store.Include("SalesRep").Include("State").Include("Status").ToList();
+                stores = _context.Store.Include("SalesRep").Include("State").Include("Status");
             }
-            else
+                        
+
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["OrderDateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
+
+
+            switch (sortOrder)
             {
-                // retrieve only matching stores where current user is the Sales Rep attached to the store
-                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user).ToList();
+                case "name_desc":
+                    stores = stores.OrderByDescending(s => s.Name);
+                    break;
+                case "Date":
+                    stores = stores.OrderBy(s => s.LastOrderDate);
+                    break;
+                case "date_desc":
+                    stores = stores.OrderByDescending(s => s.LastOrderDate);
+                    break;
+                case "Status":
+                    stores = stores.OrderBy(s => s.StatusId);
+                    break;
+                case "status_desc":
+                    stores = stores.OrderByDescending(s => s.StatusId);
+                    break;
+                default:
+                    stores = stores.OrderBy(s => s.Name);
+                    break;
             }
 
-            
-            return View(stores);
+
+
+
+            return View(await stores.ToListAsync());
 
         }
 
