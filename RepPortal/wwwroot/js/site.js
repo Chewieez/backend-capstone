@@ -25,19 +25,19 @@ $(document).ready(function () {
                     var icons = {
                         1: {
                             name: 'Active',
-                            icon: '/images/map-icons/Shopping_Bag_6.svg'
+                            icon: '/images/map-icons/Shopping_Bag_1.svg'
                         },
                         2: {
                             name: 'No Orders > 6 months',
-                            icon: '/images/map-icons/Shopping_Bag_7.svg'
+                            icon: '/images/map-icons/Shopping_Bag_2.svg'
                         },
                         3: {
                             name: 'No Orders > 12 months',
-                            icon: '/images/map-icons/Shopping_Bag_5.svg'
+                            icon: '/images/map-icons/Shopping_Bag_3.svg'
                         },
                         4: {
                             name: 'Closed',
-                            icon: '/images/map-icons/Shopping_Bag_2.svg'
+                            icon: '/images/map-icons/Shopping_Bag_4.svg'
                         }
                     }
                     //create markers for all of the stores associated with the current user

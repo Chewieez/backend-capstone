@@ -77,6 +77,8 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Status.Name)
+
+                    <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.StatusId)' />
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
