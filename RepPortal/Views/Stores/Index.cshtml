@@ -6,9 +6,12 @@
 
 <h2>Index</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -45,9 +48,12 @@
                     @Html.DisplayNameFor(model => model.SalesRep)
                 </th>
             }
-            <th>
-                @Html.DisplayNameFor(model => model.DateClosed)
-            </th>
+            @if (@Html.DisplayNameFor(model => model.Status) == "Closed")
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.DateClosed)
+                </th>
+            }
             <th>
                 @Html.DisplayNameFor(model => model.LastOrderTotal)
             </th>
@@ -96,13 +102,16 @@
                 </td>
                 @if (User.IsInRole("Administrator"))
                 {
-                <td>
-                    @Html.DisplayFor(modelItem => item.SalesRep.FirstName) @Html.DisplayFor(modelItem => item.SalesRep.LastName)
-                </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SalesRep.FirstName) @Html.DisplayFor(modelItem => item.SalesRep.LastName)
+                    </td>
                 }
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateClosed)
-                </td>
+                @if (@Html.DisplayNameFor(model => model.Status) == "Closed")
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateClosed)
+                    </td>
+                }
                 <td>
                     @Html.DisplayFor(modelItem => item.LastOrderTotal)
                 </td>
@@ -116,7 +125,7 @@
                     @Html.DisplayFor(modelItem => item.LastOrderPaidDate)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a>
+                    <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.StoreId">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.StoreId">Delete</a>
                 </td>

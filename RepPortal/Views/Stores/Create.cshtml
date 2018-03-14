@@ -52,7 +52,7 @@
                 <span asp-validation-for="@Model.Store.ContactName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.SalesRepId)
+                @Html.LabelFor(model => model.Store.SalesRep)
                 @Html.DropDownListFor(model => model.SalesRepId,
                   ViewBag.SalesReps as IEnumerable<SelectListItem>, "Select a Sales Rep", new { @class = "form-control" })
             </div>
