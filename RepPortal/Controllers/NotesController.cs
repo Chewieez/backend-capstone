@@ -31,7 +31,7 @@ namespace RepPortal.Controllers
         {
             var notes = await _context.Note.Include("ToUser").ToListAsync();
 
-            return View("_NotesViewPartial", notes);
+            return View(notes);
         }
 
         // GET: Notes/Details/5
@@ -75,11 +75,14 @@ namespace RepPortal.Controllers
 
             if (ModelState.IsValid)
             {
-                // find matching user for SalesRep in system
-                ApplicationUser ToUser = _context.Users.Single(u => u.Id == noteViewModel.ToUserId);
+                if (noteViewModel.ToUserId != null)
+                {
+                    // find matching user for SalesRep in system
+                    ApplicationUser ToUser = _context.Users.Single(u => u.Id == noteViewModel.ToUserId);
 
-                // store the sales rep on the store
-                noteViewModel.Note.ToUser = ToUser;
+                    // store the sales rep on the store
+                    noteViewModel.Note.ToUser = ToUser;
+                }
 
                 // get current user
                 ApplicationUser user = await GetCurrentUserAsync();

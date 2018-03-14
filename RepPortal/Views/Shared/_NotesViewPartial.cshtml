@@ -2,8 +2,11 @@
 
 @foreach (var item in Model)
 {
-    <div class="note" id=@Html.DisplayFor(modelItem => item.NoteId)>
-        <div class="note__author">@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName) </div>
-       <div class="note__content"> <span>@Html.DisplayFor(modelItem => item.DateCreated)</span> <span>@Html.DisplayFor(modelItem => item.Content)</span></div>
-    </div>
+    @if (User.Identity.Name.Equals(item.User.Email) || (item.ToUser != null && User.Identity.Name.Equals(item.ToUser.Email)) || User.IsInRole("Administrator"))
+    {
+        <div class="note" id=@Html.DisplayFor(modelItem => item.NoteId)>
+            <div class="note__author">@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName) </div>
+           <div class="note__content"> <span>@Html.DisplayFor(modelItem => item.DateCreated)</span> <span>@Html.DisplayFor(modelItem => item.Content)</span></div>
+        </div>
+    }
 }
