@@ -153,5 +153,18 @@ $(".CreateStoreBtn").click(evt => {
         // if store location data not present, submit form so asp.net model validaton can catch error and alert user
         $('form').submit()
     }
-   
+
+    // Add flag to store
+    $("#AddFlag").click(function (e) {
+
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr("href"), 
+            success: function () {
+                alert("Flag Added");  // or any other indication if you want to show
+            }
+
+        });
+
+    });
 })

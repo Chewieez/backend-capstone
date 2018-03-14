@@ -62,12 +62,6 @@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.LastOrderDate)</a>
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.LastOrderShipDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastOrderPaidDate)
-            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -91,8 +85,6 @@
                         @Html.DisplayFor(modelItem => item.State.Name) 
                         @Html.DisplayFor(modelItem => item.Zipcode)
                     </div>
-
-
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PhoneNumber)

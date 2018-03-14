@@ -31,6 +31,7 @@ namespace RepPortal.Controllers
         // GET: Stores
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
 
@@ -39,7 +40,7 @@ namespace RepPortal.Controllers
 
             // create a list of stores
             // by default, only retrieve matching stores where current user is the Sales Rep attached to the store
-            var stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user);
+            var stores = _context.Store.Include("SalesRep").Include("State").Include("Status").Where(s => s.SalesRep == user);
 
             // check if the user is an Administrator
             if (roles.Contains("Administrator"))
@@ -347,6 +348,23 @@ namespace RepPortal.Controllers
             Console.WriteLine(stores);
             // return a json formatted response to be used in javascript ajax call
             return Json(stores);
+        }
+
+        
+        public async Task<IActionResult> AddFlag(int? id)
+        {
+            var store = await _context.Store.SingleOrDefaultAsync(m => m.StoreId == id);
+
+            var FollowUpFlag = _context.Flag.Where(f => f.Name == "Follow Up").Single();
+
+            var StoreFollowUp = new StoreFlag();
+            StoreFollowUp.StoreId = store.StoreId;
+            StoreFollowUp.FlagId = FollowUpFlag.FlagId;
+
+            _context.Add(StoreFollowUp);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = id });
         }
     }
 }

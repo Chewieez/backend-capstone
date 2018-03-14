@@ -249,6 +249,22 @@ namespace RepPortal.Data
                     }
                     context.SaveChanges();
                 }
+
+                if (!context.Flag.Any())
+                {
+                    var flags = new Flag[]
+                    {
+                        new Flag {
+                            Name = "Follow Up"
+                        },
+                    };
+
+                    foreach (Flag f in flags)
+                    {
+                        context.Flag.Add(f);
+                    }
+                    context.SaveChanges();
+                }
             }
         }
     }

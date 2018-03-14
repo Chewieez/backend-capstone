@@ -9,7 +9,16 @@
 <div>
     <h4>Store</h4>
     <hr />
+    @*<a asp-controller="stores" asp-action="AddFlag">Add Reminder To Follow Up</a>
+    *@
+    @*<a href="@Url.Action("AddFlag", "stores", new { id = Model.StoreId })">Add Remind To Follow Up</a>*@
+    @*@Html.ActionLink("Add Flag", "AddFlag", "stores", new { id = "2" })*@
+
+    <a asp-controller="stores" asp-action="AddFlag" asp-route-id="@Model.StoreId" >Add Remind To Follow Up</a>
+    @*<input type="button" onclick="AddFlag" id="AddFlag" value="Remind To Follow Up"/>*@
+
     <dl class="dl-horizontal">
+
         <dt>
             @Html.DisplayNameFor(model => model.Status)
         </dt>

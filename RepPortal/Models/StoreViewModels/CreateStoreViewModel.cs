@@ -10,8 +10,11 @@ namespace RepPortal.Models.StoreViewModels
 {
     public class CreateStoreViewModel
     {
-        [Display(Name="To User")]
+        [Display(Name="Sales Rep")]
         public string SalesRepId { get; set; }
+
+        [Display(Name="Flag")]
+        public string FlagId { get; set; }
 
         public Store Store { get; set; }
     }
