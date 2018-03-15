@@ -63,11 +63,19 @@
 }
 
 #notes {
-    height: 400px;
+    height: 350px;
+    overflow: auto;
     width: 100%;
     border: 1px solid rgba(128, 128, 128, 0.86);
 }
 
+.note__author {
+    font-weight: bold;
+}
+
+#notes hr {
+    margin: 4px 0;
+}
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */

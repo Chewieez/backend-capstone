@@ -57,7 +57,7 @@ namespace RepPortal.ViewComponents
                 UserNotes = await _context.Note.Include("ToUser").Where(n => n.User == user || n.ToUser == user).ToListAsync();
             }
 
-            return UserNotes;
+            return UserNotes.OrderByDescending(n => n.DateCreated).ToList();
         }
 
         private void SaveNote(Note note)

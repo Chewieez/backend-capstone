@@ -91,16 +91,11 @@ namespace RepPortal.Controllers
 
                 _context.Add(noteViewModel.Note);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
+
                 return RedirectToAction("Index", "Home");
             }
 
-            CreateNoteViewModel CreateStoreViewModel = new CreateNoteViewModel();
-
-            ViewBag.Users = _context.Users.OrderBy(u => u.FirstName)
-               .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
-
-            return View(noteViewModel);
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Notes/Edit/5
