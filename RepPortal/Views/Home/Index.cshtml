@@ -17,21 +17,19 @@
             <div class="mapContainer">
                 <div id="map"></div>
                 <div id="legend">
-                    <h4>Legend</h4>
-                    <div id="legend-innerContainer"></div>
+
+                    <div id="legend-innerContainer"><span class="bold">Legend:</span></div>
                 </div>
+
             </div>
+            <input id="pac-input" class="controls" type="text" placeholder="Search">
         </div>
 
         <div class="col-sm-4">
             <h3>Notes:</h3>
             <div class="">
                 @await Component.InvokeAsync("Notes")
-               @* @await Html.PartialAsync("_NotesViewPartial", Model)*@
             </div>
-            @*<div id="createNote">
-                <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Notes")'" value="Add Note" />
-            </div>*@
         </div>
     </div>
     <div class="col-md-offset-8 col-md-4">
@@ -57,4 +55,4 @@
     })
     Object.freeze(googleAPI)
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.GoogleAPIKey)"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.GoogleAPIKey)&libraries=places"></script>
