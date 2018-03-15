@@ -59,7 +59,6 @@ namespace RepPortal.Controllers
 
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
-            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
 
 

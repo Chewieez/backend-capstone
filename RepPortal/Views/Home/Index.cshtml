@@ -25,14 +25,13 @@
 
         <div class="col-sm-4">
             <h3>Notes:</h3>
-            <div id="notes" class="">
-
-                @await Html.PartialAsync("_NotesViewPartial", Model)
+            <div class="">
+                @await Component.InvokeAsync("Notes")
+               @* @await Html.PartialAsync("_NotesViewPartial", Model)*@
             </div>
-            <div id="createNote">
-                @* @await Html.PartialAsync("_CreateNotePartial")*@
+            @*<div id="createNote">
                 <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Notes")'" value="Add Note" />
-            </div>
+            </div>*@
         </div>
     </div>
     <div class="col-md-offset-8 col-md-4">

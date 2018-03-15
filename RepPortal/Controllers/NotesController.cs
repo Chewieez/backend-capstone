@@ -55,13 +55,13 @@ namespace RepPortal.Controllers
         // GET: Notes/Create
         public IActionResult Create()
         {
-            CreateNoteViewModel CreateStoreViewModel = new CreateNoteViewModel();
+            CreateNoteViewModel CreateNoteViewModel = new CreateNoteViewModel();
 
             ViewBag.Users = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
 
-            return View(CreateStoreViewModel);
+            return View(CreateNoteViewModel);
         }
 
         // POST: Notes/Create
