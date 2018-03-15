@@ -1,0 +1,14 @@
+﻿@model IEnumerable<RepPortal.Models.StoreViewModels.StoreFlagViewModel>
+
+<h3>Flags</h3>
+    @foreach (var sfvm in Model)
+    {
+        @if (sfvm.Flag != null)
+        {
+            <div class="storeFlags">
+                <span class="storeFlags__flag">@sfvm.Flag.Name</span> - <span class="storeFlags__storeName">@sfvm.Store.Name</span> 
+
+            </div>
+        
+        }
+    }
