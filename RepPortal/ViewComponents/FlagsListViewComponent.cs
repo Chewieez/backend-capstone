@@ -39,15 +39,22 @@ namespace RepPortal.ViewComponents
             // get user
             var user = await GetCurrentUserAsync();
 
-            // check if user is Administrator
+            // create a new list to hold stores
+            var UserStores = new List<Store>();
 
-            //var flag = _context.StoreFlag.Include("Flag").Include("Store").Where(sf => sf.IsDone == isDone).ToListAsync();
-
-            // retrieve stores from db that are in users territory
-            var UserStores = await _context.Store.Where(s => s.SalesRep == user).ToListAsync();
+            // check if user is an Administrator, if they are, retrieve all the stores in database, if they are not, 
+            // just retrieve stores from db that are in user's (sales rep) territory
+            if (User.IsInRole("Administrator"))
+            {
+                UserStores = await _context.Store.Include("SalesRep").ToListAsync();
+            } else
+            {
+                UserStores = await _context.Store.Where(s => s.SalesRep == user).ToListAsync();
+            }
 
             // create list of view models
             List<StoreFlagViewModel> sfvmList = new List<StoreFlagViewModel>();
+
             // iterate through stores and get any flags attached
             foreach (Store s in UserStores)
             {
@@ -70,15 +77,6 @@ namespace RepPortal.ViewComponents
                 sfvmList.Add(sfvm);
             }
 
-            //var Flags = (from sf in _context.StoreFlag
-            //            join s in _context.Store
-            //            on sf.StoreId equals s.StoreId
-            //            join f in _context.Flag
-            //            on sf.FlagId equals f.FlagId
-            //            where s.SalesRep == user
-            //            select f).ToListAsync();
-
-            
             return sfvmList;
         }
     }
