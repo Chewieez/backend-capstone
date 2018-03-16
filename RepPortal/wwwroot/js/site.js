@@ -22,11 +22,11 @@ $(document).ready(function () {
 
             function createMap() {
 
-                // check if there is a valid response from ajax call
-                if (stores[0]) {
+                //// check if there is a valid response from ajax call
+                //if (stores[0]) {
 
                     // check if the respone contains coordinates
-                    if (stores[0].lat) {
+                    if (stores[0] && stores[0].lat) {
 
                         // create map
                         storeMap = new google.maps.Map(document.getElementById('map'));
@@ -179,7 +179,7 @@ $(document).ready(function () {
                             storeMap.fitBounds(bounds);
                         }); // end of Searchbox event listener
                     }
-                }
+                //}
                 // closes infowindow if user clicks anywhere on the map that is not another marker
                 storeMap.addListener('click', function () {
                     if (prev_infowindow) {
@@ -220,7 +220,7 @@ $(document).ready(function () {
                 controlUI.style.cursor = 'pointer';
                 controlUI.style.marginBottom = '22px';
                 controlUI.style.textAlign = 'center';
-                controlUI.title = 'Click to recenter the map';
+                controlUI.title = 'Click to reset the map';
                 controlDiv.appendChild(controlUI);
 
                 // Set CSS for the control interior.
@@ -228,7 +228,7 @@ $(document).ready(function () {
                 controlText.style.color = 'rgb(25,25,25)';
                 controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
                 controlText.style.fontSize = '16px';
-                controlText.style.lineHeight = '38px';
+                controlText.style.lineHeight = '33px';
                 controlText.style.paddingLeft = '5px';
                 controlText.style.paddingRight = '5px';
                 controlText.innerHTML = 'Reset Map';
