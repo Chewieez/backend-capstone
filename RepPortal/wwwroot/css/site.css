@@ -41,6 +41,24 @@
     width: 100%;
 }
 
+#description {
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+#infowindow-content .title {
+    font-weight: bold;
+}
+
+#infowindow-content {
+    display: none;
+}
+
+#map #infowindow-content {
+    display: inline;
+}
+
 .pac-card {
     margin: 10px 10px 0 0;
     border-radius: 2px 0 0 2px;

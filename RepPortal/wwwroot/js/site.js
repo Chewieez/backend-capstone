@@ -1,9 +1,12 @@
 ﻿// Write your JavaScript code.
 
+
+
 $(document).ready(function () {
-    
+
+
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-    
+
         $.ajax({
             url: "/Stores/StoresList",
             method: "GET"
@@ -29,7 +32,7 @@ $(document).ready(function () {
                         bounds = new google.maps.LatLngBounds();
 
                         //var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-                        var icons = {
+                        const icons = {
                             1: {
                                 name: 'Active',
                                 icon: '/images/map-icons/Shopping_Bag_1.svg'
@@ -56,7 +59,7 @@ $(document).ready(function () {
                                 "lng": parseFloat(s.long)
                             }
 
-                            var infowindow = new google.maps.InfoWindow({
+                            let infowindow = new google.maps.InfoWindow({
                                 content: `<div>
                                         <h5>${s.name}</h5>
                                         <div>${s.streetAddress}</div>
@@ -76,7 +79,7 @@ $(document).ready(function () {
                                 },
                                 map: storeMap
                             });
-                           
+
 
                             // add marker to the bounds method to set Google Maps center to include all pins
                             const loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
@@ -90,119 +93,174 @@ $(document).ready(function () {
                                 }
                                 //set prev_infowindow as the current detail window open
                                 prev_infowindow = infowindow;
-
+                                // open new detail window
                                 infowindow.open(storeMap, marker);
                             });
-
-                            storeMap.addListener('click', function () {
-                                if (prev_infowindow) {
-                                    prev_infowindow.close();
-                                }
-                            })
                         })
 
                         storeMap.fitBounds(bounds);
                         storeMap.panToBounds(bounds);
 
-                        var legendInnerContainer = document.getElementById('legend-innerContainer');
-                        for (var key in icons) {
-                            var type = icons[key];
-                            var name = type.name;
-                            var icon = type.icon;
-                            var div = document.createElement('div');
+                        let legendInnerContainer = document.getElementById('legend-innerContainer');
+                        for (let key in icons) {
+                            let type = icons[key];
+                            let name = type.name;
+                            let icon = type.icon;
+                            let div = document.createElement('div');
                             div.id = "legend-icons";
                             div.innerHTML = '<img src="' + icon + '"> ' + name;
                             legendInnerContainer.appendChild(div);
                         }
-                        
+
+                        // Create the DIV to hold the control and call the CenterControl()
+                        // constructor passing in this DIV.
+                        let resetControlDiv = document.createElement('div');
+                        let resetControl = new ResetControl(resetControlDiv, storeMap);
+
+                        resetControlDiv.index = 1;
+                        storeMap.controls[google.maps.ControlPosition.TOP_RIGHT].push(resetControlDiv);
+
+                        // allows users to search different for other items in the map via Google 
+                        // Create the search box and link it to the UI element.
+                        let input = document.getElementById("pac-input");
+                        let searchBox = new google.maps.places.SearchBox(input);
+
+                        storeMap.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+
+                        // Bias the SearchBox results towards current map's viewport.
+                        storeMap.addListener('bounds_changed', function () {
+                            searchBox.setBounds(storeMap.getBounds());
+                        });
+
+
+                        // Listen for the event fired when the user selects a prediction and retrieve
+                        // more details for that place.
+                        searchBox.addListener('places_changed', function () {
+                            let places = searchBox.getPlaces();
+
+                            if (places.length == 0) {
+                                return;
+                            }
+
+                            // Clear out the old markers.
+                            markers.forEach(function (marker) {
+                                marker.setMap(null);
+                            });
+                            markers = [];
+
+                            // For each place, get the icon, name and location.
+                            let bounds = new google.maps.LatLngBounds();
+                            places.forEach(function (place) {
+                                if (!place.geometry) {
+                                    console.log("Returned place contains no geometry");
+                                    return;
+                                }
+                                let icon = {
+                                    url: place.icon,
+                                    size: new google.maps.Size(71, 71),
+                                    origin: new google.maps.Point(0, 0),
+                                    anchor: new google.maps.Point(17, 34),
+                                    scaledSize: new google.maps.Size(25, 25)
+                                };
+
+                                let infowindow = new google.maps.InfoWindow({
+                                    pixelOffset: new google.maps.Size(-22, 0),
+                                    content: `<div>
+                                    <h5>${place.name}</h5>
+                                    <div>${place.formatted_address}</div>                            
+                                  </div>`
+                                });
+
+                                // Create a marker for each place.
+                                let newMarker = new google.maps.Marker({
+                                    map: storeMap,
+                                    icon: icon,
+                                    title: place.name,
+                                    position: place.geometry.location
+                                })
+                                markers.push(newMarker);
+
+                                newMarker.addListener('click', function () {
+                                    //if a detail window is open, close it before opening a new one
+                                    if (prev_infowindow) {
+                                        prev_infowindow.close();
+                                    }
+                                    //set prev_infowindow as the current detail window open
+                                    prev_infowindow = infowindow;
+
+                                    infowindow.open(storeMap, newMarker);
+                                });
+
+
+                                if (place.geometry.viewport) {
+                                    // Only geocodes have viewport.
+                                    bounds.union(place.geometry.viewport);
+                                } else {
+                                    bounds.extend(place.geometry.location);
+                                }
+                            });
+                            storeMap.fitBounds(bounds);
+                        }); // end of Searchbox event listener
+
                     }
                 }
             }
             createMap();
 
-            //allows users to search different for other items in the map via Google 
-            // Create the search box and link it to the UI element.
-            var input = document.getElementById('pac-input');
-            var searchBox = new google.maps.places.SearchBox(input);
-            storeMap.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-            // Bias the SearchBox results towards current map's viewport.
-            storeMap.addListener('bounds_changed', function () {
-                searchBox.setBounds(storeMap.getBounds());
-            });
-
-            
-            // Listen for the event fired when the user selects a prediction and retrieve
-            // more details for that place.
-            searchBox.addListener('places_changed', function () {
-                var places = searchBox.getPlaces();
-
-                if (places.length == 0) {
-                    return;
+            // closes infowindow is user clicks anywhere in the map that is not another marker
+            storeMap.addListener('click', function () {
+                if (prev_infowindow) {
+                    prev_infowindow.close();
                 }
+            })
 
-                // Clear out the old markers.
-                markers.forEach(function (marker) {
-                    marker.setMap(null);
+
+
+            /**
+  * The ResetControl adds a control to the map that recenters the map on
+  * the users stores.
+  * This constructor takes the control DIV as an argument.
+  * @constructor
+  */
+            function ResetControl(controlDiv, map) {
+
+                // Set CSS for the control border.
+                let controlUI = document.createElement('div');
+                controlUI.style.backgroundColor = '#fff';
+                controlUI.style.border = '2px solid #fff';
+                controlUI.style.borderRadius = '3px';
+                controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+                controlUI.style.cursor = 'pointer';
+                controlUI.style.marginBottom = '22px';
+                controlUI.style.textAlign = 'center';
+                controlUI.title = 'Click to recenter the map';
+                controlDiv.appendChild(controlUI);
+
+                // Set CSS for the control interior.
+                let controlText = document.createElement('div');
+                controlText.style.color = 'rgb(25,25,25)';
+                controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+                controlText.style.fontSize = '16px';
+                controlText.style.lineHeight = '38px';
+                controlText.style.paddingLeft = '5px';
+                controlText.style.paddingRight = '5px';
+                controlText.innerHTML = 'Center Map';
+                controlUI.appendChild(controlText);
+
+                // Setup the click event listeners: simply set the map to Chicago.
+                controlUI.addEventListener('click', () => {
+                    createMap();
                 });
-                markers = [];
+            }
+        }) // end of .then() from ajax call
 
-                // For each place, get the icon, name and location.
-                var bounds = new google.maps.LatLngBounds();
-                places.forEach(function (place) {
-                    if (!place.geometry) {
-                        console.log("Returned place contains no geometry");
-                        return;
-                    }
-                    var icon = {
-                        url: place.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
-
-                    var infowindow = new google.maps.InfoWindow({
-                        content: `<div>
-                                        <h5>${place.name}</h5>
-                                        
-                                        <div>${place.formatted_address}</div>
-                                        
-                                                                         
-                                        </div>`
-                    });
-
-                    // Create a marker for each place.
-                    let newMarker = new google.maps.Marker({
-                        map: storeMap,
-                        icon: icon,
-                        title: place.name,
-                        position: place.geometry.location
-                    })
-                    markers.push(newMarker);
-
-                    newMarker.addListener('click', function () {
-                        infowindow.open(storeMap, newMarker);
-                    });
+    } // end of if statement checking where the user is in the app
 
 
-                    if (place.geometry.viewport) {
-                        // Only geocodes have viewport.
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                storeMap.fitBounds(bounds);
-            });
 
-
-                        //storeMap.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
-
-        })
-
-    }
 });
+
 
 
 //get geocode data of the new store upon creation 
@@ -247,5 +305,5 @@ $(".CreateStoreBtn").click(evt => {
         $('form').submit()
     }
 
-   
+
 })
