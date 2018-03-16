@@ -17,6 +17,9 @@ $(document).ready(function () {
             // variable to hold content of info window, so only one window can be open at a time.
             let prev_infowindow
 
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById("pac-input");
+
             function createMap() {
 
                 // check if there is a valid response from ajax call
@@ -30,26 +33,7 @@ $(document).ready(function () {
 
                         // create a bounds object to tell Google Maps where to set the center of the map
                         bounds = new google.maps.LatLngBounds();
-
-                        //var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-                        const icons = {
-                            1: {
-                                name: 'Active',
-                                icon: '/images/map-icons/Shopping_Bag_1.svg'
-                            },
-                            2: {
-                                name: 'No Orders > 6 months',
-                                icon: '/images/map-icons/Shopping_Bag_2.svg'
-                            },
-                            3: {
-                                name: 'No Orders > 12 months',
-                                icon: '/images/map-icons/Shopping_Bag_3.svg'
-                            },
-                            4: {
-                                name: 'Closed',
-                                icon: '/images/map-icons/Shopping_Bag_4.svg'
-                            }
-                        }
+                        
                         //create markers for all of the stores associated with the current user
                         stores.forEach(s => {
 
@@ -59,6 +43,7 @@ $(document).ready(function () {
                                 "lng": parseFloat(s.long)
                             }
 
+                            // create an info window with details for the store
                             let infowindow = new google.maps.InfoWindow({
                                 content: `<div>
                                         <h5>${s.name}</h5>
@@ -69,6 +54,7 @@ $(document).ready(function () {
                                         </div>`
                             });
 
+                            // create marker for the store
                             let marker = new google.maps.Marker({
                                 position: latLong,
                                 animation: google.maps.Animation.DROP,
@@ -98,19 +84,15 @@ $(document).ready(function () {
                             });
                         })
 
+                        // set map center and zoom levels to contain all the pins
                         storeMap.fitBounds(bounds);
                         storeMap.panToBounds(bounds);
 
-                        let legendInnerContainer = document.getElementById('legend-innerContainer');
-                        for (let key in icons) {
-                            let type = icons[key];
-                            let name = type.name;
-                            let icon = type.icon;
-                            let div = document.createElement('div');
-                            div.id = "legend-icons";
-                            div.innerHTML = '<img src="' + icon + '"> ' + name;
-                            legendInnerContainer.appendChild(div);
-                        }
+                        // allows users to search different for other items in the map via Google 
+                        
+                        let searchBox = new google.maps.places.SearchBox(input);
+
+                        storeMap.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
                         // Create the DIV to hold the control and call the CenterControl()
                         // constructor passing in this DIV.
@@ -120,12 +102,6 @@ $(document).ready(function () {
                         resetControlDiv.index = 1;
                         storeMap.controls[google.maps.ControlPosition.TOP_RIGHT].push(resetControlDiv);
 
-                        // allows users to search different for other items in the map via Google 
-                        // Create the search box and link it to the UI element.
-                        let input = document.getElementById("pac-input");
-                        let searchBox = new google.maps.places.SearchBox(input);
-
-                        storeMap.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
 
                         // Bias the SearchBox results towards current map's viewport.
@@ -181,6 +157,7 @@ $(document).ready(function () {
                                 })
                                 markers.push(newMarker);
 
+                                // add event listener to new marker
                                 newMarker.addListener('click', function () {
                                     //if a detail window is open, close it before opening a new one
                                     if (prev_infowindow) {
@@ -192,7 +169,6 @@ $(document).ready(function () {
                                     infowindow.open(storeMap, newMarker);
                                 });
 
-
                                 if (place.geometry.viewport) {
                                     // Only geocodes have viewport.
                                     bounds.union(place.geometry.viewport);
@@ -202,27 +178,37 @@ $(document).ready(function () {
                             });
                             storeMap.fitBounds(bounds);
                         }); // end of Searchbox event listener
-
                     }
                 }
+                // closes infowindow if user clicks anywhere on the map that is not another marker
+                storeMap.addListener('click', function () {
+                    if (prev_infowindow) {
+                        prev_infowindow.close();
+                    }
+                })
             }
             createMap();
 
-            // closes infowindow is user clicks anywhere in the map that is not another marker
-            storeMap.addListener('click', function () {
-                if (prev_infowindow) {
-                    prev_infowindow.close();
-                }
-            })
+            // create the legend to explain what the different marker icon represent
+            let legendInnerContainer = document.getElementById('legend-innerContainer');
+            for (let key in icons) {
+                let type = icons[key];
+                let name = type.name;
+                let icon = type.icon;
+                let div = document.createElement('div');
+                div.id = "legend-icons";
+                div.innerHTML = '<img src="' + icon + '"> ' + name;
+                legendInnerContainer.appendChild(div);
+            }
 
 
 
             /**
-  * The ResetControl adds a control to the map that recenters the map on
-  * the users stores.
-  * This constructor takes the control DIV as an argument.
-  * @constructor
-  */
+              * The ResetControl adds a control to the map that recenters the map on
+              * the users stores.
+              * This constructor takes the control DIV as an argument.
+              * @constructor
+            */
             function ResetControl(controlDiv, map) {
 
                 // Set CSS for the control border.
@@ -245,23 +231,38 @@ $(document).ready(function () {
                 controlText.style.lineHeight = '38px';
                 controlText.style.paddingLeft = '5px';
                 controlText.style.paddingRight = '5px';
-                controlText.innerHTML = 'Center Map';
+                controlText.innerHTML = 'Reset Map';
                 controlUI.appendChild(controlText);
 
                 // Setup the click event listeners: simply set the map to Chicago.
                 controlUI.addEventListener('click', () => {
                     createMap();
+                    input.value = "";
                 });
             }
         }) // end of .then() from ajax call
-
     } // end of if statement checking where the user is in the app
-
-
-
 });
 
-
+// Icons to use as Google Map markers
+const icons = {
+    1: {
+        name: 'Active',
+        icon: '/images/map-icons/Shopping_Bag_1.svg'
+    },
+    2: {
+        name: 'No Orders > 6 months',
+        icon: '/images/map-icons/Shopping_Bag_2.svg'
+    },
+    3: {
+        name: 'No Orders > 12 months',
+        icon: '/images/map-icons/Shopping_Bag_3.svg'
+    },
+    4: {
+        name: 'Closed',
+        icon: '/images/map-icons/Shopping_Bag_4.svg'
+    }
+}
 
 //get geocode data of the new store upon creation 
 $(".CreateStoreBtn").click(evt => {
@@ -294,16 +295,12 @@ $(".CreateStoreBtn").click(evt => {
                     // submit form
                     $('form').submit()
                 }
-
             } else {
                 alert("Error retrieving geolocation coordinates. Check your address and try again.")
             }
-
         })
     } else {
-        // if store location data not present, submit form so asp.net model validaton can catch error and alert user
-        $('form').submit()
+        // if store location data not present, do not submite form so asp.net model validaton can catch error and alert user
+        //$('form').submit()
     }
-
-
 })
