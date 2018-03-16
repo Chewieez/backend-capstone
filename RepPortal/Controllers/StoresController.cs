@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using LINQtoCSV;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -31,7 +34,7 @@ namespace RepPortal.Controllers
         // GET: Stores
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            
+
 
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
@@ -55,7 +58,7 @@ namespace RepPortal.Controllers
                 stores = stores.Where(s => s.Name.Contains(searchString) || s.Status.Name.Contains(searchString));
             }
 
-            
+
 
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
@@ -119,7 +122,7 @@ namespace RepPortal.Controllers
             StoreDetailViewModel sdvm = new StoreDetailViewModel();
 
             // find any flags for the store
-            var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id ).SingleOrDefaultAsync();
+            var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id).SingleOrDefaultAsync();
             // attach flag info to the view model
             sdvm.Flag1 = flag;
 
@@ -151,14 +154,14 @@ namespace RepPortal.Controllers
         {
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-            
+
 
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
-                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id}).ToList();
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
-            ViewData["StateId"] = new SelectList(_context.State.OrderBy( s=> s.Name), "StateId", "Name");
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name");
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
-            
+
             return View(createStoreViewModel);
         }
 
@@ -338,10 +341,11 @@ namespace RepPortal.Controllers
             {
                 // retrieve all stores to display on map (for site administrator)
                 stores = _context.Store.Include("State").Include("Status").ToList();
-            } else
+            }
+            else
             {
                 // retrieve only matching stores where current user is the Sales Rep attached to the store
-                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user).ToList();     
+                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user).ToList();
             }
 
             // update the status of all stores by checking their last order date versus the current date
@@ -367,7 +371,7 @@ namespace RepPortal.Controllers
                 {
                     storeStatusId = 2;
                 }
-                
+
                 // if status has changed, save new status and write to database
                 if (storeStatusId != s.StatusId)
                 {
@@ -382,7 +386,7 @@ namespace RepPortal.Controllers
             return Json(stores);
         }
 
-        
+
         public async Task<IActionResult> AddFlag(int? id)
         {
             var store = await _context.Store.SingleOrDefaultAsync(m => m.StoreId == id);
@@ -398,5 +402,63 @@ namespace RepPortal.Controllers
 
             return RedirectToAction("Details", new { id = id });
         }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadCsv(IFormFile attachmentcsv)
+        {
+
+            List<string> records = new List<string>();
+
+            var filePath = Path.GetTempFileName();
+
+            var stream = new FileStream(filePath, FileMode.Create);
+
+            attachmentcsv.CopyTo(stream);
+            // Reading the text file - StreamReader include System.IO namespace
+            StreamReader objReader = new StreamReader(stream);// Please give the file path
+            string sLine = "";
+            List<string> TextList = new List<string>();// Include System.Collections.Generic namespace
+            while (sLine != null)
+            {
+                sLine = objReader.ReadLine();
+                if (sLine != null)
+                    TextList.Add(sLine);
+            }
+
+            Console.WriteLine("working?");
+
+            //var reader = new StreamReader(stream);
+
+            //var value = await reader.ReadToEndAsync();
+
+
+
+            //while (!reader.EndOfStream)
+            //{
+            //    var line = reader.ReadLine();
+            //    var values = line.Split(",");
+            //}
+
+
+
+
+
+            //foreach (string record in records)
+            //{
+            //    Store importedStore = new Store();
+            //    string[] textpart = record.Split(",");
+
+            //    importedStore.Name = textpart[0];
+
+            //    //emplist.Add(emp);
+
+            //}
+
+            //_context.Store.AddRange(list);
+            //_context.SaveChanges();
+            return Redirect("Index");
+        }
+
+
     }
 }
