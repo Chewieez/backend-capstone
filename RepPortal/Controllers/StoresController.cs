@@ -412,37 +412,35 @@ namespace RepPortal.Controllers
 
             var filePath = Path.GetTempFileName();
 
-            //Read the contents of CSV file.
-            string csvData = System.IO.File.ReadAllText(filePath);
+            ////Read the contents of CSV file.
+            //string csvData = System.IO.File.ReadAllText(filePath);
 
-            //Execute a loop over the rows.
-            foreach (string row in csvData.Split('\n'))
-            {
-                if (!string.IsNullOrEmpty(row))
-                {
-                    Console.Write("uuugghggh");
+            ////Execute a loop over the rows.
+            //foreach (string row in csvData.Split('\n'))
+            //{
+            //    if (!string.IsNullOrEmpty(row))
+            //    {
+            //        Console.Write("uuugghggh");
                    
+            //    }
+            //}
+
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await attachmentcsv.CopyToAsync(stream);
+
+                var reader = new StreamReader(stream);
+
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(",");
                 }
             }
 
 
-            //using (var stream = new FileStream(filePath, FileMode.Create))
-            //{
-            //    await attachmentcsv.CopyToAsync(stream);
 
-            //    var reader = new StreamReader(stream);
-
-            //    while (!reader.EndOfStream)
-            //    {
-            //        var line = reader.ReadLine();
-            //        var values = line.Split(",");
-            //    }
-                
-               
-            //}
-
-            
-            
             //_context.Store.AddRange(list);
             //_context.SaveChanges();
             return Redirect("Index");
