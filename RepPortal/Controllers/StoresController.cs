@@ -431,12 +431,12 @@ namespace RepPortal.Controllers
                         var ns = new Store();
                         string[] textpart = s.Split(',');
                         ns.City = textpart[0];
-                        ns.Zipcode = "12345";
                         ns.ContactName = textpart[1];
+                        ns.DateAdded = Convert.ToDateTime(textpart[2]);
+                        ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
+                        ns.Zipcode = "12345";
                         ns.Name = "First Imported via csv";
-                        //ns.DateAdded = Convert.ToDateTime(textpart[2]);
                         ns.DateAdded = DateTime.Now;
-                        ns.LastOrderDate = DateTime.Now;
                         ns.LastOrderShipDate = DateTime.Now;
                         ns.LastOrderTotal = 22;
                         ns.PhoneNumber = "2222222222";
