@@ -8,20 +8,33 @@
 
 @if (User.IsInRole("Administrator"))
 {
+    <div class="col-md-offset-5 col-md-7">
     <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create">Create A New Store Listing</a>
     </p>
+        @using (Html.BeginForm("UploadCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                <label for="attachment">Add stores via CSV File</label>
+                <label class="btn btn-default btn-file">
+                    <input type="file" name="attachmentcsv" id="attachmentcsv" hidden>
+                </label>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+            <hr />
+        }
+    </div>
 }
 
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p>
-                Search by Name or Status: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-                <input type="submit" value="Search" class="btn btn-default" /> |
-                <a asp-action="Index">Back to Full List</a>
-            </p>
-        </div>
-    </form>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search by Name or Status: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
 
 <table class="table">
     <thead>
@@ -82,10 +95,10 @@
                 </td>
                 <td>
                     <div>@Html.DisplayFor(modelItem => item.Store.StreetAddress)</div>
-                   
+
                     <div>
-                        @Html.DisplayFor(modelItem => item.Store.City) 
-                        @Html.DisplayFor(modelItem => item.Store.State.Name) 
+                        @Html.DisplayFor(modelItem => item.Store.City)
+                        @Html.DisplayFor(modelItem => item.Store.State.Name)
                         @Html.DisplayFor(modelItem => item.Store.Zipcode)
                     </div>
                 </td>
@@ -117,11 +130,11 @@
                     @Html.DisplayFor(modelItem => item.Store.LastOrderDate)
                 </td>
                 @*<td>
-                    @Html.DisplayFor(modelItem => item.LastOrderShipDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastOrderPaidDate)
-                </td>*@
+                        @Html.DisplayFor(modelItem => item.LastOrderShipDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastOrderPaidDate)
+                    </td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Store.StoreId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Store.StoreId">Details</a> |
@@ -131,3 +144,5 @@
         }
     </tbody>
 </table>
+
+

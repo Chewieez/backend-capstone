@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -398,5 +400,60 @@ namespace RepPortal.Controllers
 
             return RedirectToAction("Details", new { id = id });
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> UploadCsv(IFormFile attachmentcsv)
+        {
+            // get current User
+            var user = await GetCurrentUserAsync();
+
+            List<string> records = new List<string>();
+            List<Store> StoresToAdd = new List<Store>();
+
+            var filePath = Path.GetTempFileName();
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await attachmentcsv.CopyToAsync(stream);
+
+                var reader = new StreamReader(stream);
+                stream.Position = 0;
+                reader.DiscardBufferedData();
+
+                var CsvContent = reader.ReadToEnd();
+                records = new List<string>(CsvContent.Split('\n'));
+
+                foreach (string s in records)
+                {
+                    if (!s.StartsWith("City") && s.Length > 5)
+                    {
+                        var ns = new Store();
+                        string[] textpart = s.Split(',');
+                        ns.City = textpart[0];
+                        ns.ContactName = textpart[1];
+                        ns.DateAdded = Convert.ToDateTime(textpart[2]);
+                        ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
+                        ns.Zipcode = "12345";
+                        ns.Name = "First Imported via csv";
+                        ns.DateAdded = DateTime.Now;
+                        ns.LastOrderShipDate = DateTime.Now;
+                        ns.LastOrderTotal = 22;
+                        ns.PhoneNumber = "2222222222";
+                        ns.StreetAddress ="xxx";
+                        ns.StateId = 1;
+                        ns.StatusId = 1;
+                        ns.User = user;
+                        StoresToAdd.Add(ns);
+
+                    }
+                }  
+            }
+            _context.Store.AddRange(StoresToAdd);
+            _context.SaveChanges();
+            return Redirect("Index");
+        }
+
+
     }
 }
