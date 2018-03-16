@@ -6,6 +6,7 @@
 appsettings.json
 RepPortal.db
 RepPortal2.db
+RepPortal3.db
 
 # User-specific files
 *.suo

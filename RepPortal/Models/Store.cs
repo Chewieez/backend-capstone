@@ -43,7 +43,6 @@ namespace RepPortal.Models
         [StringLength(5, ErrorMessage = "Too many characters.")]
         public string Zipcode { get; set; }
 
-        [Required]
         [Display(Name = "Phone Number")]
         [StringLength(11, ErrorMessage = "Please use numbers only, no dashes or symbols.")]
         public string PhoneNumber { get; set; }
@@ -55,40 +54,34 @@ namespace RepPortal.Models
         [Display(Name = "Store Contact Name")]
         public string ContactName { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
-        public DateTime DateAdded { get; set; }
+        public DateTime? DateAdded { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; set; }
 
-        [Required]
         //[Range(1, int.MaxValue, ErrorMessage = "Please select a status from list.")]
         public int StatusId { get; set; }
 
         public Status Status { get; set; }
 
-
         [DataType(DataType.Date)]
         [Display(Name = "Date Store Closed")]
         public DateTime? DateClosed { get; set; }
 
-        [Required]
         [DisplayFormat(DataFormatString = "{0:C}")]
         [Display(Name = "Last Order Total")]
-        public double LastOrderTotal { get; set; }
+        public double? LastOrderTotal { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Last Order Date")]
-        public DateTime LastOrderDate { get; set; }
+        public DateTime? LastOrderDate { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Last Order Ship Date")]
-        public DateTime LastOrderShipDate { get; set; }
+        public DateTime? LastOrderShipDate { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Last Order Paid Date")]

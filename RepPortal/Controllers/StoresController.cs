@@ -351,8 +351,11 @@ namespace RepPortal.Controllers
 
             foreach (Store s in stores)
             {
+                // use null-coalescing operator to cast DateTime? to DateTime, in case the current store doesn't have a last order date saved
+                DateTime LastOrderDateForStore = s.LastOrderDate ?? DateTime.MinValue;
+
                 // calculate the time difference between current date and the store's last order date
-                TimeSpan interval = currentDate - s.LastOrderDate;
+                TimeSpan interval = currentDate - LastOrderDateForStore;
                 // store the store's current status
                 int storeStatusId = s.StatusId;
 
