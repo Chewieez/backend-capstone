@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using LINQtoCSV;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -412,25 +410,13 @@ namespace RepPortal.Controllers
 
             var filePath = Path.GetTempFileName();
 
-            ////Read the contents of CSV file.
-            //string csvData = System.IO.File.ReadAllText(filePath);
-
-            ////Execute a loop over the rows.
-            //foreach (string row in csvData.Split('\n'))
-            //{
-            //    if (!string.IsNullOrEmpty(row))
-            //    {
-            //        Console.Write("uuugghggh");
-                   
-            //    }
-            //}
-
-
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await attachmentcsv.CopyToAsync(stream);
 
                 var reader = new StreamReader(stream);
+                stream.Position = 0;
+                reader.DiscardBufferedData();
 
                 while (!reader.EndOfStream)
                 {
