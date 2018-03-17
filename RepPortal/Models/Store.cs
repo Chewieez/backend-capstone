@@ -40,7 +40,7 @@ namespace RepPortal.Models
         public State State { get; set; }
 
         [Required]
-        [StringLength(5, ErrorMessage = "Too many characters.")]
+        [StringLength(10, ErrorMessage = "Too many characters.")]
         public string Zipcode { get; set; }
 
         [Display(Name = "Phone Number")]
@@ -50,6 +50,10 @@ namespace RepPortal.Models
         [Display(Name = "Website")]
         [StringLength(100, ErrorMessage = "The website URL is too long.")]
         public string WebsiteURL { get; set; }
+
+        [Display(Name = "Store Email")]
+        [StringLength(100, ErrorMessage = "The email address is too long.")]
+        public string Email { get; set; }
 
         [Display(Name = "Store Contact Name")]
         public string ContactName { get; set; }

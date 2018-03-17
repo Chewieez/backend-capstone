@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using RepPortal.Data;
 using RepPortal.Models;
 using RepPortal.Models.StoreViewModels;
+using CsvHelper.Configuration;
 
 namespace RepPortal.Controllers
 {
@@ -410,48 +411,69 @@ namespace RepPortal.Controllers
         {
             // get current User
             var user = await GetCurrentUserAsync();
-
+            // create list to hold csv records
             List<string> records = new List<string>();
+            // create list to hold new stores to add
             List<Store> StoresToAdd = new List<Store>();
-
+            // get the file path of the temp file created when csv is uploaded
             var filePath = Path.GetTempFileName();
-
+            // create a stream file
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
+                // copy contents of the temp csv file to the stream
                 await attachmentcsv.CopyToAsync(stream);
-
-                var reader = new StreamReader(stream);
+                var csv = new CsvReader(stream);
+                    // create a stream reader to read the file
+                    var reader = new StreamReader(stream);
+                    
+                var records = csv.GetRecords().ToList();
+                    
+                /* reset the reader to the beginning to allow reading. Not sure exactly why 
+                the reader is being created and immediately read, but this is a good workaround.
+                */
                 stream.Position = 0;
                 reader.DiscardBufferedData();
-
+                // get contents of the csv file
                 var CsvContent = reader.ReadToEnd();
+                // split the csv file contents on each new line
                 records = new List<string>(CsvContent.Split('\n'));
-
+                // iterate through the records and act upon each record
                 foreach (string s in records)
                 {
-                    if (!s.StartsWith("City") && s.Length > 5)
+                    /* if statement makes sure we are not on the first line of csv that had header data
+                    and the line has content */
+                    if (!s.StartsWith("Customer") && s.Length > 5)
                     {
+                        // create a new store instance
                         var ns = new Store();
-                        string[] textpart = s.Split(',');
-                        ns.City = textpart[0];
-                        ns.ContactName = textpart[1];
-                        ns.DateAdded = Convert.ToDateTime(textpart[2]);
-                        ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
-                        ns.Zipcode = "12345";
-                        ns.Name = "First Imported via csv";
-                        ns.DateAdded = DateTime.Now;
-                        ns.LastOrderShipDate = DateTime.Now;
-                        ns.LastOrderTotal = 22;
-                        ns.PhoneNumber = "2222222222";
-                        ns.StreetAddress ="xxx";
-                        ns.StateId = 1;
-                        ns.StatusId = 1;
+                        // separate each column at the comma
+                        string[] csvColumn = s.Split(',');
+                        // assign each column to a store field
+                        ns.Name = csvColumn[0];
+                        ns.ContactName = csvColumn[1];
+                        ns.PhoneNumber = csvColumn[2];
+                        ns.Email = csvColumn[3];
+                        ns.StreetAddress = csvColumn[4] + " " + csvColumn[5];
+                        ns.City = csvColumn[6];
+                        // retrieve id for state from database then use it on store model
+                        var StoreState = _context.State.Where(state => state.Name == csvColumn[7]).SingleOrDefault();
+                        ns.StateId = StoreState.StateId;
+                        ns.Zipcode = csvColumn[8];
+                        // add current user
                         ns.User = user;
-                        StoresToAdd.Add(ns);
+                        // move these fields to a different import csv file function
+                        //ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
+                        //ns.DateAdded = DateTime.Now;
+                        //ns.LastOrderShipDate = DateTime.Now;
+                        //ns.LastOrderTotal = 22;
+                        //ns.StatusId = 1;
 
+                        // add store to list of stores to add
+                        StoresToAdd.Add(ns);
                     }
                 }  
             }
+            // add the new stores to the database
             _context.Store.AddRange(StoresToAdd);
             _context.SaveChanges();
             return Redirect("Index");
