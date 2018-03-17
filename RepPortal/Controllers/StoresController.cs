@@ -436,8 +436,7 @@ namespace RepPortal.Controllers
                 reader.DiscardBufferedData();
                 // get contents of the csv file
                 var CsvContent = reader.ReadToEnd();
-                // split the csv file contents on each new line
-                //records = new List<string>(CsvContent.Split("\n"));
+                // split the csv file contents on each new line        
                 records = new List<string>(CsvContent.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
                 // iterate through the records and act upon each record
                 foreach (string s in records)
@@ -449,10 +448,8 @@ namespace RepPortal.Controllers
                         // create a new store instance
                         var ns = new Store();
                         // separate each column at the comma
-                        //string[] csvColumn = s.Split(",");
-                        //this regular expression splits string on the separator character NOT inside double quotes. 
-                        //separatorChar can be any character like comma or semicolon etc. 
-                        //it also allows single quotes inside the string value: e.g. "Mike's Kitchen","Jane's Room"
+                        //  this regular expression splits string on the separator character NOT inside double quotes. 
+                        //and allows single quotes inside the string value: e.g. "Mike's Kitchen"
                         Regex regx = new Regex("," + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
                         string[] csvColumn = regx.Split(s);
                         // assign each column to a store field
@@ -470,6 +467,7 @@ namespace RepPortal.Controllers
                         // add current user
                         ns.User = user;
                         ns.StatusId = 1;
+
                         // move these fields to a different import csv file function
                         //ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
                         //ns.DateAdded = DateTime.Now;
@@ -482,11 +480,7 @@ namespace RepPortal.Controllers
                 }  
             }
             // add the new stores to the database
-            //_context.Store.AddRange(StoresToAdd);
-            foreach (Store newStore in StoresToAdd)
-            {
-                _context.Store.Add(newStore);
-            }
+            _context.Store.AddRange(StoresToAdd);
             _context.SaveChanges();
             return Redirect("Index");
         }
