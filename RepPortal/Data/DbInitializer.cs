@@ -63,6 +63,10 @@ namespace RepPortal.Data
                         new State {
                             Name = "AR",
                         },
+                        new State
+                        {
+                            Name = "AZ",
+                        },
                         new State {
                             Name = "CA",
                         },
@@ -107,6 +111,9 @@ namespace RepPortal.Data
                         },
                         new State {
                             Name = "LA",
+                        },
+                        new State {
+                            Name = "MA",
                         },
                         new State {
                             Name = "ME",
@@ -199,7 +206,7 @@ namespace RepPortal.Data
                             Name = "WA",
                         },
                         new State {
-                            Name = "Washington DC"
+                            Name = "DC"
                         },
                         new State {
                             Name = "WI",

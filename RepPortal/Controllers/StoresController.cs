@@ -14,6 +14,7 @@ using RepPortal.Data;
 using RepPortal.Models;
 using RepPortal.Models.StoreViewModels;
 using CsvHelper.Configuration;
+using System.Text.RegularExpressions;
 
 namespace RepPortal.Controllers
 {
@@ -422,11 +423,11 @@ namespace RepPortal.Controllers
             {
                 // copy contents of the temp csv file to the stream
                 await attachmentcsv.CopyToAsync(stream);
-                var csv = new CsvReader(stream);
-                    // create a stream reader to read the file
-                    var reader = new StreamReader(stream);
+                //var csv = new CsvReader(stream);
+                // create a stream reader to read the file
+                var reader = new StreamReader(stream);
                     
-                var records = csv.GetRecords().ToList();
+                //var records = csv.GetRecords().ToList();
                     
                 /* reset the reader to the beginning to allow reading. Not sure exactly why 
                 the reader is being created and immediately read, but this is a good workaround.
@@ -436,7 +437,8 @@ namespace RepPortal.Controllers
                 // get contents of the csv file
                 var CsvContent = reader.ReadToEnd();
                 // split the csv file contents on each new line
-                records = new List<string>(CsvContent.Split('\n'));
+                //records = new List<string>(CsvContent.Split("\n"));
+                records = new List<string>(CsvContent.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
                 // iterate through the records and act upon each record
                 foreach (string s in records)
                 {
@@ -447,9 +449,15 @@ namespace RepPortal.Controllers
                         // create a new store instance
                         var ns = new Store();
                         // separate each column at the comma
-                        string[] csvColumn = s.Split(',');
+                        //string[] csvColumn = s.Split(",");
+                        //this regular expression splits string on the separator character NOT inside double quotes. 
+                        //separatorChar can be any character like comma or semicolon etc. 
+                        //it also allows single quotes inside the string value: e.g. "Mike's Kitchen","Jane's Room"
+                        Regex regx = new Regex("," + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+                        string[] csvColumn = regx.Split(s);
                         // assign each column to a store field
-                        ns.Name = csvColumn[0];
+
+                        ns.Name = csvColumn[0].Replace("\\", "").Replace("\"","");
                         ns.ContactName = csvColumn[1];
                         ns.PhoneNumber = csvColumn[2];
                         ns.Email = csvColumn[3];
@@ -457,16 +465,16 @@ namespace RepPortal.Controllers
                         ns.City = csvColumn[6];
                         // retrieve id for state from database then use it on store model
                         var StoreState = _context.State.Where(state => state.Name == csvColumn[7]).SingleOrDefault();
-                        ns.StateId = StoreState.StateId;
+                        ns.StateId = StoreState.StateId;                     
                         ns.Zipcode = csvColumn[8];
                         // add current user
                         ns.User = user;
+                        ns.StatusId = 1;
                         // move these fields to a different import csv file function
                         //ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
                         //ns.DateAdded = DateTime.Now;
                         //ns.LastOrderShipDate = DateTime.Now;
                         //ns.LastOrderTotal = 22;
-                        //ns.StatusId = 1;
 
                         // add store to list of stores to add
                         StoresToAdd.Add(ns);
@@ -474,7 +482,11 @@ namespace RepPortal.Controllers
                 }  
             }
             // add the new stores to the database
-            _context.Store.AddRange(StoresToAdd);
+            //_context.Store.AddRange(StoresToAdd);
+            foreach (Store newStore in StoresToAdd)
+            {
+                _context.Store.Add(newStore);
+            }
             _context.SaveChanges();
             return Redirect("Index");
         }
