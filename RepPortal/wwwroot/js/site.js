@@ -7,6 +7,8 @@ $(document).ready(function () {
 
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
 
+        console.log("Hello script!");
+
         $.ajax({
             url: "/Stores/StoresList",
             method: "GET"
@@ -23,10 +25,8 @@ $(document).ready(function () {
             function createMap() {
 
                 //// check if there is a valid response from ajax call
-                //if (stores[0]) {
+                if (stores[0]) {
 
-                    // check if the respone contains coordinates
-                    if (stores[0] && stores[0].lat) {
 
                         // create map
                         storeMap = new google.maps.Map(document.getElementById('map'));
@@ -34,6 +34,8 @@ $(document).ready(function () {
                         // create a bounds object to tell Google Maps where to set the center of the map
                         bounds = new google.maps.LatLngBounds();
                         
+                    // check if the respone contains coordinates
+                    if (stores[0].lat) {
                         //create markers for all of the stores associated with the current user
                         stores.forEach(s => {
 
@@ -179,7 +181,7 @@ $(document).ready(function () {
                             storeMap.fitBounds(bounds);
                         }); // end of Searchbox event listener
                     }
-                //}
+                }
                 // closes infowindow if user clicks anywhere on the map that is not another marker
                 storeMap.addListener('click', function () {
                     if (prev_infowindow) {
@@ -264,44 +266,3 @@ const icons = {
     }
 }
 
-//get geocode data of the new store upon creation 
-$(".CreateStoreBtn").click(evt => {
-    // get the value out of the address fields
-    const address = $(".formStreetAddress").val() || ""
-    const city = $(".formCity").val() || ""
-    const zip = $(".formZipcode").val() || ""
-
-    // Add more required fields to check
-
-
-    // check that all fields are entered
-    if (address !== "" && city !== "" && zip !== "") {
-        // prevent form from submitting
-        evt.preventDefault()
-
-        //ajax request to get geolocation data for address
-        $.ajax({
-            method: "GET",
-            url: `https://maps.googleapis.com/maps/api/geocode/json?address=${address}+${city}+${zip}&key=${googleAPI.key}`
-        }).then(res => {
-            // check if a single response came back, meaning an address was good.
-            if (res.results.length === 1) {
-                //geolocation of the address entered
-                let geoLocation = res.results["0"].geometry.location
-                if (geoLocation) {
-                    //assign to form fields
-                    $(".Map-Lat").val(geoLocation.lat)
-                    $(".Map-Long").val(geoLocation.lng)
-
-                    // submit form
-                    $('form').submit()
-                }
-            } else {
-                alert("Error retrieving geolocation coordinates. Check your address and try again.")
-            }
-        })
-    } else {
-        // if store location data not present, do not submite form so asp.net model validaton can catch error and alert user
-        $('form').submit()
-    }
-})
