@@ -267,9 +267,10 @@ const icons = {
 //get geocode data of the new store upon creation 
 $(".CreateStoreBtn").click(evt => {
     // get the value out of the address fields
-    const address = $("#formStreetAddress").val() || ""
-    const city = $("#formCity").val() || ""
-    const zip = $("#formZipcode").val() || ""
+    const address = $(".formStreetAddress").val() || ""
+    const city = $(".formCity").val() || ""
+    const zip = $(".formZipcode").val() || ""
+
     // Add more required fields to check
 
 
@@ -289,8 +290,8 @@ $(".CreateStoreBtn").click(evt => {
                 let geoLocation = res.results["0"].geometry.location
                 if (geoLocation) {
                     //assign to form fields
-                    $("#Map-Lat").val(geoLocation.lat)
-                    $("#Map-Long").val(geoLocation.lng)
+                    $(".Map-Lat").val(geoLocation.lat)
+                    $(".Map-Long").val(geoLocation.lng)
 
                     // submit form
                     $('form').submit()
@@ -301,6 +302,6 @@ $(".CreateStoreBtn").click(evt => {
         })
     } else {
         // if store location data not present, do not submite form so asp.net model validaton can catch error and alert user
-        //$('form').submit()
+        $('form').submit()
     }
 })

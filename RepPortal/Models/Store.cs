@@ -44,7 +44,7 @@ namespace RepPortal.Models
         public string Zipcode { get; set; }
 
         [Display(Name = "Phone Number")]
-        [StringLength(11, ErrorMessage = "Please use numbers only, no dashes or symbols.")]
+        [StringLength(12, ErrorMessage = "Make sure format is 111-111-1111")]
         public string PhoneNumber { get; set; }
         
         [Display(Name = "Website")]

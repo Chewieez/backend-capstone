@@ -227,12 +227,18 @@ namespace RepPortal.Controllers
             }
 
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
-            createStoreViewModel.SalesRepId = store.SalesRep.Id;
+            if (store.SalesRep != null)
+            {
+                createStoreViewModel.SalesRepId = store.SalesRep.Id;
+            } else
+            {
+                createStoreViewModel.SalesRepId = null;
+            }
             createStoreViewModel.Store = store;
 
             ViewBag.SalesReps = _context.Users.Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
-            ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
             return View(createStoreViewModel);
         }
@@ -242,9 +248,9 @@ namespace RepPortal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StoreId,SalesRepId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,ContactName,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
+        public async Task<IActionResult> Edit(int id, CreateStoreViewModel storeModel)
         {
-            if (id != store.StoreId)
+            if (id != storeModel.Store.StoreId)
             {
                 return NotFound();
             }
@@ -255,16 +261,16 @@ namespace RepPortal.Controllers
             {
                 var user = await GetCurrentUserAsync();
 
-                store.User = user;
+                storeModel.Store.User = user;
 
                 try
                 {
-                    _context.Update(store);
+                    _context.Update(storeModel.Store);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StoreExists(store.StoreId))
+                    if (!StoreExists(storeModel.Store.StoreId))
                     {
                         return NotFound();
                     }
@@ -277,14 +283,14 @@ namespace RepPortal.Controllers
             }
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-            createStoreViewModel.Store = store;
+            createStoreViewModel.Store = storeModel.Store;
 
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
 
-            ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
-            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy(st => st.Name), "StateId", "Name", storeModel.Store.StateId);
+            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", storeModel.Store.StatusId);
             return View(createStoreViewModel);
         }
 
