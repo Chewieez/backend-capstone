@@ -40,42 +40,57 @@ namespace RepPortal.ViewComponents
             var user = await GetCurrentUserAsync();
 
             // create a new list to hold stores
-            var UserStores = new List<Store>();
+            //var UserStores = new List<Store>();
+            var RetStoreFlags = new List<StoreFlag>();
+            RetStoreFlags = await _context.StoreFlag.Include(sf => sf.Flag).Include(sf => sf.Store).ThenInclude(s => s.SalesRep).ToListAsync();
 
             // check if user is an Administrator, if they are, retrieve all the stores in database, if they are not, 
             // just retrieve stores from db that are in user's (sales rep) territory
-            if (User.IsInRole("Administrator"))
-            {
-                UserStores = await _context.Store.Include("SalesRep").ToListAsync();
-            } else
-            {
-                UserStores = await _context.Store.Where(s => s.SalesRep == user).ToListAsync();
-            }
+            //if (User.IsInRole("Administrator"))
+            //{
+            //    UserStores = await _context.Store.Include("SalesRep").ToListAsync();
+            //} else
+            //{
+            //    UserStores = await _context.Store.Where(s => s.SalesRep == user).ToListAsync();
+            //}
 
+            
             // create list of view models
             List<StoreFlagViewModel> sfvmList = new List<StoreFlagViewModel>();
 
-            // iterate through stores and get any flags attached
-            foreach (Store s in UserStores)
+            foreach (StoreFlag sf in RetStoreFlags)
             {
-                // create a new view model instance
+
+                //create a new view model instance
                 StoreFlagViewModel sfvm = new StoreFlagViewModel();
+                sfvm.Store = sf.Store;
+                sfvm.Flag = sf.Flag;
 
-                var Flag = (from f in _context.Flag
-                            join sf in _context.StoreFlag
-                            on f.FlagId equals sf.FlagId
-                            join st in _context.Store
-                            on sf.StoreId equals st.StoreId
-                            where st.StoreId == s.StoreId
-                            select f).SingleOrDefaultAsync();
-
-                // attach store and flag to view model
-                sfvm.Store = s;
-                sfvm.Flag = await Flag;
-
-                // add view model to list of storeflagviewmodels
+                // add the StoreFlagViewModel to the list
                 sfvmList.Add(sfvm);
             }
+
+            //// iterate through stores and get any flags attached
+            //foreach (Store s in UserStores)
+            //{
+            //    // create a new view model instance
+            //    StoreFlagViewModel sfvm = new StoreFlagViewModel();
+
+            //    var Flag = (from f in _context.Flag
+            //                join sf in _context.StoreFlag
+            //                on f.FlagId equals sf.FlagId
+            //                join st in _context.Store
+            //                on sf.StoreId equals st.StoreId
+            //                where st.StoreId == s.StoreId
+            //                select f).SingleOrDefaultAsync();
+
+            //    // attach store and flag to view model
+            //    sfvm.Store = s;
+            //    sfvm.Flag = await Flag;
+
+            //    // add view model to list of storeflagviewmodels
+            //    sfvmList.Add(sfvm);
+            //}
 
             return sfvmList;
         }

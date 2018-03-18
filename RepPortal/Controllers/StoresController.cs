@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using RepPortal.Data;
 using RepPortal.Models;
 using RepPortal.Models.StoreViewModels;
+using CsvHelper.Configuration;
+using System.Text.RegularExpressions;
 
 namespace RepPortal.Controllers
 {
@@ -33,7 +35,7 @@ namespace RepPortal.Controllers
         // GET: Stores
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            
+
 
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
@@ -57,7 +59,7 @@ namespace RepPortal.Controllers
                 stores = stores.Where(s => s.Name.Contains(searchString) || s.Status.Name.Contains(searchString));
             }
 
-            
+
 
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
@@ -121,7 +123,7 @@ namespace RepPortal.Controllers
             StoreDetailViewModel sdvm = new StoreDetailViewModel();
 
             // find any flags for the store
-            var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id ).SingleOrDefaultAsync();
+            var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id).SingleOrDefaultAsync();
             // attach flag info to the view model
             sdvm.Flag1 = flag;
 
@@ -153,14 +155,14 @@ namespace RepPortal.Controllers
         {
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-            
+
 
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
-                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id}).ToList();
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
-            ViewData["StateId"] = new SelectList(_context.State.OrderBy( s=> s.Name), "StateId", "Name");
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name");
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
-            
+
             return View(createStoreViewModel);
         }
 
@@ -225,12 +227,19 @@ namespace RepPortal.Controllers
             }
 
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
-            createStoreViewModel.SalesRepId = store.SalesRep.Id;
+            if (store.SalesRep != null)
+            {
+                createStoreViewModel.SalesRepId = store.SalesRep.Id;
+            }
+            else
+            {
+                createStoreViewModel.SalesRepId = null;
+            }
             createStoreViewModel.Store = store;
 
             ViewBag.SalesReps = _context.Users.Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
-            ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
             return View(createStoreViewModel);
         }
@@ -240,9 +249,9 @@ namespace RepPortal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StoreId,SalesRepId,Name,StreetAddress,City,StateId,Zipcode,PhoneNumber,WebsiteURL,ContactName,DateAdded,DateCreated,StatusId,DateClosed,LasterOrderTotal,LastOrderDate,LastOrderShipDate,LastOrderPaidDate,Lat,Long")] Store store)
+        public async Task<IActionResult> Edit(int id, CreateStoreViewModel storeModel)
         {
-            if (id != store.StoreId)
+            if (id != storeModel.Store.StoreId)
             {
                 return NotFound();
             }
@@ -253,16 +262,22 @@ namespace RepPortal.Controllers
             {
                 var user = await GetCurrentUserAsync();
 
-                store.User = user;
+                storeModel.Store.User = user;
+                // add salesRep if info changed
+                if (storeModel.Store.SalesRep == null)
+                {
+                    var AddedSalesRep = await _context.Users.Where(u => u.Id == storeModel.SalesRepId).SingleOrDefaultAsync();
+                    storeModel.Store.SalesRep = AddedSalesRep;
+                }
 
                 try
                 {
-                    _context.Update(store);
+                    _context.Update(storeModel.Store);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StoreExists(store.StoreId))
+                    if (!StoreExists(storeModel.Store.StoreId))
                     {
                         return NotFound();
                     }
@@ -275,14 +290,14 @@ namespace RepPortal.Controllers
             }
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-            createStoreViewModel.Store = store;
+            createStoreViewModel.Store = storeModel.Store;
 
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
 
-            ViewData["StateId"] = new SelectList(_context.State, "StateId", "Name", store.StateId);
-            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy(st => st.Name), "StateId", "Name", storeModel.Store.StateId);
+            ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", storeModel.Store.StatusId);
             return View(createStoreViewModel);
         }
 
@@ -334,16 +349,19 @@ namespace RepPortal.Controllers
 
             // create a list of stores
             var stores = new List<Store>();
+            // create a list of smaller version of each store to send in JSON response.
+            var SmallStores = new List<StoreJsonResponse>();
 
             // check if the user is an Administrator
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display on map (for site administrator)
-                stores = _context.Store.Include("State").Include("Status").ToList();
-            } else
+                stores = await _context.Store.Include(s=> s.State).Include(s=> s.Status).ToListAsync();
+            }
+            else
             {
                 // retrieve only matching stores where current user is the Sales Rep attached to the store
-                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user).ToList();     
+                stores = await _context.Store.Include(s => s.State).Include(s => s.Status).Where(s => s.SalesRep == user).ToListAsync();
             }
 
             // update the status of all stores by checking their last order date versus the current date
@@ -351,8 +369,11 @@ namespace RepPortal.Controllers
 
             foreach (Store s in stores)
             {
+                // use null-coalescing operator to cast DateTime? to DateTime, in case the current store doesn't have a last order date saved
+                DateTime LastOrderDateForStore = s.LastOrderDate ?? DateTime.MinValue;
+
                 // calculate the time difference between current date and the store's last order date
-                TimeSpan interval = currentDate - s.LastOrderDate;
+                TimeSpan interval = currentDate - LastOrderDateForStore;
                 // store the store's current status
                 int storeStatusId = s.StatusId;
 
@@ -368,28 +389,45 @@ namespace RepPortal.Controllers
                 else if ((interval.Days / 29) > 6)
                 {
                     storeStatusId = 2;
+                } else
+                {
+                    s.StatusId = 1;
                 }
-                
+
                 // if status has changed, save new status and write to database
                 if (storeStatusId != s.StatusId)
                 {
                     s.StatusId = storeStatusId;
                     _context.Update(s);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
+
+                // create a new smaller version of the store info to return in the JSON result
+                var SmallStore = new StoreJsonResponse()
+                {
+                    Name = s.Name,
+                    StoreId = s.StoreId,
+                    Lat = s.Lat,
+                    Long = s.Long,
+                    StreetAddress = s.StreetAddress,
+                    CityStateZip = $"{ s.City} {s.State.Name} { s.Zipcode}", 
+                    StatusId = s.StatusId
+                };
+
+                SmallStores.Add(SmallStore);
             }
 
-            Console.WriteLine(stores);
+
             // return a json formatted response to be used in javascript ajax call
-            return Json(stores);
+            return Ok(SmallStores);
         }
 
-        
+
         public async Task<IActionResult> AddFlag(int? id)
         {
             var store = await _context.Store.SingleOrDefaultAsync(m => m.StoreId == id);
 
-            var FollowUpFlag = _context.Flag.Where(f => f.Name == "Follow Up").Single();
+            var FollowUpFlag = await _context.Flag.Where(f => f.Name == "Follow Up").SingleOrDefaultAsync();
 
             var StoreFollowUp = new StoreFlag();
             StoreFollowUp.StoreId = store.StoreId;
@@ -407,50 +445,76 @@ namespace RepPortal.Controllers
         {
             // get current User
             var user = await GetCurrentUserAsync();
-
+            // create list to hold csv records
             List<string> records = new List<string>();
+            // create list to hold new stores to add
             List<Store> StoresToAdd = new List<Store>();
-
+            // get the file path of the temp file created when csv is uploaded
             var filePath = Path.GetTempFileName();
-
+            // create a stream file
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
+                // copy contents of the temp csv file to the stream
                 await attachmentcsv.CopyToAsync(stream);
-
+                //var csv = new CsvReader(stream);
+                // create a stream reader to read the file
                 var reader = new StreamReader(stream);
+
+                //var records = csv.GetRecords().ToList();
+
+                /* reset the reader to the beginning to allow reading. Not sure exactly why 
+                the reader is being created and immediately read, but this is a good workaround.
+                */
                 stream.Position = 0;
                 reader.DiscardBufferedData();
-
+                // get contents of the csv file
                 var CsvContent = reader.ReadToEnd();
-                records = new List<string>(CsvContent.Split('\n'));
-
+                // split the csv file contents on each new line        
+                records = new List<string>(CsvContent.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+                // iterate through the records and act upon each record
                 foreach (string s in records)
                 {
-                    if (!s.StartsWith("City") && s.Length > 5)
+                    /* if statement makes sure we are not on the first line of csv that had header data
+                    and the line has content */
+                    if (!s.StartsWith("Customer") && s.Length > 5)
                     {
+                        // create a new store instance
                         var ns = new Store();
-                        string[] textpart = s.Split(',');
-                        ns.City = textpart[0];
-                        ns.ContactName = textpart[1];
-                        ns.DateAdded = Convert.ToDateTime(textpart[2]);
-                        ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
-                        ns.Zipcode = "12345";
-                        ns.Name = "First Imported via csv";
-                        ns.DateAdded = DateTime.Now;
-                        ns.LastOrderShipDate = DateTime.Now;
-                        ns.LastOrderTotal = 22;
-                        ns.PhoneNumber = "2222222222";
-                        ns.StreetAddress ="xxx";
-                        ns.StateId = 1;
-                        ns.StatusId = 1;
-                        ns.User = user;
-                        StoresToAdd.Add(ns);
+                        // separate each column at the comma
+                        //  this regular expression splits string on the separator character NOT inside double quotes. 
+                        //and allows single quotes inside the string value: e.g. "Mike's Kitchen"
+                        Regex regx = new Regex("," + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+                        string[] csvColumn = regx.Split(s);
+                        // assign each column to a store field
 
+                        ns.Name = csvColumn[0].Replace("\\", "").Replace("\"", "");
+                        ns.ContactName = csvColumn[1];
+                        ns.PhoneNumber = csvColumn[2];
+                        ns.Email = csvColumn[3];
+                        ns.StreetAddress = csvColumn[4] + " " + csvColumn[5];
+                        ns.City = csvColumn[6];
+                        // retrieve id for state from database then use it on store model
+                        var StoreState = _context.State.Where(state => state.Name == csvColumn[7]).SingleOrDefault();
+                        ns.StateId = StoreState.StateId;
+                        ns.Zipcode = csvColumn[8];
+                        // add current user
+                        ns.User = user;
+                        ns.StatusId = 1;
+
+                        // move these fields to a different import csv file function
+                        //ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
+                        //ns.DateAdded = DateTime.Now;
+                        //ns.LastOrderShipDate = DateTime.Now;
+                        //ns.LastOrderTotal = 22;
+
+                        // add store to list of stores to add
+                        StoresToAdd.Add(ns);
                     }
-                }  
+                }
             }
+            // add the new stores to the database
             _context.Store.AddRange(StoresToAdd);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Redirect("Index");
         }
 

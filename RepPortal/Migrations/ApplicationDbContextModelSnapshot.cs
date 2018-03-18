@@ -268,7 +268,7 @@ namespace RepPortal.Migrations
 
                     b.Property<string>("ContactName");
 
-                    b.Property<DateTime>("DateAdded");
+                    b.Property<DateTime?>("DateAdded");
 
                     b.Property<DateTime?>("DateClosed");
 
@@ -276,13 +276,16 @@ namespace RepPortal.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
-                    b.Property<DateTime>("LastOrderDate");
+                    b.Property<string>("Email")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime?>("LastOrderDate");
 
                     b.Property<DateTime?>("LastOrderPaidDate");
 
-                    b.Property<DateTime>("LastOrderShipDate");
+                    b.Property<DateTime?>("LastOrderShipDate");
 
-                    b.Property<double>("LastOrderTotal");
+                    b.Property<double?>("LastOrderTotal");
 
                     b.Property<string>("Lat");
 
@@ -293,7 +296,6 @@ namespace RepPortal.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(11);
 
                     b.Property<string>("SalesRepId");
@@ -314,7 +316,7 @@ namespace RepPortal.Migrations
 
                     b.Property<string>("Zipcode")
                         .IsRequired()
-                        .HasMaxLength(5);
+                        .HasMaxLength(10);
 
                     b.HasKey("StoreId");
 

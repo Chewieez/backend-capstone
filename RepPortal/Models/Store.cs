@@ -40,55 +40,52 @@ namespace RepPortal.Models
         public State State { get; set; }
 
         [Required]
-        [StringLength(5, ErrorMessage = "Too many characters.")]
+        [StringLength(10, ErrorMessage = "Too many characters.")]
         public string Zipcode { get; set; }
 
-        [Required]
         [Display(Name = "Phone Number")]
-        [StringLength(11, ErrorMessage = "Please use numbers only, no dashes or symbols.")]
+        [StringLength(12, ErrorMessage = "Make sure format is 111-111-1111")]
         public string PhoneNumber { get; set; }
         
         [Display(Name = "Website")]
         [StringLength(100, ErrorMessage = "The website URL is too long.")]
         public string WebsiteURL { get; set; }
 
+        [Display(Name = "Store Email")]
+        [StringLength(100, ErrorMessage = "The email address is too long.")]
+        public string Email { get; set; }
+
         [Display(Name = "Store Contact Name")]
         public string ContactName { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
-        public DateTime DateAdded { get; set; }
+        public DateTime? DateAdded { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; set; }
 
-        [Required]
         //[Range(1, int.MaxValue, ErrorMessage = "Please select a status from list.")]
         public int StatusId { get; set; }
 
         public Status Status { get; set; }
 
-
         [DataType(DataType.Date)]
         [Display(Name = "Date Store Closed")]
         public DateTime? DateClosed { get; set; }
 
-        [Required]
         [DisplayFormat(DataFormatString = "{0:C}")]
         [Display(Name = "Last Order Total")]
-        public double LastOrderTotal { get; set; }
+        public double? LastOrderTotal { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Last Order Date")]
-        public DateTime LastOrderDate { get; set; }
+        public DateTime? LastOrderDate { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Last Order Ship Date")]
-        public DateTime LastOrderShipDate { get; set; }
+        public DateTime? LastOrderShipDate { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Last Order Paid Date")]
