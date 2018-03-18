@@ -25,8 +25,8 @@ $(".CreateStoreBtn").click(evt => {
                 let geoLocation = res.results["0"].geometry.location
                 if (geoLocation) {
                     //assign to form fields
-                    formLat.val(geoLocation.lat)
-                    formLong.val(geoLocation.lng)
+                    $(".Map-Lat").val(geoLocation.lat)
+                    $(".Map-Long").val(geoLocation.lng)
 
                     // submit form
                     $('form').submit()

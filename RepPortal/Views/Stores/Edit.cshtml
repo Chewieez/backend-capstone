@@ -12,94 +12,99 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <input type="hidden" asp-for="@Model.Store.StoreId" />
-           
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.Name" class="control-label"></label>
-                    <input asp-for="@Model.Store.Name" class="form-control" />
-                    <span asp-validation-for="@Model.Store.Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.StreetAddress" class="control-label"></label>
-                    <input asp-for="@Model.Store.StreetAddress" class="form-control formStreetAddress" />
-                    <span asp-validation-for="@Model.Store.StreetAddress" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.City" class="control-label"></label>
-                    <input asp-for="@Model.Store.City" class="form-control formCity" />
-                    <span asp-validation-for="@Model.Store.City" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.StateId" class="control-label"></label>
-                    @Html.DropDownListFor(model => model.Store.StateId,
-                             ViewBag.StateId as IEnumerable<SelectListItem>, "Select a State", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.Zipcode" class="control-label"></label>
-                    <input asp-for="@Model.Store.Zipcode" class="form-control formZipcode" />
-                    <span asp-validation-for="@Model.Store.Zipcode" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.PhoneNumber" class="control-label"></label>
-                    <input asp-for="@Model.Store.PhoneNumber" class="form-control" />
-                    <span asp-validation-for="@Model.Store.PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.WebsiteURL" class="control-label"></label>
-                    <input asp-for="@Model.Store.WebsiteURL" class="form-control" />
-                    <span asp-validation-for="@Model.Store.WebsiteURL" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.ContactName" class="control-label"></label>
-                    <input asp-for="@Model.Store.ContactName" class="form-control" />
-                    <span asp-validation-for="@Model.Store.ContactName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Store.SalesRep)
-                    @Html.DropDownListFor(model => model.SalesRepId,
-                             ViewBag.SalesReps as IEnumerable<SelectListItem>, "Select a Sales Rep", new { @class = "form-control" })
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.DateAdded" class="control-label"></label>
-                    <input asp-for="@Model.Store.DateAdded" class="form-control" />
-                    <span asp-validation-for="@Model.Store.DateAdded" class="text-danger"></span>
-                </div>
-                @* Remove this dropdown for Status at some later time *@
-                <div class="form-group">
-                    <label asp-for="@Model.Store.StatusId" class="control-label"></label>
-                    <select asp-for="@Model.Store.StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
-                </div>
-        
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.Name" class="control-label"></label>
+                <input asp-for="@Model.Store.Name" class="form-control" />
+                <span asp-validation-for="@Model.Store.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.StreetAddress" class="control-label"></label>
+                <input asp-for="@Model.Store.StreetAddress" class="form-control formStreetAddress" />
+                <span asp-validation-for="@Model.Store.StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.City" class="control-label"></label>
+                <input asp-for="@Model.Store.City" class="form-control formCity" />
+                <span asp-validation-for="@Model.Store.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.StateId" class="control-label"></label>
+                @Html.DropDownListFor(model => model.Store.StateId,
+                      ViewBag.StateId as IEnumerable<SelectListItem>, "Select a State", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.Zipcode" class="control-label"></label>
+                <input asp-for="@Model.Store.Zipcode" class="form-control formZipcode" />
+                <span asp-validation-for="@Model.Store.Zipcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.PhoneNumber" class="control-label"></label>
+                <input asp-for="@Model.Store.PhoneNumber" class="form-control" />
+                <span asp-validation-for="@Model.Store.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.Email" class="control-label"></label>
+                <input asp-for="@Model.Store.Email" class="form-control" />
+                <span asp-validation-for="@Model.Store.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.WebsiteURL" class="control-label"></label>
+                <input asp-for="@Model.Store.WebsiteURL" class="form-control" />
+                <span asp-validation-for="@Model.Store.WebsiteURL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.ContactName" class="control-label"></label>
+                <input asp-for="@Model.Store.ContactName" class="form-control" />
+                <span asp-validation-for="@Model.Store.ContactName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Store.SalesRep)
+                @Html.DropDownListFor(model => model.SalesRepId,
+                      ViewBag.SalesReps as IEnumerable<SelectListItem>, "Select a Sales Rep", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.DateAdded" class="control-label"></label>
+                <input asp-for="@Model.Store.DateAdded" class="form-control" />
+                <span asp-validation-for="@Model.Store.DateAdded" class="text-danger"></span>
+            </div>
+            @* Remove this dropdown for Status at some later time *@
+            <div class="form-group">
+                <label asp-for="@Model.Store.StatusId" class="control-label"></label>
+                <select asp-for="@Model.Store.StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+            </div>
+
             <div class="form-group">
                 <label asp-for="@Model.Store.DateClosed" class="control-label"></label>
                 <input asp-for="@Model.Store.DateClosed" class="form-control" />
                 <span asp-validation-for="@Model.Store.DateClosed" class="text-danger"></span>
             </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.LastOrderTotal" class="control-label"></label>
-                    <input asp-for="@Model.Store.LastOrderTotal" class="form-control" />
-                    <span asp-validation-for="@Model.Store.LastOrderTotal" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.LastOrderDate" class="control-label"></label>
-                    <input asp-for="@Model.Store.LastOrderDate" class="form-control" />
-                    <span asp-validation-for="@Model.Store.LastOrderDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.LastOrderShipDate" class="control-label"></label>
-                    <input asp-for="@Model.Store.LastOrderShipDate" class="form-control" />
-                    <span asp-validation-for="@Model.Store.LastOrderShipDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.Store.LastOrderPaidDate" class="control-label"></label>
-                    <input asp-for="@Model.Store.LastOrderPaidDate" class="form-control" />
-                    <span asp-validation-for="@Model.Store.LastOrderPaidDate" class="text-danger"></span>
-                </div>
-                <input asp-for="@Model.Store.Lat" type="hidden" class="Map-Lat" />
-                <input asp-for="@Model.Store.Long" type="hidden" class="Map-Long" />       
+            <div class="form-group">
+                <label asp-for="@Model.Store.LastOrderTotal" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderTotal" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderTotal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.LastOrderDate" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderDate" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.LastOrderShipDate" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderShipDate" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderShipDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Store.LastOrderPaidDate" class="control-label"></label>
+                <input asp-for="@Model.Store.LastOrderPaidDate" class="form-control" />
+                <span asp-validation-for="@Model.Store.LastOrderPaidDate" class="text-danger"></span>
+            </div>
+            <input asp-for="@Model.Store.Lat" type="hidden" class="Map-Lat" />
+            <input asp-for="@Model.Store.Long" type="hidden" class="Map-Long" />
 
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default CreateStoreBtn" />
+                <input type="submit" value="Save" class="btn btn-primary CreateStoreBtn" />
             </div>
         </form>
     </div>

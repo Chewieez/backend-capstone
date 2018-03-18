@@ -389,6 +389,9 @@ namespace RepPortal.Controllers
                 else if ((interval.Days / 29) > 6)
                 {
                     storeStatusId = 2;
+                } else
+                {
+                    s.StatusId = 1;
                 }
 
                 // if status has changed, save new status and write to database
