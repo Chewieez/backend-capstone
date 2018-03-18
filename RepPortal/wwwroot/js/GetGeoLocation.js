@@ -1,17 +1,18 @@
 ﻿//get geocode data of the new store upon creation 
 $(".CreateStoreBtn").click(evt => {
     // get the value out of the address fields
-    const address = $(".formStreetAddress").val() || ""
-    const city = $(".formCity").val() || ""
-    const zip = $(".formZipcode").val() || ""
-
+    const address = $(".formStreetAddress").val() || "";
+    const city = $(".formCity").val() || "";
+    const zip = $(".formZipcode").val() || "";
+    const formLat = $(".Map-Lat").val() || "";
+    const formLong = $(".Map-Long").val() || "";
     // Add more required fields to check
 
 
     // check that all fields are entered
-    if (address !== "" && city !== "" && zip !== "") {
+    if (address !== "" && city !== "" && zip !== "" && formLat === "" && formLong === "") {
         // prevent form from submitting
-        evt.preventDefault()
+        evt.preventDefault();
 
         //ajax request to get geolocation data for address
         $.ajax({
@@ -24,8 +25,8 @@ $(".CreateStoreBtn").click(evt => {
                 let geoLocation = res.results["0"].geometry.location
                 if (geoLocation) {
                     //assign to form fields
-                    $(".Map-Lat").val(geoLocation.lat)
-                    $(".Map-Long").val(geoLocation.lng)
+                    formLat.val(geoLocation.lat)
+                    formLong.val(geoLocation.lng)
 
                     // submit form
                     $('form').submit()

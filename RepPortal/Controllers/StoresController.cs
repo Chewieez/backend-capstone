@@ -35,7 +35,7 @@ namespace RepPortal.Controllers
         // GET: Stores
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            
+
 
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
@@ -59,7 +59,7 @@ namespace RepPortal.Controllers
                 stores = stores.Where(s => s.Name.Contains(searchString) || s.Status.Name.Contains(searchString));
             }
 
-            
+
 
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
@@ -123,7 +123,7 @@ namespace RepPortal.Controllers
             StoreDetailViewModel sdvm = new StoreDetailViewModel();
 
             // find any flags for the store
-            var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id ).SingleOrDefaultAsync();
+            var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == id).SingleOrDefaultAsync();
             // attach flag info to the view model
             sdvm.Flag1 = flag;
 
@@ -155,14 +155,14 @@ namespace RepPortal.Controllers
         {
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-            
+
 
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
-                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id}).ToList();
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
-            ViewData["StateId"] = new SelectList(_context.State.OrderBy( s=> s.Name), "StateId", "Name");
+            ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name");
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
-            
+
             return View(createStoreViewModel);
         }
 
@@ -230,7 +230,8 @@ namespace RepPortal.Controllers
             if (store.SalesRep != null)
             {
                 createStoreViewModel.SalesRepId = store.SalesRep.Id;
-            } else
+            }
+            else
             {
                 createStoreViewModel.SalesRepId = null;
             }
@@ -262,6 +263,12 @@ namespace RepPortal.Controllers
                 var user = await GetCurrentUserAsync();
 
                 storeModel.Store.User = user;
+                // add salesRep if info changed
+                if (storeModel.Store.SalesRep == null)
+                {
+                    var AddedSalesRep = await _context.Users.Where(u => u.Id == storeModel.SalesRepId).SingleOrDefaultAsync();
+                    storeModel.Store.SalesRep = AddedSalesRep;
+                }
 
                 try
                 {
@@ -342,16 +349,19 @@ namespace RepPortal.Controllers
 
             // create a list of stores
             var stores = new List<Store>();
+            // create a list of smaller version of each store to send in JSON response.
+            var SmallStores = new List<StoreJsonResponse>();
 
             // check if the user is an Administrator
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display on map (for site administrator)
-                stores = _context.Store.Include("State").Include("Status").ToList();
-            } else
+                stores = await _context.Store.Include(s=> s.State).Include(s=> s.Status).ToListAsync();
+            }
+            else
             {
                 // retrieve only matching stores where current user is the Sales Rep attached to the store
-                stores = _context.Store.Include("State").Include("Status").Where(s => s.SalesRep == user).ToList();     
+                stores = await _context.Store.Include(s => s.State).Include(s => s.Status).Where(s => s.SalesRep == user).ToListAsync();
             }
 
             // update the status of all stores by checking their last order date versus the current date
@@ -380,27 +390,41 @@ namespace RepPortal.Controllers
                 {
                     storeStatusId = 2;
                 }
-                
+
                 // if status has changed, save new status and write to database
                 if (storeStatusId != s.StatusId)
                 {
                     s.StatusId = storeStatusId;
                     _context.Update(s);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
+
+                // create a new smaller version of the store info to return in the JSON result
+                var SmallStore = new StoreJsonResponse()
+                {
+                    Name = s.Name,
+                    StoreId = s.StoreId,
+                    Lat = s.Lat,
+                    Long = s.Long,
+                    StreetAddress = s.StreetAddress,
+                    CityStateZip = $"{ s.City} {s.State.Name} { s.Zipcode}", 
+                    StatusId = s.StatusId
+                };
+
+                SmallStores.Add(SmallStore);
             }
 
-            Console.WriteLine(stores);
+
             // return a json formatted response to be used in javascript ajax call
-            return Json(stores);
+            return Ok(SmallStores);
         }
 
-        
+
         public async Task<IActionResult> AddFlag(int? id)
         {
             var store = await _context.Store.SingleOrDefaultAsync(m => m.StoreId == id);
 
-            var FollowUpFlag = _context.Flag.Where(f => f.Name == "Follow Up").Single();
+            var FollowUpFlag = await _context.Flag.Where(f => f.Name == "Follow Up").SingleOrDefaultAsync();
 
             var StoreFollowUp = new StoreFlag();
             StoreFollowUp.StoreId = store.StoreId;
@@ -432,9 +456,9 @@ namespace RepPortal.Controllers
                 //var csv = new CsvReader(stream);
                 // create a stream reader to read the file
                 var reader = new StreamReader(stream);
-                    
+
                 //var records = csv.GetRecords().ToList();
-                    
+
                 /* reset the reader to the beginning to allow reading. Not sure exactly why 
                 the reader is being created and immediately read, but this is a good workaround.
                 */
@@ -460,7 +484,7 @@ namespace RepPortal.Controllers
                         string[] csvColumn = regx.Split(s);
                         // assign each column to a store field
 
-                        ns.Name = csvColumn[0].Replace("\\", "").Replace("\"","");
+                        ns.Name = csvColumn[0].Replace("\\", "").Replace("\"", "");
                         ns.ContactName = csvColumn[1];
                         ns.PhoneNumber = csvColumn[2];
                         ns.Email = csvColumn[3];
@@ -468,7 +492,7 @@ namespace RepPortal.Controllers
                         ns.City = csvColumn[6];
                         // retrieve id for state from database then use it on store model
                         var StoreState = _context.State.Where(state => state.Name == csvColumn[7]).SingleOrDefault();
-                        ns.StateId = StoreState.StateId;                     
+                        ns.StateId = StoreState.StateId;
                         ns.Zipcode = csvColumn[8];
                         // add current user
                         ns.User = user;
@@ -483,11 +507,11 @@ namespace RepPortal.Controllers
                         // add store to list of stores to add
                         StoresToAdd.Add(ns);
                     }
-                }  
+                }
             }
             // add the new stores to the database
             _context.Store.AddRange(StoresToAdd);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Redirect("Index");
         }
 

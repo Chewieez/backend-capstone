@@ -42,7 +42,7 @@ namespace RepPortal.ViewComponents
             // create a new list to hold stores
             //var UserStores = new List<Store>();
             var RetStoreFlags = new List<StoreFlag>();
-            RetStoreFlags = await _context.StoreFlag.Include("Flag").Include("Store").ToListAsync();
+            RetStoreFlags = await _context.StoreFlag.Include(sf => sf.Flag).Include(sf => sf.Store).ThenInclude(s => s.SalesRep).ToListAsync();
 
             // check if user is an Administrator, if they are, retrieve all the stores in database, if they are not, 
             // just retrieve stores from db that are in user's (sales rep) territory
@@ -60,6 +60,7 @@ namespace RepPortal.ViewComponents
 
             foreach (StoreFlag sf in RetStoreFlags)
             {
+
                 //create a new view model instance
                 StoreFlagViewModel sfvm = new StoreFlagViewModel();
                 sfvm.Store = sf.Store;

@@ -11,8 +11,12 @@ $(document).ready(function () {
 
         $.ajax({
             url: "/Stores/StoresList",
-            method: "GET"
+            method: "GET",
+            failure: function (response) {
+                alert(response.d);
+            }
         }).then(response => {
+            console.log("Response");
             let stores = response
             let storeMap;
             var markers = [];
@@ -38,52 +42,54 @@ $(document).ready(function () {
                     if (stores[0].lat) {
                         //create markers for all of the stores associated with the current user
                         stores.forEach(s => {
+                            if (s.lat != null) {
 
-                            // parse the lat and long and create a marker
-                            const latLong = {
-                                "lat": parseFloat(s.lat),
-                                "lng": parseFloat(s.long)
-                            }
-
-                            // create an info window with details for the store
-                            let infowindow = new google.maps.InfoWindow({
-                                content: `<div>
-                                        <h5>${s.name}</h5>
-                                        <div>${s.streetAddress}</div>
-                                        <div>${s.city}, ${s.state.name}</div>
-                                        <div>${s.zipcode}</div>
-                                        <a href='./Stores/Details/${s.storeId}'>Details</a>                                     
-                                        </div>`
-                            });
-
-                            // create marker for the store
-                            let marker = new google.maps.Marker({
-                                position: latLong,
-                                animation: google.maps.Animation.DROP,
-                                title: s.name,
-                                icon: {
-                                    url: icons[s.statusId].icon,
-                                    scaledSize: new google.maps.Size(64, 64)
-                                },
-                                map: storeMap
-                            });
-
-
-                            // add marker to the bounds method to set Google Maps center to include all pins
-                            const loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-                            bounds.extend(loc);
-
-                            // add event listener to markers to open info window on click
-                            marker.addListener('click', function () {
-                                //if a detail window is open, close it before opening a new one
-                                if (prev_infowindow) {
-                                    prev_infowindow.close();
+                                // parse the lat and long and create a marker
+                                const latLong = {
+                                    "lat": parseFloat(s.lat),
+                                    "lng": parseFloat(s.long)
                                 }
-                                //set prev_infowindow as the current detail window open
-                                prev_infowindow = infowindow;
-                                // open new detail window
-                                infowindow.open(storeMap, marker);
-                            });
+
+                                // create an info window with details for the store
+                                let infowindow = new google.maps.InfoWindow({
+                                    content: `<div>
+                                            <h5>${s.name}</h5>
+                                            <div>${s.streetAddress}</div>
+                                            <div>${s.cityStateZip}</div>
+                                        
+                                            <a href='./Stores/Details/${s.storeId}'>Details</a>                                     
+                                            </div>`
+                                });
+
+                                // create marker for the store
+                                let marker = new google.maps.Marker({
+                                    position: latLong,
+                                    animation: google.maps.Animation.DROP,
+                                    title: s.name,
+                                    icon: {
+                                        url: icons[s.statusId].icon,
+                                        scaledSize: new google.maps.Size(64, 64)
+                                    },
+                                    map: storeMap
+                                });
+
+
+                                // add marker to the bounds method to set Google Maps center to include all pins
+                                const loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+                                bounds.extend(loc);
+
+                                // add event listener to markers to open info window on click
+                                marker.addListener('click', function () {
+                                    //if a detail window is open, close it before opening a new one
+                                    if (prev_infowindow) {
+                                        prev_infowindow.close();
+                                    }
+                                    //set prev_infowindow as the current detail window open
+                                    prev_infowindow = infowindow;
+                                    // open new detail window
+                                    infowindow.open(storeMap, marker);
+                                });
+                            }
                         })
 
                         // set map center and zoom levels to contain all the pins
