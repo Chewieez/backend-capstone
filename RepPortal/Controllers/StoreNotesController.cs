@@ -160,7 +160,7 @@ namespace RepPortal.Models
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Stores", new { id = storeNote.StoreId });
             }
             ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name", storeNote.StoreId);
             return View(storeNote);
