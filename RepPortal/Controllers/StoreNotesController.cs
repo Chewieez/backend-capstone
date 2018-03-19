@@ -2,21 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RepPortal.Data;
+using RepPortal.Models.StoreNotesViewModels;
 
 namespace RepPortal.Models
 {
     public class StoreNotesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StoreNotesController(ApplicationDbContext context)
+        public StoreNotesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
+        // This task retrieves the currently authenticated user
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: StoreNotes
         public async Task<IActionResult> Index()
@@ -56,16 +63,25 @@ namespace RepPortal.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StoreNoteId,StoreId,Content,DateCreated")] StoreNote storeNote)
+        public async Task<IActionResult> Create( StoreNoteViewModel storeNoteViewModel)
         {
+            // attach store Id from view model to the new StoreNote
+            storeNoteViewModel.StoreNote.StoreId = storeNoteViewModel.CurrentStoreId;
+
+            ModelState.Remove("StoreNote.User");
+
             if (ModelState.IsValid)
             {
-                _context.Add(storeNote);
+                // get current user
+                var user = await GetCurrentUserAsync();
+                storeNoteViewModel.StoreNote.User = user;
+
+                _context.Add(storeNoteViewModel.StoreNote);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "City", storeNote.StoreId);
-            return View(storeNote);
+            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name", storeNoteViewModel.StoreNote.StoreId);
+            return View(storeNoteViewModel);
         }
 
         // GET: StoreNotes/Edit/5

@@ -9,6 +9,8 @@ namespace RepPortal.Models.StoreNotesViewModels
     {
         public StoreNote StoreNote { get; set; }
 
+        public int CurrentStoreId { get; set; }
+
         public List<StoreNote> AllNotesForStore { get; set; }
     }
 }

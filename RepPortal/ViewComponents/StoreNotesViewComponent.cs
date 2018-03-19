@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using RepPortal.Models;
-using RepPortal.Models.NotesViewModels;
+using RepPortal.Models.StoreNotesViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RepPortal.ViewComponents
@@ -27,11 +27,19 @@ namespace RepPortal.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(int storeId)
         {
+            // create a new StoreNoteViewModel
+            StoreNoteViewModel snvm = new StoreNoteViewModel()
+            {
+                // attach the current store id to the view model, to use to attach to a new store note when one is created
+                CurrentStoreId = storeId
+            };
+
             // get StoreNotes from the database for the current store being viewed
-            List<StoreNote> StoreNotes = await _context.StoreNote.Include(sn => sn.Store).Where(sn => sn.Store.StoreId == storeId).OrderBy(sn => sn.DateCreated).ToListAsync();
-           
+            snvm.AllNotesForStore = await _context.StoreNote.Include(sn => sn.Store).Where(sn => sn.Store.StoreId == storeId).OrderBy(sn => sn.DateCreated).ToListAsync();
+                       
             // return notes
-            return View(StoreNotes);
+            return View(snvm);
         }
+
     }
 }

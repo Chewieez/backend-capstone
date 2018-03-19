@@ -11,9 +11,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.StoreNote.DateCreated)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StoreNote.Store)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -28,9 +25,6 @@
                     @Html.DisplayFor(modelItem => item.DateCreated)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Store.Name)
-                </td>
-                <td>
                     <a asp-action="Edit" asp-route-id="@item.StoreNoteId">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.StoreNoteId">Delete</a>
                 </td>
@@ -39,12 +33,9 @@
     </tbody>
 </table>
 
-<form asp-action="Create">
+<form asp-controller="StoreNotes" asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="StoreNote.StoreId" class="control-label"></label>
-        <select asp-for="StoreNote.StoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
-    </div>
+    <input type="hidden" asp-for="CurrentStoreId" />
     <div class="form-group">
         <label asp-for="StoreNote.Content" class="control-label"></label>
         <input asp-for="StoreNote.Content" class="form-control" />
