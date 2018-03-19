@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace RepPortal.Models.StoreNotesViewModels
+{
+    public class StoreNoteViewModel
+    {
+        public StoreNote StoreNote { get; set; }
+
+        public List<StoreNote> AllNotesForStore { get; set; }
+    }
+}

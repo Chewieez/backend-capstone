@@ -1,0 +1,56 @@
+﻿@model RepPortal.Models.StoreNotesViewModels.StoreNoteViewModel
+
+<h2>Notes</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreNote.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreNote.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreNote.Store)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AllNotesForStore)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Store.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StoreNoteId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.StoreNoteId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="StoreNote.StoreId" class="control-label"></label>
+        <select asp-for="StoreNote.StoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="StoreNote.Content" class="control-label"></label>
+        <input asp-for="StoreNote.Content" class="form-control" />
+        <span asp-validation-for="StoreNote.Content" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-default" />
+    </div>
+</form>

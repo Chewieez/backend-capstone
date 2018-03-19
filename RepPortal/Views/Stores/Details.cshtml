@@ -23,7 +23,7 @@
 
     
 
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal col-md-7">
         <dt>Flags</dt>
         <dd> @Html.DisplayFor(model => model.Flag1.Flag.Name)</dd>
         <dt>
@@ -132,6 +132,10 @@
             @Html.DisplayFor(model => model.Store.LastOrderPaidDate)
         </dd>
     </dl>
+</div>
+
+<div class="col-md-offset-7 col-md-5">
+    @await Component.InvokeAsync("StoreNotes", new { storeId = Model.Store.StoreId })
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Store.StoreId">Edit</a> |
