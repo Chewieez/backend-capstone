@@ -28,8 +28,28 @@ namespace RepPortal.Models
         // GET: StoreNotes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.StoreNote.Include(s => s.Store);
+            var applicationDbContext = _context.StoreNote.Include(s => s.Store).OrderBy(sn => sn.DateCreated);
+
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: StoreNotes/Details/5
+        public async Task<IActionResult> ListStoreNotes(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var storeNote = await _context.StoreNote
+                .Include(s => s.Store)
+                .SingleOrDefaultAsync(m => m.StoreNoteId == id);
+            if (storeNote == null)
+            {
+                return NotFound();
+            }
+
+            return View(storeNote);
         }
 
         // GET: StoreNotes/Details/5

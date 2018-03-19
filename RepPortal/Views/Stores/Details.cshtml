@@ -1,29 +1,28 @@
 ﻿@model RepPortal.Models.StoreViewModels.StoreDetailViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Store Details";
 }
 
-<h2>Details</h2>
+<h2>Store Details</h2>
 
 <div>
-    <h4>Store</h4>
     <hr />
+    <dl class="dl-horizontal col-md-7">
     @if (Model.Flag1 == null)
     {
         @*<a asp-controller="stores" asp-action="AddFlag" asp-route-id="@Model.Store.StoreId">Add Reminder To Follow Up</a>*@
-    <p>
-        Click to add reminder to follow up with store:
-        <button class="btn btn-info" type="button" id="addressSearch"
-                onclick="location.href='@Url.Action("AddFlag", "Stores", new { id = Model.Store.StoreId })'">
-            Follow Up!
-        </button>
-    </p>
+        <p>
+            Click to add reminder to follow up with store:
+            <button class="btn btn-info" type="button" id="addressSearch"
+                    onclick="location.href='@Url.Action("AddFlag", "Stores", new { id = Model.Store.StoreId })'">
+                Follow Up!
+            </button>
+        </p>
     }
 
-    
 
-    <dl class="dl-horizontal col-md-7">
+
         <dt>Flags</dt>
         <dd> @Html.DisplayFor(model => model.Flag1.Flag.Name)</dd>
         <dt>
@@ -99,14 +98,14 @@
             @Html.DisplayFor(model => model.Store.DateAdded)
         </dd>
         @if (@Model.Store.StatusId == 4)
-    {
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.DateClosed)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.DateClosed)
-        </dd>
-}
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.DateClosed)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.DateClosed)
+            </dd>
+        }
         <dt>
             @Html.DisplayNameFor(model => model.Store.LastOrderTotal)
         </dt>
@@ -134,10 +133,11 @@
     </dl>
 </div>
 
-<div class="col-md-offset-7 col-md-5">
+<div class="col-md-5">
     @await Component.InvokeAsync("StoreNotes", new { storeId = Model.Store.StoreId })
 </div>
-<div>
+<div class="col-md-7">
     <a asp-action="Edit" asp-route-id="@Model.Store.StoreId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+

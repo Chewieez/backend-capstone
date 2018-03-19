@@ -70,9 +70,7 @@
                     @Html.DisplayNameFor(model => model.Store.DateClosed)
                 </th>
             }
-            <th>
-                @Html.DisplayNameFor(model => model.Store.LastOrderTotal)
-            </th>
+            <th>Notes</th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.Store.LastOrderDate)</a>
             </th>
@@ -124,21 +122,18 @@
                     </td>
                 }
                 <td>
-                    @Html.DisplayFor(modelItem => item.Store.LastOrderTotal)
-                </td>
+                    <a asp-action="Details" asp-route-id="@item.Store.StoreId">Notes</a>
+                </td>           
                 <td>
                     @Html.DisplayFor(modelItem => item.Store.LastOrderDate)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.LastOrderShipDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LastOrderPaidDate)
-                    </td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Store.StoreId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Store.StoreId">Details</a> |
+                    @if (User.IsInRole("Administrator"))
+                    {
                     <a asp-action="Delete" asp-route-id="@item.Store.StoreId">Delete</a>
+                    }
                 </td>
             </tr>
         }
