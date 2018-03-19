@@ -35,7 +35,7 @@ namespace RepPortal.ViewComponents
             };
 
             // get StoreNotes from the database for the current store being viewed
-            snvm.AllNotesForStore = await _context.StoreNote.Include(sn => sn.Store).Where(sn => sn.Store.StoreId == storeId).OrderBy(sn => sn.DateCreated).ToListAsync();
+            snvm.AllNotesForStore = await _context.StoreNote.Include("User").Include(sn => sn.Store).Where(sn => sn.Store.StoreId == storeId).OrderBy(sn => sn.DateCreated).ToListAsync();
                        
             // return notes
             return View(snvm);

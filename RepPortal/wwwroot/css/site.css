@@ -154,6 +154,22 @@
 #notes hr {
     margin: 4px 0;
 }
+
+.store-notes .store-notes__list {
+    height: 350px;
+    overflow: auto;
+    width: 100%;
+    border: 1px solid rgba(128, 128, 128, 0.86);
+}
+
+.store-note__author {
+    font-weight: bold;
+}
+
+.storeNotes__list hr {
+    margin: 4px 0;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */

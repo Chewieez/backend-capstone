@@ -74,7 +74,7 @@ namespace RepPortal.Models
         // GET: StoreNotes/Create
         public IActionResult Create()
         {
-            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "City");
+            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name");
             return View();
         }
 
@@ -117,7 +117,7 @@ namespace RepPortal.Models
             {
                 return NotFound();
             }
-            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "City", storeNote.StoreId);
+            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name", storeNote.StoreId);
             return View(storeNote);
         }
 
@@ -133,8 +133,17 @@ namespace RepPortal.Models
                 return NotFound();
             }
 
+            ModelState.Remove("User");
+
             if (ModelState.IsValid)
             {
+                // get current dateTime and overwrite DateCreated
+                storeNote.DateCreated = DateTime.Now;
+
+                // get user
+                var user = await GetCurrentUserAsync();
+                storeNote.User = user;
+
                 try
                 {
                     _context.Update(storeNote);
@@ -153,7 +162,7 @@ namespace RepPortal.Models
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "City", storeNote.StoreId);
+            ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name", storeNote.StoreId);
             return View(storeNote);
         }
 
