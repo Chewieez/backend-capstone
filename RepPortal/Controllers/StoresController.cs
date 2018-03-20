@@ -43,13 +43,13 @@ namespace RepPortal.Controllers
 
             // create a list of stores
             // by default, only retrieve matching stores where current user is the Sales Rep attached to the store
-            var stores = _context.Store.Include("SalesRep").Include("State").Include("Status").Include(s => s.StoreFlags).ThenInclude(sf => sf.Flag).Where(s => s.SalesRep == user);
+            var stores = _context.Store.Include("SalesRep").Include("State").Include("Status").Where(s => s.SalesRep == user);
 
             // check if the user is an Administrator
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display (for site administrator)
-                stores = _context.Store.Include("SalesRep").Include("State").Include("Status").Include(s => s.StoreFlags).ThenInclude(sf => sf.Flag);
+                stores = _context.Store.Include("SalesRep").Include("State").Include("Status");
             }
 
             if (!String.IsNullOrEmpty(searchString))
@@ -119,9 +119,9 @@ namespace RepPortal.Controllers
             //}
 
 
-            int pageSize = 25;
-            return View(await PaginatedList<Store>.CreateAsync(stores, page ?? 1, pageSize));
-            //return View(StoresViewModels);
+
+            return View(await PaginatedList<StoreListViewModel>.CreateAsync(StoresViewModels, page ?? 1, pageSize));
+            return View(StoresViewModels);
 
         }
 
