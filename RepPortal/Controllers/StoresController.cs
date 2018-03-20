@@ -465,11 +465,9 @@ namespace RepPortal.Controllers
             {
                 // copy contents of the temp csv file to the stream
                 await attachmentcsv.CopyToAsync(stream);
-                //var csv = new CsvReader(stream);
+                
                 // create a stream reader to read the file
-                var reader = new StreamReader(stream);
-
-                //var records = csv.GetRecords().ToList();
+                var reader = new StreamReader(stream);            
 
                 /* reset the reader to the beginning to allow reading. Not sure exactly why 
                 the reader is being created and immediately read, but this is a good workaround.
@@ -490,10 +488,11 @@ namespace RepPortal.Controllers
                         // create a new store instance
                         var ns = new Store();
                         // separate each column at the comma
-                        //  this regular expression splits string on the separator character NOT inside double quotes. 
-                        //and allows single quotes inside the string value: e.g. "Mike's Kitchen"
+                        // this regular expression splits string on the separator character NOT inside double quotes. 
+                        // and allows single quotes inside the string value: e.g. "Mike's Kitchen"
                         Regex regx = new Regex("," + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
                         string[] csvColumn = regx.Split(s);
+                        
                         // assign each column to a store field
 
                         ns.Name = csvColumn[0].Replace("\\", "").Replace("\"", "");
@@ -503,19 +502,15 @@ namespace RepPortal.Controllers
                         ns.StreetAddress = csvColumn[4] + " " + csvColumn[5];
                         ns.City = csvColumn[6];
                         // retrieve id for state from database then use it on store model
-                        var StoreState = _context.State.Where(state => state.Name == csvColumn[7]).SingleOrDefault();
+                        var StoreState = await _context.State.Where(state => state.Name == csvColumn[7]).SingleOrDefaultAsync();
                         ns.StateId = StoreState.StateId;
                         ns.Zipcode = csvColumn[8];
                         // add current user
                         ns.User = user;
                         ns.StatusId = 1;
-
-                        // move these fields to a different import csv file function
-                        //ns.LastOrderDate = Convert.ToDateTime(textpart[2]);
-                        //ns.DateAdded = DateTime.Now;
-                        //ns.LastOrderShipDate = DateTime.Now;
-                        //ns.LastOrderTotal = 22;
-
+                        // assign the sales rep if one is assigned, if not, assign the admin house user
+                        ns.SalesRep = await _context.Users.Where(sr => sr.Company == csvColumn[9]).SingleOrDefaultAsync();
+                        
                         // add store to list of stores to add
                         StoresToAdd.Add(ns);
                     }
@@ -527,6 +522,67 @@ namespace RepPortal.Controllers
             return Redirect("Index");
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UpdateStoreViaCsv(IFormFile attachmentUpdateCsv)
+        {
+            // get current User
+            var user = await GetCurrentUserAsync();
+            // create list to hold csv records
+            List<string> UpdatedRecords = new List<string>();
+            
+            // get the file path of the temp file created when csv is uploaded
+            var filePath = Path.GetTempFileName();
+            // create a stream file
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                // copy contents of the temp csv file to the stream
+                await attachmentUpdateCsv.CopyToAsync(stream);
+                
+                // create a stream reader to read the file
+                var reader = new StreamReader(stream);
 
+                /* reset the reader to the beginning to allow reading. Not sure exactly why 
+                the reader is being created and immediately read, but this is a good workaround.
+                */
+                stream.Position = 0;
+                reader.DiscardBufferedData();
+                // read first line of csv file which is just headers, and toss
+                reader.ReadLine();
+                // get contents of the csv file
+                var CsvContent = reader.ReadToEnd();
+                // split the csv file contents on each new line        
+                UpdatedRecords = new List<string>(CsvContent.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+                // iterate through the records and act upon each record
+                foreach (string line in UpdatedRecords)
+                {
+                    /* make sure the line has content */
+                    if (line.Length > 5)
+                    {
+                        // separate each column at the comma
+                        // this regular expression splits string on the separator character NOT inside double quotes. 
+                        // and allows single quotes inside the string value: e.g. "Mike's Kitchen"
+                        Regex regx = new Regex("," + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+                        string[] csvColumn = regx.Split(line);
+
+                        // Get the name of the current store in the csv file
+                        var StoreToUpdateName = csvColumn[0].Replace("\\", "").Replace("\"", "");
+                        // find the matching store in the database
+                        var UpdatedStore = _context.Store.Where(s => s.Name == StoreToUpdateName).SingleOrDefault();
+
+                        // assign each column to a store field
+                        UpdatedStore.LastOrderDate = Convert.ToDateTime(csvColumn[1]);
+                        UpdatedStore.LastOrderShipDate = Convert.ToDateTime(csvColumn[2]);
+                        UpdatedStore.LastOrderTotal = Convert.ToDouble(csvColumn[3]);
+
+                        
+                        // update store 
+                        _context.Update(UpdatedStore);
+                    }
+                }
+            }
+            // save changes to the database
+            await _context.SaveChangesAsync();
+            return Redirect("Index");
+        }
     }
 }

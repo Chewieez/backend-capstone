@@ -19,7 +19,7 @@ namespace RepPortal.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Display(Name = "Company if Applicable")]
+        [Display(Name = "Company")]
         [StringLength(50, ErrorMessage = "Please shorten Company Name to less than 50 characters.")]
         public string Company { get; set; }
 

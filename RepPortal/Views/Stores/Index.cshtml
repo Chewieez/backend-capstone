@@ -8,22 +8,34 @@
 
 @if (User.IsInRole("Administrator"))
 {
-    <div class="col-md-offset-5 col-md-7">
-        <p>
-            <a asp-action="Create">Create A New Store Listing</a>
-        </p>
-        @using (Html.BeginForm("UploadCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <div class="form-group">
-                <label for="attachment">Add stores via CSV File</label>
-                <label class="btn btn-default btn-file">
-                    <input type="file" name="attachmentcsv" id="attachmentcsv" hidden>
-                </label>
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </div>
-            <hr />
-        }
-    </div>
+<div class="col-md-offset-5 col-md-7">
+    <p>
+        <a asp-action="Create">Create A New Store Listing</a>
+    </p>
+    @using (Html.BeginForm("UpdateStoreViaCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <label for="attachmentUpdateCsv">Update Store Sales Data via CSV File</label>
+            <label class="btn btn-default btn-file">
+                <input type="file" name="attachmentUpdateCsv" id="attachmentUpdateCsv" hidden>
+            </label>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+        <hr />
+    }
+
+    @using (Html.BeginForm("UploadCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <label for="attachment">Add stores via CSV File</label>
+            <label class="btn btn-default btn-file">
+                <input type="file" name="attachmentcsv" id="attachmentcsv" hidden>
+            </label>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+        <hr />
+    }
+</div>
 }
 
 <form asp-action="Index" method="get">
