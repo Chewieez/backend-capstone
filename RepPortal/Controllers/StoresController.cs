@@ -177,7 +177,7 @@ namespace RepPortal.Controllers
             ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name");
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
 
-            return View(createStoreViewModel);
+            return await View(createStoreViewModel);
         }
 
         // POST: Stores/Create
@@ -623,33 +623,8 @@ namespace RepPortal.Controllers
             return Redirect("Index");
         }
 
-
-        //// Handles getting geolocation data for store from Google Api in bulk
-        //static HttpClient client = new HttpClient();
-
-        //// GET - go and get a store's geolocation data from Google location api
-        //static async Task<GeolocationStoreData> GetProductAsync(string path)
-        //{
-        //    GeolocationStoreData ReturnedGeolocationStoreData = null;
-
-        //    HttpResponseMessage response = await client.GetAsync(path);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-
-        //        var ResponseStream = await response.Content.ReadAsStreamAsync();
-        //        // create a stream reader to read the file
-        //        var reader = new StreamReader(ResponseStream);
-
-        //        ResponseStream.Position = 0;
-
-        //        var geoContent = reader.ReadToEnd();
-
-        //        // attach geoContent to a new instance of a ReturnedGeoplocationStoreData model
-
-        //    }
-        //    return ReturnedGeolocationStoreData;
-        //}
-
+        // GET - Function retrieves all the stores in database, checks if they contain geolocation, if they don't, an api call to 
+        // Google is performed and the results are attached to the store and saved to database.
         public async void GeolocateAllStores()
         {
             // get google api key
@@ -660,19 +635,21 @@ namespace RepPortal.Controllers
             foreach (Store s in AllStores)
             {
                 if (s.Lat == null) {
+                    // create a URI string for the api call to Google
                     string requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&key={1}", Uri.EscapeDataString(s.StreetAddress + s.City + s.State.Name + s.Zipcode), GoogleApi);
-
+                    // create a web request using the built uri
                     WebRequest request = WebRequest.Create(requestUri);
                     WebResponse response = request.GetResponse();
+                    // if there is a valid response from Google, read response, if not, catch errors
                     try
                     {
+                        // get response stream and read it
                         XDocument xdoc = XDocument.Load(response.GetResponseStream());
-
                         XElement result = xdoc.Element("GeocodeResponse").Element("result");
                         XElement locationElement = result.Element("geometry").Element("location");
                         XElement lat = locationElement.Element("lat");
                         XElement lng = locationElement.Element("lng");
-
+                        // parse the lat and long data returned
                         string ParsedLat = lat.ToString().Replace("<lat>", "").Replace("</lat>", "");
                         string ParsedLng = lng.ToString().Replace("<lng>", "").Replace("</lng>", "");
 
@@ -687,58 +664,8 @@ namespace RepPortal.Controllers
                     {
                         Console.WriteLine("Error getting geolocation");
                     }
-                    
-
-                    
-
                 }
-
-
-
-
             }
-
-
-            //// get google api key
-            //var GoogleApi = _iConfiguration.GetValue<string>("ApplicationConfiguration:GoogleAPIKey");
-            // get list of all stores
-            //List<Store> AllStores = await _context.Store.Include(s => s.State).ToListAsync();
-            //// iterate through list and pull address info to use in call to google api
-            //foreach (Store s in AllStores)
-            //{
-            //    var urlQuery = $"address=${s.StreetAddress}+${s.City}+${s.Zipcode}&key=${GoogleApi}";
-
-            //    var geolocationData = RunAsync(urlQuery).GetAwaiter().GetResult();
-            //}
-
         }
-
-        //static async Task<GeolocationStoreData> RunAsync(string path)
-        //{
-
-            
-        //    client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/geocode/json?");
-        //    client.DefaultRequestHeaders.Accept.Clear();
-        //    client.DefaultRequestHeaders.Accept.Add(
-        //        new MediaTypeWithQualityHeaderValue("application/json"));
-
-        //    var StoreGeolocation = new GeolocationStoreData();
-
-        //    try
-        //    {           
-        //            // Get the store's geolocation
-        //            StoreGeolocation = await GetProductAsync(path);
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //    }
-
-        //    return StoreGeolocation;
-           
-        //}
-
-
     }
 }
