@@ -57,7 +57,6 @@ namespace RepPortal.Controllers
                 stores = stores.Where(s => s.Name.Contains(searchString) || s.Status.Name.Contains(searchString));
             }
 
-
             ViewData["CurrentSort"] = sortOrder;
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
@@ -119,9 +118,8 @@ namespace RepPortal.Controllers
             //}
 
 
-
-            return View(await PaginatedList<StoreListViewModel>.CreateAsync(StoresViewModels, page ?? 1, pageSize));
-            return View(StoresViewModels);
+            int pageSize = 25;
+            return View(await PaginatedList<Store>.CreateAsync(stores, page ?? 1, pageSize));
 
         }
 
@@ -365,7 +363,7 @@ namespace RepPortal.Controllers
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display on map (for site administrator)
-                stores = await _context.Store.Include(s=> s.State).Include(s=> s.Status).ToListAsync();
+                stores = await _context.Store.Include(s => s.State).Include(s => s.Status).ToListAsync();
             }
             else
             {
@@ -398,7 +396,8 @@ namespace RepPortal.Controllers
                 else if ((interval.Days / 29) > 6)
                 {
                     storeStatusId = 2;
-                } else
+                }
+                else
                 {
                     s.StatusId = 1;
                 }
@@ -419,7 +418,7 @@ namespace RepPortal.Controllers
                     Lat = s.Lat,
                     Long = s.Long,
                     StreetAddress = s.StreetAddress,
-                    CityStateZip = $"{ s.City} {s.State.Name} { s.Zipcode}", 
+                    CityStateZip = $"{ s.City} {s.State.Name} { s.Zipcode}",
                     StatusId = s.StatusId
                 };
 
@@ -465,9 +464,9 @@ namespace RepPortal.Controllers
             {
                 // copy contents of the temp csv file to the stream
                 await attachmentcsv.CopyToAsync(stream);
-                
+
                 // create a stream reader to read the file
-                var reader = new StreamReader(stream);            
+                var reader = new StreamReader(stream);
 
                 /* reset the reader to the beginning to allow reading. Not sure exactly why 
                 the reader is being created and immediately read, but this is a good workaround.
@@ -492,7 +491,7 @@ namespace RepPortal.Controllers
                         // and allows single quotes inside the string value: e.g. "Mike's Kitchen"
                         Regex regx = new Regex("," + "(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
                         string[] csvColumn = regx.Split(s);
-                        
+
                         // assign each column to a store field
 
                         ns.Name = csvColumn[0].Replace("\\", "").Replace("\"", "");
@@ -510,7 +509,7 @@ namespace RepPortal.Controllers
                         ns.StatusId = 1;
                         // assign the sales rep if one is assigned, if not, assign the admin house user
                         ns.SalesRep = await _context.Users.Where(sr => sr.Company == csvColumn[9]).SingleOrDefaultAsync();
-                        
+
                         // add store to list of stores to add
                         StoresToAdd.Add(ns);
                     }
@@ -529,7 +528,7 @@ namespace RepPortal.Controllers
             var user = await GetCurrentUserAsync();
             // create list to hold csv records
             List<string> UpdatedRecords = new List<string>();
-            
+
             // get the file path of the temp file created when csv is uploaded
             var filePath = Path.GetTempFileName();
             // create a stream file
@@ -537,7 +536,7 @@ namespace RepPortal.Controllers
             {
                 // copy contents of the temp csv file to the stream
                 await attachmentUpdateCsv.CopyToAsync(stream);
-                
+
                 // create a stream reader to read the file
                 var reader = new StreamReader(stream);
 
@@ -569,14 +568,46 @@ namespace RepPortal.Controllers
                         // find the matching store in the database
                         var UpdatedStore = _context.Store.Where(s => s.Name == StoreToUpdateName).SingleOrDefault();
 
-                        // assign each column to a store field
-                        UpdatedStore.LastOrderDate = Convert.ToDateTime(csvColumn[1]);
-                        UpdatedStore.LastOrderShipDate = Convert.ToDateTime(csvColumn[2]);
-                        UpdatedStore.LastOrderTotal = Convert.ToDouble(csvColumn[3]);
+                        if (UpdatedStore != null)
+                        {
+                            // assign each column to a store field
+                            try
+                            {
+                                UpdatedStore.LastOrderDate = Convert.ToDateTime(csvColumn[1]);
+                            }
+                            catch (FormatException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            try
+                            {
+                                UpdatedStore.LastOrderShipDate = Convert.ToDateTime(csvColumn[2]);
 
-                        
-                        // update store 
-                        _context.Update(UpdatedStore);
+                            }
+                            catch (FormatException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            UpdatedStore.LastOrderTotal = Convert.ToDouble(csvColumn[3].Replace("\\", "").Replace("\"", "").Replace(",", ""));
+
+                            // update store in database
+                            try
+                            {
+                                _context.Update(UpdatedStore);
+                            }
+                            catch (DbUpdateConcurrencyException)
+                            {
+                                if (!StoreExists(UpdatedStore.StoreId))
+                                {
+                                    return NotFound();
+                                }
+                                else
+                                {
+                                    throw;
+                                }
+                            }
+
+                        }
                     }
                 }
             }
