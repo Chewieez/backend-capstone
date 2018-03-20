@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RepPortal.Models.StoreViewModels.StoreListViewModel>
+﻿@model PaginatedList<RepPortal.Models.Store>
 
 @{
     ViewData["Title"] = "Stores In Your Territory";
@@ -9,9 +9,9 @@
 @if (User.IsInRole("Administrator"))
 {
     <div class="col-md-offset-5 col-md-7">
-    <p>
-        <a asp-action="Create">Create A New Store Listing</a>
-    </p>
+        <p>
+            <a asp-action="Create">Create A New Store Listing</a>
+        </p>
         @using (Html.BeginForm("UploadCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             <div class="form-group">
@@ -39,40 +39,42 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Follow Up?</th>
+            @*<th>Follow Up?</th>*@
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]">@Html.DisplayNameFor(model => model.Store.Status)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
+                @*<a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]">@Html.DisplayNameFor(model => model.Store.Status)</a>*@
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Store.Name)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
+                @*<a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Store.Name)</a>*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Store.StreetAddress)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().StreetAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Store.PhoneNumber)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Store.WebsiteURL)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().WebsiteURL)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Store.ContactName)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ContactName)
             </th>
             @if (User.IsInRole("Administrator"))
             {
                 <th>
-                    @Html.DisplayNameFor(model => model.Store.SalesRep)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().SalesRep)
                 </th>
             }
-            @if (@Html.DisplayNameFor(model => model.Store.Status) == "Closed")
+            @if (@Html.DisplayNameFor(model => model.FirstOrDefault().Status) == "Closed")
             {
                 <th>
-                    @Html.DisplayNameFor(model => model.Store.DateClosed)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DateClosed)
                 </th>
             }
             <th>Notes</th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.Store.LastOrderDate)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.FirstOrDefault().LastOrderDate)</a>
             </th>
             <th></th>
         </tr>
@@ -82,62 +84,82 @@
         {
 
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Flag1.Flag.Name)</td>
+                @*<td>@Html.DisplayFor(modelItem => item.StoreFlag.Name)</td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.Store.Status.Name)
+                    @Html.DisplayFor(modelItem => item.Status.Name)
 
-                    <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.Store.StatusId)' />
+                    <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.StatusId)' />
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Store.Name)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <div>@Html.DisplayFor(modelItem => item.Store.StreetAddress)</div>
+                    <div>@Html.DisplayFor(modelItem => item.StreetAddress)</div>
 
                     <div>
-                        @Html.DisplayFor(modelItem => item.Store.City)
-                        @Html.DisplayFor(modelItem => item.Store.State.Name)
-                        @Html.DisplayFor(modelItem => item.Store.Zipcode)
+                        @Html.DisplayFor(modelItem => item.City)
+                        @Html.DisplayFor(modelItem => item.State.Name)
+                        @Html.DisplayFor(modelItem => item.Zipcode)
                     </div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Store.PhoneNumber)
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    <a href="@Html.DisplayFor(modelItem => item.Store.WebsiteURL)" target="_blank">@Html.DisplayFor(modelItem => item.Store.WebsiteURL)</a>
+                    <a href="@Html.DisplayFor(modelItem => item.WebsiteURL)" target="_blank">@Html.DisplayFor(modelItem => item.WebsiteURL)</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Store.ContactName)
+                    @Html.DisplayFor(modelItem => item.ContactName)
                 </td>
                 @if (User.IsInRole("Administrator"))
                 {
                     <td>
-                        @Html.DisplayFor(modelItem => item.Store.SalesRep.FirstName) @Html.DisplayFor(modelItem => item.Store.SalesRep.LastName)
+                        @Html.DisplayFor(modelItem => item.SalesRep.FirstName) @Html.DisplayFor(modelItem => item.SalesRep.LastName)
                     </td>
                 }
-                @if (@Html.DisplayNameFor(model => model.Store.Status) == "Closed")
+                @if (@Html.DisplayNameFor(model => model.FirstOrDefault().Status) == "Closed")
                 {
                     <td>
-                        @Html.DisplayFor(modelItem => item.Store.DateClosed)
+                        @Html.DisplayFor(modelItem => item.DateClosed)
                     </td>
                 }
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Store.StoreId">Notes</a>
-                </td>           
-                <td>
-                    @Html.DisplayFor(modelItem => item.Store.LastOrderDate)
+                    <a asp-action="Details" asp-route-id="@item.StoreId">Notes</a>
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Store.StoreId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Store.StoreId">Details</a> |
+                    @Html.DisplayFor(modelItem => item.LastOrderDate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.StoreId">Details</a> |
                     @if (User.IsInRole("Administrator"))
                     {
-                    <a asp-action="Delete" asp-route-id="@item.Store.StoreId">Delete</a>
+                        <a asp-action="Delete" asp-route-id="@item.StoreId">Delete</a>
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
 
 

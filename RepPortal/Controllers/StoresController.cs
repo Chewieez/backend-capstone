@@ -33,10 +33,8 @@ namespace RepPortal.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Stores
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-
-
             // get current user
             ApplicationUser user = await GetCurrentUserAsync();
 
@@ -45,13 +43,13 @@ namespace RepPortal.Controllers
 
             // create a list of stores
             // by default, only retrieve matching stores where current user is the Sales Rep attached to the store
-            var stores = _context.Store.Include("SalesRep").Include("State").Include("Status").Where(s => s.SalesRep == user);
+            var stores = _context.Store.Include("SalesRep").Include("State").Include("Status").Include(s => s.StoreFlags).ThenInclude(sf => sf.Flag).Where(s => s.SalesRep == user);
 
             // check if the user is an Administrator
             if (roles.Contains("Administrator"))
             {
                 // retrieve all stores to display (for site administrator)
-                stores = _context.Store.Include("SalesRep").Include("State").Include("Status");
+                stores = _context.Store.Include("SalesRep").Include("State").Include("Status").Include(s => s.StoreFlags).ThenInclude(sf => sf.Flag);
             }
 
             if (!String.IsNullOrEmpty(searchString))
@@ -60,11 +58,21 @@ namespace RepPortal.Controllers
             }
 
 
-
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["OrderDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
             ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "Name";
             ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
 
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
 
             switch (sortOrder)
             {
@@ -92,27 +100,28 @@ namespace RepPortal.Controllers
             }
 
             // create a iQueryable collection of store view models
-            List<StoreListViewModel> StoresViewModels = new List<StoreListViewModel>();
+            //List<StoreListViewModel> StoresViewModels = new List<StoreListViewModel>();
 
-            var RetrievedStores = await stores.ToListAsync();
 
-            foreach (Store s in RetrievedStores)
-            {
-                // create a new view model instance
-                StoreListViewModel slvm = new StoreListViewModel();
+            //foreach (Store s in stores)
+            //{
+            //    // create a new view model instance
+            //    StoreListViewModel slvm = new StoreListViewModel();
 
-                // find any flags for the store
-                var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == s.StoreId).SingleOrDefaultAsync();
-                // attach flag info to the view model
-                slvm.Flag1 = flag;
-                // attach the store to the view model
-                slvm.Store = s;
-                // add the view model to the StoresViewModels list
-                StoresViewModels.Add(slvm);
+            //    // find any flags for the store
+            //    var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == s.StoreId).SingleOrDefaultAsync();
+            //    // attach flag info to the view model
+            //    slvm.Flag1 = flag;
+            //    // attach the store to the view model
+            //    slvm.Store = s;
+            //    // add the view model to the StoresViewModels list
+            //    StoresViewModels.Add(slvm);
+            //}
 
-            }
 
-            return View(StoresViewModels);
+            int pageSize = 25;
+            return View(await PaginatedList<Store>.CreateAsync(stores, page ?? 1, pageSize));
+            //return View(StoresViewModels);
 
         }
 
