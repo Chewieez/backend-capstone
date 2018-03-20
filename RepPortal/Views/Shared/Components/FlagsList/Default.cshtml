@@ -1,18 +1,21 @@
 ﻿@model IEnumerable<RepPortal.Models.StoreViewModels.StoreFlagViewModel>
 
 <h4>Flags:</h4>
-@foreach (var sfvm in Model)
-{
-    @if (sfvm.Flag != null)
+
+<div class="store-flags rounded-border">
+    @foreach (var sfvm in Model)
     {
-        <div class="storeFlags">
-            <span class="storeFlags__flag">@sfvm.Flag.Name</span> - <span class="storeFlags__storeName">@sfvm.Store.Name</span>
-            @if (User.IsInRole("Administrator"))
-            {
-                <span class="storeFlags__salesRep">- Rep: @sfvm.Store.SalesRep.FirstName @sfvm.Store.SalesRep.LastName</span>
-            }
+        @if (sfvm.Flag != null)
+        {
+            <div class="store-flag">
+                <span class="store-flag__flag">@sfvm.Flag.Name</span> - <span class="store-flags__storeName">@sfvm.Store.Name</span>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <span class="store-flag__salesRep">- Rep: @sfvm.Store.SalesRep.FirstName @sfvm.Store.SalesRep.LastName</span>
+                }
 
-        </div>
+            </div>
 
+        }
     }
-}
+</div>

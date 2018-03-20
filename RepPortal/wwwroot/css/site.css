@@ -39,7 +39,7 @@
 
 /* Google Maps Styles */
 .mapContainer {
-    margin: 10px auto;
+    margin: 15px auto -20px;
     height: 600px;
 }
 
@@ -126,8 +126,6 @@
     background: #fff;
     padding: 6px;
     margin: 2px auto;
-    /*border: 1px solid #808080;*/
-    border-radius: 3px;
 }
 
 #legend-innerContainer {
@@ -147,7 +145,7 @@
     vertical-align: middle;
 }
 
-/* -- Notes On Dashboard -- */
+/* -- Notes View Component -- */
 .dashboard-notes {
     padding: 5px;
     height: 350px;
@@ -163,7 +161,7 @@
     margin: 4px 0;
 }
 
-/* -- Store Notes on Store Details Page -- */
+/* -- Store Notes view component -- */
 .store-notes .store-notes__list {
     padding: 5px;
     height: 350px;
@@ -180,6 +178,15 @@
 .storeNotes__list hr {
     margin: 4px 0;
 }
+
+/* -- Store Flags View Component -- */
+.store-flags {
+    height: 140px;
+    overflow: auto;
+    width: 100%;
+    padding: 5px;
+}
+
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

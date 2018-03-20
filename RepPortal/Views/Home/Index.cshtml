@@ -10,44 +10,43 @@
 }
 
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="mapContainer">
-                <div id="map"></div>
-                <div id="legend">
-                    <div id="legend-innerContainer">
-                        <span class="bold">Legend:</span>
+<div class="row">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="mapContainer">
+                    <div id="map"><input id="pac-input" class="controls form-control" type="text" placeholder="Search"></div>
+
+                    <div id="legend">
+                        <div id="legend-innerContainer">
+                            <span class="bold">Legend:</span>
+                        </div>
                     </div>
                 </div>
-
+                <div class="col-md-8 ">
+                    @await Component.InvokeAsync("FlagsList")
+                </div>
             </div>
-            <input id="pac-input" class="controls form-control" type="text" placeholder="Search">
 
-        </div>
-
-        <div class="col-sm-4">
-            <h3>Notes:</h3>
-            <div class="">
-                @await Component.InvokeAsync("Notes")
+            <div class="col-sm-4">
+                <h3>Notes:</h3>
+                
+                    @await Component.InvokeAsync("Notes")
+               
             </div>
+
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+    {
+        <div class="col-sm-8">
+            <br />
+            <a asp-controller="Stores" asp-action="Create" class="btn btn-primary">Add A Store</a>
         </div>
-    </div>
-    <div class="col-md-offset-8 col-md-4">
-        @await Component.InvokeAsync("FlagsList")
-    </div>
+    }
 
-}
-
-@if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
-{
-    <div>
-
-        <a asp-controller="Stores" asp-action="Create" class="btn btn-primary">Add A Store</a>
-    </div>
-}
-
+       </div>
+    }
+</div>
 
 <script type="text/javascript">
     const googleAPI = Object.create(null, {

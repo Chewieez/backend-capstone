@@ -4,8 +4,6 @@ $(document).ready(function () {
 
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
 
-        console.log("Hello script!");
-
         $.ajax({
             url: "/Stores/StoresList",
             method: "GET",
@@ -13,7 +11,6 @@ $(document).ready(function () {
                 alert(response.d);
             }
         }).then(response => {
-            console.log("Response");
             let stores = response
             let storeMap;
             var markers = [];

@@ -169,15 +169,13 @@ namespace RepPortal.Controllers
         {
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
 
-
-
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
             ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name");
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Name");
 
-            return await View(createStoreViewModel);
+            return View(createStoreViewModel);
         }
 
         // POST: Stores/Create
@@ -667,5 +665,6 @@ namespace RepPortal.Controllers
                 }
             }
         }
+
     }
 }
