@@ -1,4 +1,5 @@
 ﻿//get geocode data of the new store upon creation 
+
 $(".CreateStoreBtn").click(evt => {
     // get the value out of the address fields
     const address = $(".formStreetAddress").val() || "";

@@ -1,7 +1,4 @@
-﻿// Write your JavaScript code.
-
-
-
+﻿
 $(document).ready(function () {
 
 
@@ -271,4 +268,6 @@ const icons = {
         icon: '/images/map-icons/Shopping_Bag_4.svg'
     }
 }
+
+
 

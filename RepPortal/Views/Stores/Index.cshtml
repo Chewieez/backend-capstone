@@ -9,7 +9,10 @@
 @if (User.IsInRole("Administrator"))
 {
 <div class="col-md-offset-5 col-md-7">
+    @*<input type="button" id="geolocateAllStores" value="Geolocate All Stores" />*@
+    
     <p>
+        <a asp-action="GeoLocateAllStores">GeolocateAllStores</a>
         <a asp-action="Create">Create A New Store Listing</a>
     </p>
     @using (Html.BeginForm("UpdateStoreViaCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))

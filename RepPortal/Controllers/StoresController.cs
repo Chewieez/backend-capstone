@@ -15,6 +15,11 @@ using RepPortal.Models;
 using RepPortal.Models.StoreViewModels;
 using CsvHelper.Configuration;
 using System.Text.RegularExpressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Microsoft.Extensions.Configuration;
+using System.Net;
+using System.Xml.Linq;
 
 namespace RepPortal.Controllers
 {
@@ -22,11 +27,13 @@ namespace RepPortal.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _iConfiguration;
 
-        public StoresController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public StoresController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IConfiguration iConfiguration)
         {
             _userManager = userManager;
             _context = context;
+            _iConfiguration = iConfiguration;
         }
 
         // This task retrieves the currently authenticated user
@@ -615,5 +622,123 @@ namespace RepPortal.Controllers
             await _context.SaveChangesAsync();
             return Redirect("Index");
         }
+
+
+        //// Handles getting geolocation data for store from Google Api in bulk
+        //static HttpClient client = new HttpClient();
+
+        //// GET - go and get a store's geolocation data from Google location api
+        //static async Task<GeolocationStoreData> GetProductAsync(string path)
+        //{
+        //    GeolocationStoreData ReturnedGeolocationStoreData = null;
+
+        //    HttpResponseMessage response = await client.GetAsync(path);
+        //    if (response.IsSuccessStatusCode)
+        //    {
+
+        //        var ResponseStream = await response.Content.ReadAsStreamAsync();
+        //        // create a stream reader to read the file
+        //        var reader = new StreamReader(ResponseStream);
+
+        //        ResponseStream.Position = 0;
+
+        //        var geoContent = reader.ReadToEnd();
+
+        //        // attach geoContent to a new instance of a ReturnedGeoplocationStoreData model
+
+        //    }
+        //    return ReturnedGeolocationStoreData;
+        //}
+
+        public async void GeolocateAllStores()
+        {
+            // get google api key
+            var GoogleApi = _iConfiguration.GetValue<string>("ApplicationConfiguration:GoogleAPIKey");
+            //get list of all stores
+            List<Store> AllStores = await _context.Store.Include(s => s.State).ToListAsync();
+            // iterate through list and pull address info to use in call to google api
+            foreach (Store s in AllStores)
+            {
+                if (s.Lat == null) {
+                    string requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?address={0}&sensor=false&key={1}", Uri.EscapeDataString(s.StreetAddress + s.City + s.State.Name + s.Zipcode), GoogleApi);
+
+                    WebRequest request = WebRequest.Create(requestUri);
+                    WebResponse response = request.GetResponse();
+                    try
+                    {
+                        XDocument xdoc = XDocument.Load(response.GetResponseStream());
+
+                        XElement result = xdoc.Element("GeocodeResponse").Element("result");
+                        XElement locationElement = result.Element("geometry").Element("location");
+                        XElement lat = locationElement.Element("lat");
+                        XElement lng = locationElement.Element("lng");
+
+                        string ParsedLat = lat.ToString().Replace("<lat>", "").Replace("</lat>", "");
+                        string ParsedLng = lng.ToString().Replace("<lng>", "").Replace("</lng>", "");
+
+                        // attach geolocation data to store
+                        s.Lat = ParsedLat;
+                        s.Long = ParsedLng;
+
+                        // update store in database
+                        _context.Update(s);
+                        await _context.SaveChangesAsync(); 
+                    } catch (Exception)
+                    {
+                        Console.WriteLine("Error getting geolocation");
+                    }
+                    
+
+                    
+
+                }
+
+
+
+
+            }
+
+
+            //// get google api key
+            //var GoogleApi = _iConfiguration.GetValue<string>("ApplicationConfiguration:GoogleAPIKey");
+            // get list of all stores
+            //List<Store> AllStores = await _context.Store.Include(s => s.State).ToListAsync();
+            //// iterate through list and pull address info to use in call to google api
+            //foreach (Store s in AllStores)
+            //{
+            //    var urlQuery = $"address=${s.StreetAddress}+${s.City}+${s.Zipcode}&key=${GoogleApi}";
+
+            //    var geolocationData = RunAsync(urlQuery).GetAwaiter().GetResult();
+            //}
+
+        }
+
+        //static async Task<GeolocationStoreData> RunAsync(string path)
+        //{
+
+            
+        //    client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/geocode/json?");
+        //    client.DefaultRequestHeaders.Accept.Clear();
+        //    client.DefaultRequestHeaders.Accept.Add(
+        //        new MediaTypeWithQualityHeaderValue("application/json"));
+
+        //    var StoreGeolocation = new GeolocationStoreData();
+
+        //    try
+        //    {           
+        //            // Get the store's geolocation
+        //            StoreGeolocation = await GetProductAsync(path);
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //    }
+
+        //    return StoreGeolocation;
+           
+        //}
+
+
     }
 }
