@@ -389,17 +389,17 @@ namespace RepPortal.Controllers
                 {
                     storeStatusId = 4;
                 }
-                else if ((interval.Days / 29) > 12)
+                else if ((interval.Days / 29) >= 12)
                 {
                     storeStatusId = 3;
                 }
-                else if ((interval.Days / 29) > 6)
+                else if ((interval.Days / 29) >= 6)
                 {
                     storeStatusId = 2;
                 }
                 else
                 {
-                    s.StatusId = 1;
+                    storeStatusId = 1;
                 }
 
                 // if status has changed, save new status and write to database
