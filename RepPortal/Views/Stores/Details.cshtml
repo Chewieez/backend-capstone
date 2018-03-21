@@ -4,140 +4,144 @@
     ViewData["Title"] = "Store Details";
 }
 
-<h2>Store Details</h2>
+<h2>
+    <a asp-action="Index"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
+    Store Details
+</h2>
 
-<div>
-    <hr />
-    <dl class="dl-horizontal col-md-7">
-    @if (Model.Flag1 == null)
-    {
-        @*<a asp-controller="stores" asp-action="AddFlag" asp-route-id="@Model.Store.StoreId">Add Reminder To Follow Up</a>*@
-        <p>
-            Click to add reminder to follow up with store:
-            <button class="btn btn-info" type="button" id="addressSearch"
-                    onclick="location.href='@Url.Action("AddFlag", "Stores", new { id = Model.Store.StoreId })'">
-                Follow Up!
-            </button>
-        </p>
-    }
-
-
-
-        <dt>Flags</dt>
-        <dd> @Html.DisplayFor(model => model.Flag1.Flag.Name)</dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.Status)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.Status.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.StreetAddress)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.StreetAddress)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.City)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.City)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.State)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.State.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.Zipcode)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.Zipcode)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.PhoneNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.PhoneNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.Email)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.Email)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.WebsiteURL)
-        </dt>
-        <dd>
-            <a href="@Html.DisplayFor(model => model.Store.WebsiteURL)" target="_blank">@Html.DisplayFor(model => model.Store.WebsiteURL)</a>
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.ContactName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.ContactName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.SalesRep)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.SalesRep.FirstName) @Html.DisplayFor(model => model.Store.SalesRep.LastName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.DateAdded)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.DateAdded)
-        </dd>
-        @if (@Model.Store.StatusId == 4)
+<hr />
+<div class="row">
+    <div class="col-sm-12 col-md-7">
+        @if (Model.Flag1 == null)
         {
+            <p>
+                <button class="btn btn-info" type="button" id="addressSearch"
+                        onclick="location.href='@Url.Action("AddFlag", "Stores", new { id = Model.Store.StoreId })'">
+                    Follow Up!
+                </button>
+                Click to add reminder
+            </p>
+        }
+        <dl class="dl-horizontal">
+
+            <dt>Flags</dt>
+            <dd> @Html.DisplayFor(model => model.Flag1.Flag.Name)</dd>
             <dt>
-                @Html.DisplayNameFor(model => model.Store.DateClosed)
+                @Html.DisplayNameFor(model => model.Store.Status)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Store.DateClosed)
+                @Html.DisplayFor(model => model.Store.Status.Name)
             </dd>
-        }
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.LastOrderTotal)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.LastOrderTotal)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.LastOrderDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.LastOrderDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.LastOrderShipDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.LastOrderShipDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Store.LastOrderPaidDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Store.LastOrderPaidDate)
-        </dd>
-    </dl>
-</div>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.StreetAddress)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.StreetAddress)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.City)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.City)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.State)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.State.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.Zipcode)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.Zipcode)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.PhoneNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.PhoneNumber)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.Email)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.Email)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.WebsiteURL)
+            </dt>
+            <dd>
+                <a href="@Html.DisplayFor(model => model.Store.WebsiteURL)" target="_blank">@Html.DisplayFor(model => model.Store.WebsiteURL)</a>
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.ContactName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.ContactName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.SalesRep)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.SalesRep.FirstName) @Html.DisplayFor(model => model.Store.SalesRep.LastName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.DateAdded)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.DateAdded)
+            </dd>
+            @if (@Model.Store.StatusId == 4)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.Store.DateClosed)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Store.DateClosed)
+                </dd>
+            }
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.LastOrderTotal)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.LastOrderTotal)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.LastOrderDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.LastOrderDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.LastOrderShipDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.LastOrderShipDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Store.LastOrderPaidDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Store.LastOrderPaidDate)
+            </dd>
+        </dl>
+        <div class="col-md-7">
 
-<div class="col-md-5 store-notes">
-    @await Component.InvokeAsync("StoreNotes", new { storeId = Model.Store.StoreId })
-</div>
-<div class="col-md-7">
-    <a asp-action="Edit" asp-route-id="@Model.Store.StoreId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <a asp-action="Edit" asp-route-id="@Model.Store.StoreId" class="btn btn-default"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <span>Edit</span></a>
+        </div>
+
+
+    </div>
+    <div class="col-md-5 store-notes">
+        @await Component.InvokeAsync("StoreNotes", new { storeId = Model.Store.StoreId })
+    </div>
 </div>
 

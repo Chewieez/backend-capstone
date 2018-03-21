@@ -3,6 +3,14 @@
     padding-bottom: 20px;
 }
 
+.glyphicon {
+    font-size: 2.8rem;
+}
+
+h2 .glyphicon {
+    font-size: 1.2em;
+}
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
