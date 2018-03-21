@@ -10,15 +10,19 @@
     @if (User.IsInRole("Administrator"))
     {
         <div class="col-md-5">
-            <button class="btn btn-info" type="button" id="addressSearch"
-                    onclick="location.href='@Url.Action("Create", "Stores")'">
-                Add A Store
-            </button>
-
-            <button class="btn btn-info" type="button" id="addressSearch"
-                    onclick="location.href='@Url.Action("GeolocateAllStores", "Stores")'">
-                Geolocate All Stores
-            </button>
+            <div class="row">
+                <button class="btn btn-info" type="button" id="addressSearch"
+                        onclick="location.href='@Url.Action("Create", "Stores")'">
+                    Add A Store
+                </button>
+            </div>
+            <br />
+            <div class="row">
+                <button class="btn btn-warning" type="button" id="addressSearch"
+                        onclick="location.href='@Url.Action("GeolocateAllStores", "Stores")'">
+                    Geolocate All Stores
+                </button>
+            </div>
         </div>
 
         <div class="col-md-7">
@@ -32,10 +36,10 @@
                     </label>
                     <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
-                <hr />
+                
             }
 
-            @using (Html.BeginForm("UploadCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("AddStoresViaCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 <div class="form-group">
                     <label for="attachment">Add stores via CSV File</label>
@@ -44,18 +48,23 @@
                     </label>
                     <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
-                <hr />
             }
         </div>
     }
 
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
-            <p>
-                Search by Name or Status: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+
+            <label for="SearchString">Search by Name or Status:</label>
+            <div class="row">
+                <span class="form-group col-sm-4">
+                    <input type="text" class="form-control" id="SearchString "name="SearchString" value="@ViewData["currentFilter"]" />
+                </span>
                 <input type="submit" value="Search" class="btn btn-default" /> |
                 <a asp-action="Index">Back to Full List</a>
-            </p>
+
+            </div>
+
         </div>
     </form>
 

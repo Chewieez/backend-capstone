@@ -105,26 +105,7 @@ namespace RepPortal.Controllers
                     break;
             }
 
-            // create a iQueryable collection of store view models
-            //List<StoreListViewModel> StoresViewModels = new List<StoreListViewModel>();
-
-
-            //foreach (Store s in stores)
-            //{
-            //    // create a new view model instance
-            //    StoreListViewModel slvm = new StoreListViewModel();
-
-            //    // find any flags for the store
-            //    var flag = await _context.StoreFlag.Include("Flag").Where(f => f.StoreId == s.StoreId).SingleOrDefaultAsync();
-            //    // attach flag info to the view model
-            //    slvm.Flag1 = flag;
-            //    // attach the store to the view model
-            //    slvm.Store = s;
-            //    // add the view model to the StoresViewModels list
-            //    StoresViewModels.Add(slvm);
-            //}
-
-
+            // set amount of stores to display per page
             int pageSize = 25;
             return View(await PaginatedList<Store>.CreateAsync(stores, page ?? 1, pageSize));
 
@@ -194,11 +175,15 @@ namespace RepPortal.Controllers
                 // Get the current user
                 ApplicationUser user = await GetCurrentUserAsync();
 
-                // find matching user for SalesRep in system
-                ApplicationUser SalesRep = _context.Users.Single(u => u.Id == storeModel.SalesRepId);
+                if (storeModel.SalesRepId != null)
+                {
+                    // find matching user for SalesRep in system
+                    ApplicationUser SalesRep = _context.Users.Single(u => u.Id == storeModel.SalesRepId);
 
-                // store the sales rep on the store
-                storeModel.Store.SalesRep = SalesRep;
+                    // store the sales rep on the store
+                    storeModel.Store.SalesRep = SalesRep;
+                }
+
                 // Add current user to store listing
                 storeModel.Store.User = user;
 
@@ -224,7 +209,7 @@ namespace RepPortal.Controllers
         }
 
         // GET: Stores/Edit/5
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -249,7 +234,7 @@ namespace RepPortal.Controllers
             }
             createStoreViewModel.Store = store;
 
-            ViewBag.SalesReps = _context.Users.Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
+            ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName).Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
             ViewData["StateId"] = new SelectList(_context.State.OrderBy(s => s.Name), "StateId", "Name", store.StateId);
             ViewData["StatusId"] = new SelectList(_context.Status, "StatusId", "Color", store.StatusId);
@@ -278,7 +263,7 @@ namespace RepPortal.Controllers
                 // add salesRep if info changed
                 if (storeModel.Store.SalesRep == null)
                 {
-                    var AddedSalesRep = await _context.Users.Where(u => u.Id == storeModel.SalesRepId).SingleOrDefaultAsync();
+                    var AddedSalesRep = await _context.Users.OrderBy(u => u.FirstName).Where(u => u.Id == storeModel.SalesRepId).SingleOrDefaultAsync();
                     storeModel.Store.SalesRep = AddedSalesRep;
                 }
 
@@ -454,7 +439,7 @@ namespace RepPortal.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> UploadCsv(IFormFile attachmentcsv)
+        public async Task<ActionResult> AddStoresViaCsv(IFormFile attachmentcsv)
         {
             // get current User
             var user = await GetCurrentUserAsync();

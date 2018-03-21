@@ -2,6 +2,7 @@
 
 $(".CreateStoreBtn").click(evt => {
     // get the value out of the address fields
+    const name = $(".formName") || "";
     const address = $(".formStreetAddress").val() || "";
     const city = $(".formCity").val() || "";
     const zip = $(".formZipcode").val() || "";
@@ -11,7 +12,7 @@ $(".CreateStoreBtn").click(evt => {
 
 
     // check that all fields are entered
-    if (address !== "" && city !== "" && zip !== "" && formLat === "" && formLong === "") {
+    if (name !== "" && address !== "" && city !== "" && zip !== "" && formLat === "" && formLong === "") {
         // prevent form from submitting
         evt.preventDefault();
 
@@ -36,8 +37,8 @@ $(".CreateStoreBtn").click(evt => {
                 alert("Error retrieving geolocation coordinates. Check your address and try again.")
             }
         })
-    } else {
-        // if store location data not present, do not submite form so asp.net model validaton can catch error and alert user
-        $('form').submit()
-    }
+    } 
+
+    // if store location data not present, do not submite form so asp.net model validaton can catch error and alert user
+       
 })
