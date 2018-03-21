@@ -61,14 +61,11 @@
 <table class="table">
     <thead>
         <tr>
-            @*<th>Follow Up?</th>*@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
-                @*<a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]">@Html.DisplayNameFor(model => model.Store.Status)</a>*@
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
-                @*<a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Store.Name)</a>*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().StreetAddress)
@@ -106,7 +103,6 @@
         {
 
             <tr>
-                @*<td>@Html.DisplayFor(modelItem => item.StoreFlag.Name)</td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Status.Name)
 

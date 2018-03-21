@@ -4,11 +4,16 @@
 }
 
 .glyphicon {
-    font-size: 2.8rem;
+    font-size: 2.2rem;
 }
 
 h2 .glyphicon {
     font-size: 1.2em;
+}
+
+.edit-btn-text {
+    font-size: 1.4em;
+    font-weight: 600;
 }
 
 /* Wrapping element */
