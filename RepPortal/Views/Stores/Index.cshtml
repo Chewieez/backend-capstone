@@ -6,178 +6,179 @@
 
 <h2>Stores In Your Territory</h2>
 
-@if (User.IsInRole("Administrator"))
-{
-    <div class="col-md-5">
-        <button class="btn btn-info" type="button" id="addressSearch"
-                onclick="location.href='@Url.Action("Create", "Stores")'">
-            Add A Store
-        </button>
+<div class="row white-background store-list rounded">
+    @if (User.IsInRole("Administrator"))
+    {
+        <div class="col-md-5">
+            <button class="btn btn-info" type="button" id="addressSearch"
+                    onclick="location.href='@Url.Action("Create", "Stores")'">
+                Add A Store
+            </button>
 
-        <button class="btn btn-info" type="button" id="addressSearch"
-                onclick="location.href='@Url.Action("GeolocateAllStores", "Stores")'">
-            Geolocate All Stores
-        </button>
-    </div>
+            <button class="btn btn-info" type="button" id="addressSearch"
+                    onclick="location.href='@Url.Action("GeolocateAllStores", "Stores")'">
+                Geolocate All Stores
+            </button>
+        </div>
 
-    <div class="col-md-7">
+        <div class="col-md-7">
 
-        @using (Html.BeginForm("UpdateStoreViaCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <div class="form-group">
-                <label for="attachmentUpdateCsv">Update Store Sales Data via CSV File</label>
-                <label class="btn btn-default btn-file">
-                    <input type="file" name="attachmentUpdateCsv" id="attachmentUpdateCsv" hidden>
-                </label>
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </div>
-            <hr />
-        }
-
-        @using (Html.BeginForm("UploadCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <div class="form-group">
-                <label for="attachment">Add stores via CSV File</label>
-                <label class="btn btn-default btn-file">
-                    <input type="file" name="attachmentcsv" id="attachmentcsv" hidden>
-                </label>
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </div>
-            <hr />
-        }
-    </div>
-}
-
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Search by Name or Status: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().StreetAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().WebsiteURL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().ContactName)
-            </th>
-            @if (User.IsInRole("Administrator"))
+            @using (Html.BeginForm("UpdateStoreViaCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().SalesRep)
-                </th>
+                <div class="form-group">
+                    <label for="attachmentUpdateCsv">Update Store Sales Data via CSV File</label>
+                    <label class="btn btn-default btn-file">
+                        <input type="file" name="attachmentUpdateCsv" id="attachmentUpdateCsv" hidden>
+                    </label>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+                <hr />
             }
-            @if (@Html.DisplayNameFor(model => model.FirstOrDefault().Status) == "Closed")
-            {
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().DateClosed)
-                </th>
-            }
-            <th>Notes</th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.FirstOrDefault().LastOrderDate)</a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
 
+            @using (Html.BeginForm("UploadCsv", "Stores", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-group">
+                    <label for="attachment">Add stores via CSV File</label>
+                    <label class="btn btn-default btn-file">
+                        <input type="file" name="attachmentcsv" id="attachmentcsv" hidden>
+                    </label>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+                <hr />
+            }
+        </div>
+    }
+
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Search by Name or Status: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Search" class="btn btn-default" /> |
+                <a asp-action="Index">Back to Full List</a>
+            </p>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status.Name)
-
-                    <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.StatusId)' />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    <div>@Html.DisplayFor(modelItem => item.StreetAddress)</div>
-
-                    <div>
-                        @Html.DisplayFor(modelItem => item.City)
-                        @Html.DisplayFor(modelItem => item.State.Name)
-                        @Html.DisplayFor(modelItem => item.Zipcode)
-                    </div>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    <a href="@Html.DisplayFor(modelItem => item.WebsiteURL)" target="_blank">@Html.DisplayFor(modelItem => item.WebsiteURL)</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ContactName)
-                </td>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().StreetAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().PhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().WebsiteURL)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ContactName)
+                </th>
                 @if (User.IsInRole("Administrator"))
                 {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SalesRep.FirstName) @Html.DisplayFor(modelItem => item.SalesRep.LastName)
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().SalesRep)
+                    </th>
                 }
                 @if (@Html.DisplayNameFor(model => model.FirstOrDefault().Status) == "Closed")
                 {
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateClosed)
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().DateClosed)
+                    </th>
                 }
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.StoreId">Notes</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastOrderDate)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.StoreId">Details</a> |
+                <th>Notes</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderDateSortParm"]">@Html.DisplayNameFor(model => model.FirstOrDefault().LastOrderDate)</a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.Name)
+
+                        <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.StatusId)' />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        <div>@Html.DisplayFor(modelItem => item.StreetAddress)</div>
+
+                        <div>
+                            @Html.DisplayFor(modelItem => item.City)
+                            @Html.DisplayFor(modelItem => item.State.Name)
+                            @Html.DisplayFor(modelItem => item.Zipcode)
+                        </div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        <a href="@Html.DisplayFor(modelItem => item.WebsiteURL)" target="_blank">@Html.DisplayFor(modelItem => item.WebsiteURL)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContactName)
+                    </td>
                     @if (User.IsInRole("Administrator"))
                     {
-                        <a asp-action="Delete" asp-route-id="@item.StoreId">Delete</a>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SalesRep.FirstName) @Html.DisplayFor(modelItem => item.SalesRep.LastName)
+                        </td>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    @if (@Html.DisplayNameFor(model => model.FirstOrDefault().Status) == "Closed")
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateClosed)
+                        </td>
+                    }
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.StoreId">Notes</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastOrderDate)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.StoreId">Details</a> |
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.StoreId">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
 
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-page="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-page="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-page="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-page="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
 
-
+</div>

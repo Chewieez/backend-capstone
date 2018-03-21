@@ -15,10 +15,10 @@
     {
         <div class="row">
             <div class="col-sm-8">
-                <div class="mapContainer">
+                <div class="mapContainer rounded">
                     <div id="map"><input id="pac-input" class="controls form-control" type="text" placeholder="Search"></div>
 
-                    <div id="legend">
+                    <div id="legend" class="rounded">
                         <div id="legend-innerContainer">
                             <span class="bold">Legend:</span>
                         </div>
@@ -30,10 +30,7 @@
             </div>
 
             <div class="col-sm-4">
-                <h3>Notes:</h3>
-                
                     @await Component.InvokeAsync("Notes")
-               
             </div>
 
     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))

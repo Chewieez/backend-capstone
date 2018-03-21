@@ -1,6 +1,9 @@
-﻿body {
+﻿/* -- General Site-wide styles -- */
+body {
+    margin-top: 20px;
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #79e5cb;
 }
 
 .glyphicon {
@@ -11,10 +14,28 @@ h2 .glyphicon {
     font-size: 1.2em;
 }
 
+.bold {
+    font-weight: bold;
+}
+
+.rounded-border {
+    border: 1px solid rgba(128, 128, 128, 0.85);
+    border-radius: 4px;
+}
+
+.rounded {
+    border-radius: 4px;
+}
+
 .edit-btn-text {
     font-size: 1.4em;
     font-weight: 600;
 }
+
+.white-background {
+    background-color: white;
+}
+
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -37,16 +58,6 @@ h2 .glyphicon {
 /* QR code generator */
 #qrCode {
     margin: 15px;
-}
-
-.bold {
-    font-weight: bold;
-}
-
-
-.rounded-border {
-    border: 1px solid rgba(128, 128, 128, 0.85);
-    border-radius: 4px;
 }
 
 
@@ -158,6 +169,11 @@ h2 .glyphicon {
     vertical-align: middle;
 }
 
+/* -- Store List page -- */
+.store-list {
+    padding: 10px;
+}
+
 /* -- Notes View Component -- */
 .dashboard-notes {
     padding: 5px;
@@ -181,8 +197,6 @@ h2 .glyphicon {
     overflow: auto;
     width: 100%;
 }
-
-
 
 .store-note__author {
     font-weight: bold;
