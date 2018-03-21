@@ -27,12 +27,18 @@ namespace RepPortal.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            // get current user
+            var user = await GetCurrentUserAsync();
+
             // populate dropdown of users
             ViewBag.Users = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
 
             // create a new Notes view model instance
-            var NotesViewModel = new CreateNoteViewModel();
+            var NotesViewModel = new CreateNoteViewModel() {
+                // attach current user to view model
+                CurrentUser = user
+            };
 
             // get notes from the database
             NotesViewModel.UserNotes = await GetNotesAsync();

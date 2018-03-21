@@ -7,7 +7,7 @@ body {
 }
 
 .glyphicon {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
 }
 
 h2 .glyphicon {
@@ -28,7 +28,7 @@ h2 .glyphicon {
 }
 
 .edit-btn-text {
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: 600;
 }
 
@@ -175,7 +175,7 @@ h2 .glyphicon {
 }
 
 /* -- Notes View Component -- */
-.dashboard-notes {
+.notes {
     padding: 5px;
     height: 350px;
     overflow: auto;

@@ -7,6 +7,7 @@ namespace RepPortal.Models.NotesViewModels
 {
     public class CreateNoteViewModel
     {
+        public ApplicationUser CurrentUser { get; set; }
 
         public Note Note { get; set; }
 

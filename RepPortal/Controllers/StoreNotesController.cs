@@ -98,10 +98,10 @@ namespace RepPortal.Models
 
                 _context.Add(storeNoteViewModel.StoreNote);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Stores", new { id = storeNoteViewModel.StoreNote.StoreId });
             }
             ViewData["StoreId"] = new SelectList(_context.Store, "StoreId", "Name", storeNoteViewModel.StoreNote.StoreId);
-            return View(storeNoteViewModel);
+            return RedirectToAction("Details", "Stores", new { id = storeNoteViewModel.StoreNote.StoreId });
         }
 
         // GET: StoreNotes/Edit/5
@@ -193,7 +193,7 @@ namespace RepPortal.Models
             var storeNote = await _context.StoreNote.SingleOrDefaultAsync(m => m.StoreNoteId == id);
             _context.StoreNote.Remove(storeNote);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Stores", new { id = storeNote.StoreId });
         }
 
         private bool StoreNoteExists(int id)

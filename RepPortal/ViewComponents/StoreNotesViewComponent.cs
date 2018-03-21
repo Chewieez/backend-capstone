@@ -27,11 +27,14 @@ namespace RepPortal.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(int storeId)
         {
+            var user = await GetCurrentUserAsync();
+
             // create a new StoreNoteViewModel
             StoreNoteViewModel snvm = new StoreNoteViewModel()
             {
                 // attach the current store id to the view model, to use to attach to a new store note when one is created
-                CurrentStoreId = storeId
+                CurrentStoreId = storeId,
+                CurrentUser = user
             };
 
             // get StoreNotes from the database for the current store being viewed

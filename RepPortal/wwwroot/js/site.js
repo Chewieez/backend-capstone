@@ -58,7 +58,7 @@ $(document).ready(function () {
                                 // create marker for the store
                                 let marker = new google.maps.Marker({
                                     position: latLong,
-                                    animation: google.maps.Animation.DROP,
+                                    
                                     title: s.name,
                                     icon: {
                                         url: icons[s.statusId].icon,

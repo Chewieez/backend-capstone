@@ -12,10 +12,10 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ToUserId)
+            To:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ToUserId)
+            @Html.DisplayFor(model => model.ToUser.FirstName) @Html.DisplayFor(model => model.ToUser.LastName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Content)
