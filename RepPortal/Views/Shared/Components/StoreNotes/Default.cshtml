@@ -2,21 +2,23 @@
 
 <h2>Notes</h2>
 
-<div class="store-notes__list rounded-border">
+<div class="store-notes__list rounded white-background">
     @foreach (var item in Model.AllNotesForStore)
     {
-    <div class="store-note" id=@item.StoreNoteId>
-        <span class="store-note__author">@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</span>
-        @*<span class="store-note__date">@Html.DisplayFor(modelItem => item.DateCreated)</span>*@
-        <span class="store-note__date">@item.DateCreated</span>
+        <div class="store-note" id=@item.StoreNoteId>
+            <span class="store-note__author">@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</span>
+            @*<span class="store-note__date">@Html.DisplayFor(modelItem => item.DateCreated)</span>*@
+            <span class="store-note__date">@item.DateCreated</span>
 
-        <span class="store-note__edit"><a asp-controller="StoreNotes" asp-action="Edit" asp-route-id="@item.StoreNoteId">Edit</a></span> |
-        <span class="store-note_delete"><a asp-constroller="StoreNotes" asp-action="Delete" asp-route-id="@item.StoreNoteId">Delete</a></span>
+            @if (Model.CurrentUser.Id == item.User.Id)
+            {
+                <span class="store-note__edit"><a asp-controller="StoreNotes" asp-action="Edit" asp-route-id="@item.StoreNoteId">Edit</a></span><text> | </text>
+                <span class="store-note__delete"><a asp-controller="StoreNotes" asp-action="Delete" asp-route-id="@item.StoreNoteId">Delete</a></span>
+            }
 
-        <div class="store-note__content"> @Html.DisplayFor(modelItem => item.Content)</div>
-        <hr />
-
-    </div>
+            <div class="store-note__content"> @Html.DisplayFor(modelItem => item.Content)</div>
+            <hr />
+        </div>
     }
 </div>
 <div class="store-notes__create">
@@ -24,12 +26,12 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="CurrentStoreId" />
         <div class="form-group">
-            <label asp-for="StoreNote.Content" class="control-label">Add a note</label>
-            <textarea asp-for="StoreNote.Content" rows="5" class="form-control"></textarea>
+            <h4>Add A Note</h4>
+            <textarea asp-for="StoreNote.Content" rows="5" class="form-control" placeholder="Enter content here..."></textarea>
             <span asp-validation-for="StoreNote.Content" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
+            <input type="submit" value="Save Note" class="btn btn-default" />
         </div>
     </form>
 </div>

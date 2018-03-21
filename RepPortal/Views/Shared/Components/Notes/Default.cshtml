@@ -1,13 +1,20 @@
 ﻿@model RepPortal.Models.NotesViewModels.CreateNoteViewModel
 
 
-<div id="notes" class="dashboard-notes rounded-border">
+<h4>Notes:</h4>
+
+<div id="notes" class="notes rounded white-background">
     @foreach (Note n in Model.UserNotes)
     {
         <div class="note" id=@n.NoteId>
             <div class="note__author-Date">
                 <span class="note__author">@n.User.FirstName @n.User.LastName</span>
                 <span class="note__date">@n.DateCreated</span>
+                @if (Model.CurrentUser.Id == n.User.Id)
+                {
+                <span class="note__edit"><a asp-controller="Notes" asp-action="Edit" asp-route-id="@n.NoteId">Edit</a></span><text> | </text>
+                <span class="note__delete"><a asp-controller="Notes" asp-action="Delete" asp-route-id="@n.NoteId">Delete</a></span>
+                }
             </div>
             <div class="note__content"><span>@n.Content</span></div>
             <hr />
@@ -18,7 +25,7 @@
 
 <form asp-controller="notes" asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <label>Create a Note</label>
+    <h4>Add a Note</h4>
     @if (User.IsInRole("Administrator"))
     {
         <div class="form-group">
@@ -27,12 +34,12 @@
         </div>
     }
     <div class="form-group">
-        <label asp-for="@Model.Note.Content" class="control-label"></label>
+        @*<label asp-for="@Model.Note.Content" class="control-label"></label>*@
         <textarea asp-for="@Model.Note.Content" rows="5" class="form-control" placeholder="Enter content here... "></textarea>
         <span asp-validation-for="@Model.Note.Content" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <input type="submit" value="Add Note" class="btn btn-default" />
+        <input type="submit" value="Save Note" class="btn btn-default" />
     </div>
 </form>
 

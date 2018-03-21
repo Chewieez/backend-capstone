@@ -61,7 +61,7 @@ namespace RepPortal.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                stores = stores.Where(s => s.Name.Contains(searchString) || s.Status.Name.Contains(searchString));
+                stores = stores.Where(s => s.Name.ToLower().Contains(searchString.ToLower()) || s.Status.Name.ToLower().Contains(searchString.ToLower()));
             }
 
             ViewData["CurrentSort"] = sortOrder;

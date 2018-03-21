@@ -7,6 +7,8 @@ namespace RepPortal.Models.StoreNotesViewModels
 {
     public class StoreNoteViewModel
     {
+        public ApplicationUser CurrentUser { get; set; }
+
         public StoreNote StoreNote { get; set; }
 
         public int CurrentStoreId { get; set; }

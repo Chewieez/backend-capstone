@@ -144,7 +144,7 @@ namespace RepPortal.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(note);
         }
@@ -157,7 +157,7 @@ namespace RepPortal.Controllers
                 return NotFound();
             }
 
-            var note = await _context.Note
+            var note = await _context.Note.Include("ToUser")
                 .SingleOrDefaultAsync(m => m.NoteId == id);
             if (note == null)
             {
@@ -175,7 +175,7 @@ namespace RepPortal.Controllers
             var note = await _context.Note.SingleOrDefaultAsync(m => m.NoteId == id);
             _context.Note.Remove(note);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private bool NoteExists(int id)

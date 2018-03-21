@@ -58,7 +58,6 @@ $(document).ready(function () {
                                 // create marker for the store
                                 let marker = new google.maps.Marker({
                                     position: latLong,
-                                    animation: google.maps.Animation.DROP,
                                     title: s.name,
                                     icon: {
                                         url: icons[s.statusId].icon,
@@ -182,13 +181,18 @@ $(document).ready(function () {
                         }); // end of Searchbox event listener
                     }
                 }
-                // closes infowindow if user clicks anywhere on the map that is not another marker
-                storeMap.addListener('click', function () {
-                    if (prev_infowindow) {
-                        prev_infowindow.close();
-                    }
-                })
+                // only create listener on map if the map exists. It will not exist if a user (SalesRep) has no stores attached yet. 
+                if (storeMap) {
+                    // closes infowindow if user clicks anywhere on the map that is not another marker
+                    storeMap.addListener('click', function () {
+                        if (prev_infowindow) {
+                            prev_infowindow.close();
+                        }
+                    })
+
+                }
             }
+            // run createMap function to create a map with pins for all the stores
             createMap();
 
             // create the legend to explain what the different marker icon represent
