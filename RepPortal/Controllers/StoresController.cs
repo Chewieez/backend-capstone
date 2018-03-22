@@ -408,7 +408,7 @@ namespace RepPortal.Controllers
                     Lat = s.Lat,
                     Long = s.Long,
                     StreetAddress = s.StreetAddress,
-                    CityStateZip = $"{ s.City} {s.State.Name} { s.Zipcode}",
+                    CityStateZip = $"{ s.City}, {s.State.Name} { s.Zipcode}",
                     StatusId = s.StatusId
                 };
 
@@ -420,7 +420,7 @@ namespace RepPortal.Controllers
             return Ok(SmallStores);
         }
 
-
+        // Create a Flag reminder to follow up with a store
         public async Task<IActionResult> AddFlag(int? id)
         {
             var store = await _context.Store.SingleOrDefaultAsync(m => m.StoreId == id);
@@ -435,6 +435,19 @@ namespace RepPortal.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = id });
+        }
+
+        // Delete a Flag reminder
+        public async Task<IActionResult> DeleteFlag(int? id)
+        {
+            var StoreFollowUp = await _context.StoreFlag.SingleOrDefaultAsync(sf => sf.StoreFlagId == id);
+            if (StoreFollowUp != null)
+            {
+                _context.StoreFlag.Remove(StoreFollowUp);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
 

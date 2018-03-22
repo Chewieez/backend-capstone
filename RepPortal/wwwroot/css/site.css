@@ -6,6 +6,10 @@ body {
     background-color: #79e5cb;
 }
 
+.inline {
+    display: inline;
+}
+
 .glyphicon {
     font-size: 1.6rem;
 }
@@ -27,16 +31,19 @@ h2 .glyphicon {
     border-radius: 4px;
 }
 
-.edit-btn-text {
+.edit-btn-text,
+delete-btn-text {
     font-size: 1.2em;
     font-weight: 600;
 }
 
+
 .white-background {
     background-color: white;
+    opacity: .9;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4 {
     color: white;
 }
 
@@ -64,9 +71,10 @@ h1, h2, h3, h4, h5 {
 }
 
 
+
 /* Google Maps Styles */
 .mapContainer {
-    margin: 15px auto -20px;
+    margin: 15px auto -40px;
     height: 600px;
 }
 
@@ -138,6 +146,11 @@ h1, h2, h3, h4, h5 {
     border-color: #4d90fe;
 }
 
+.googlemap-search-bar {
+    opacity: .9;
+}
+
+
 #title {
     color: #fff;
     background-color: #4d90fe;
@@ -155,8 +168,8 @@ h1, h2, h3, h4, h5 {
     border-bottom-right-radius: 4px;
     font-family: Arial, sans-serif;
     background: #fff;
-    padding: 0 6px 6px;
-    margin: 0 auto 2px;
+    padding: 2px 6px 6px;
+    margin: 0 auto -20px;
 }
 
 #legend-innerContainer {
@@ -179,6 +192,12 @@ h1, h2, h3, h4, h5 {
 /* -- Store List page -- */
 .store-list {
     padding: 10px;
+}
+
+/* -- Store Details Page -- */
+
+.store-details {
+    padding: 5px;
 }
 
 /* -- Notes View Component -- */
@@ -214,6 +233,7 @@ h1, h2, h3, h4, h5 {
 }
 
 /* -- Store Flags View Component -- */
+
 .store-flags {
     height: 140px;
     overflow: auto;
@@ -221,6 +241,9 @@ h1, h2, h3, h4, h5 {
     padding: 5px;
 }
 
+.store-flags__storeName {
+    font-size: 1.3em;
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

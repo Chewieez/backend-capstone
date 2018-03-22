@@ -14,34 +14,35 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <div class="row">
-            <div class="col-sm-8">
-                <div class="mapContainer rounded">
-                    <div id="map"><input id="pac-input" class="controls form-control" type="text" placeholder="Search"></div>
 
-                    <div id="legend" class="">
-                        <div id="legend-innerContainer">
-                            <span class="bold">Legend:</span>
-                        </div>
+            <div class="mapContainer rounded col-md-8">
+                <div id="map"><input id="pac-input" class="controls form-control googlemap-search-bar" type="text" placeholder="Search"></div>
+
+                <div id="legend" class="">
+                    <div id="legend-innerContainer">
+                        <span class="bold">Legend:</span>
                     </div>
                 </div>
-                <div class="col-md-8 ">
-                    @await Component.InvokeAsync("FlagsList")
-                </div>
             </div>
-
             <div class="col-sm-4">
-                    @await Component.InvokeAsync("Notes")
+                @await Component.InvokeAsync("Notes")
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                @await Component.InvokeAsync("FlagsList")
             </div>
 
-    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
-    {
-        <div class="col-sm-8">
-            <br />
-            <a asp-controller="Stores" asp-action="Create" class="btn btn-primary">Add A Store</a>
-        </div>
-    }
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+            {
+                <div class="col-sm-8">
+                    <br />
+                    <a asp-controller="Stores" asp-action="Create" class="btn btn-primary">Add A Store</a>
+                </div>
+            }
 
-       </div>
+        </div>
     }
 </div>
 

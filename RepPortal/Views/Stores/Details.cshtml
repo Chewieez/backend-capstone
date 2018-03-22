@@ -11,33 +11,35 @@
 
 <hr />
 <div class="row">
-    <div class="col-sm-12 col-md-7 store-details">
+    <div class="col-sm-12 col-md-7">
         @if (Model.Flag1 == null)
         {
             <p>
                 <button class="btn btn-info" type="button" id="addressSearch"
                         onclick="location.href='@Url.Action("AddFlag", "Stores", new { id = Model.Store.StoreId })'">
-                    Follow Up!
+                    Follow Up?
                 </button>
                 Click to add reminder
             </p>
         }
-            <div class="store-details__Name">
-                <h3>@Html.DisplayFor(model => model.Store.Name)
+        <div class="store-details__Name">
+            <h3>
+                @Html.DisplayFor(model => model.Store.Name)
 
                 @if (Model.Flag1 != null)
                 {
-                <span class="label label-warning">Follow Up</span>
+                    <img src="~/images/flag.svg" alt="Follow Up" class="img-responsive inline" width="25" />
                 }
-                </h3>
-            </div>
-        <dl class="dl-horizontal">
+            </h3>
+        </div>
+
+        <dl class="dl-horizontal white-background rounded store-details">
             <dt>
                 @Html.DisplayNameFor(model => model.Store.Status)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Store.Status.Name)
                 <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", Model.Store.StatusId)' />
+                @Html.DisplayFor(model => model.Store.Status.Name)
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Store.StreetAddress)
@@ -133,13 +135,21 @@
                 @Html.DisplayFor(model => model.Store.LastOrderPaidDate)
             </dd>
         </dl>
+
+        @if (User.IsInRole("Administrator"))
+        {
         <div class="col-md-7">
 
             <a asp-action="Edit" asp-route-id="@Model.Store.StoreId" class="btn btn-default">
                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 <span class="edit-btn-text">Edit</span>
             </a>
+            <a asp-action="Delete" asp-route-id="@Model.Store.StoreId" class="btn btn-warning">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                <span class="delete-btn-text">Delete</span>
+            </a>
         </div>
+        }
 
 
     </div>
