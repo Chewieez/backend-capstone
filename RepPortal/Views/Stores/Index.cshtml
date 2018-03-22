@@ -60,8 +60,8 @@
                 <span class="form-group col-sm-4">
                     <input type="text" class="form-control" id="SearchString "name="SearchString" value="@ViewData["currentFilter"]" />
                 </span>
-                <input type="submit" value="Search" class="btn btn-default" /> |
-                <a asp-action="Index">Back to Full List</a>
+                <input type="submit" value="Search" class="btn btn-info" /> 
+                <a asp-action="Index" class="btn btn-default">Clear Search</a>
 
             </div>
 
@@ -114,9 +114,8 @@
 
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status.Name)
-
                         <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.StatusId)' />
+                        @Html.DisplayFor(modelItem => item.Status.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
@@ -158,10 +157,10 @@
                         @Html.DisplayFor(modelItem => item.LastOrderDate)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.StoreId">Details</a> |
+                        <a asp-action="Details" asp-route-id="@item.StoreId">Details</a>
                         @if (User.IsInRole("Administrator"))
                         {
+                           <text> | </text> <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a><text> | </text>
                             <a asp-action="Delete" asp-route-id="@item.StoreId">Delete</a>
                         }
                     </td>

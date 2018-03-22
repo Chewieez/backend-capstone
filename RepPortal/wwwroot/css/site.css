@@ -36,6 +36,9 @@ h2 .glyphicon {
     background-color: white;
 }
 
+h1, h2, h3, h4, h5 {
+    color: white;
+}
 
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -70,6 +73,8 @@ h2 .glyphicon {
 #map {
     height: 80%;
     width: 100%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 #description {
@@ -146,14 +151,16 @@ h2 .glyphicon {
 }
 
 #legend {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
     font-family: Arial, sans-serif;
     background: #fff;
-    padding: 6px;
-    margin: 2px auto;
+    padding: 0 6px 6px;
+    margin: 0 auto 2px;
 }
 
 #legend-innerContainer {
-    margin: 2px auto;
+    margin: 0px auto;
 }
 
 #legend-icons {
