@@ -106,12 +106,31 @@ namespace RepPortal.Controllers
                 return NotFound();
             }
 
-            var note = await _context.Note.SingleOrDefaultAsync(m => m.NoteId == id);
+            var note = await _context.Note.Include("ToUser").SingleOrDefaultAsync(m => m.NoteId == id);
+            // create a new view model and attach the retrieved note
+            var cnvm = new CreateNoteViewModel()
+            {
+                Note = note
+            };
+
+            if (note.ToUser != null)
+            {
+                cnvm.ToUserId = note.ToUser.Id;
+            }
+            else
+            {
+                cnvm.ToUserId = null;
+            }
+
+            // populate dropdown of users
+            ViewBag.Users = _context.Users.OrderBy(u => u.FirstName)
+                .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
+
             if (note == null)
             {
                 return NotFound();
             }
-            return View(note);
+            return View(cnvm);
         }
 
         // POST: Notes/Edit/5
@@ -125,6 +144,9 @@ namespace RepPortal.Controllers
             {
                 return NotFound();
             }
+
+            // remove user from model state
+            ModelState.Remove("store.User");
 
             if (ModelState.IsValid)
             {

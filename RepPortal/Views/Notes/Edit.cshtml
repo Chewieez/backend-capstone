@@ -1,4 +1,4 @@
-﻿@model RepPortal.Models.Note
+﻿@model RepPortal.Models.NotesViewModels.CreateNoteViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,22 +12,23 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="NoteId" />
+            <input type="hidden" asp-for="Note.NoteId" />
+
+            @*
+        <input asp-for="ToUser" class="form-control" />
+        <span asp-validation-for="ToUser" class="text-danger"></span>*@
+            <label asp-for="ToUserId" class="control-label"></label>
+            @Html.DropDownListFor(model => model.ToUserId,
+                            ViewBag.Users as IEnumerable<SelectListItem>, "Select Recipient", new { @class = "form-control" })
+
             <div class="form-group">
-                <label asp-for="ToUser" class="control-label"></label>
-                <input asp-for="ToUser" class="form-control" />
-                <span asp-validation-for="ToUser" class="text-danger"></span>
+                <label asp-for="Note.Content" class="control-label"></label>
+                <input asp-for="Note.Content" class="form-control" />
+                <span asp-validation-for="Note.Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
+
+            <input type="hidden" asp-for="Note.DateCreated" class="form-control" />
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>

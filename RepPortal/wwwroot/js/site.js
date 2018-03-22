@@ -211,7 +211,7 @@ $(document).ready(function () {
                 let icon = type.icon;
                 let div = document.createElement('div');
                 div.id = "legend-icons";
-                div.innerHTML = '<img src="' + icon + '"> ' + name;
+                div.innerHTML = '<img src="' + icon + '" text-> ' + name;
                 legendInnerContainer.appendChild(div);
             }
 
