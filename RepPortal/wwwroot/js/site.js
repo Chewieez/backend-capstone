@@ -1,7 +1,9 @@
 ﻿
 $(document).ready(function () {
+    // initilize tooltips
+    $('[data-toggle="tooltip"]').tooltip(); 
 
-
+    // check if the user is on the homepage/dashboard and if they are, run code to create a Google Map view
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
 
         $.ajax({

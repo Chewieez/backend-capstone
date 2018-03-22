@@ -68,7 +68,7 @@
         </div>
     </form>
 
-    <table class="table">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>
@@ -114,8 +114,8 @@
 
                 <tr>
                     <td>
-                        <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.StatusId)' />
-                        @Html.DisplayFor(modelItem => item.Status.Name)
+                        <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", item.StatusId)' data-toggle="tooltip" title="@item.Status.Name" data-placement="left" />
+                       
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
@@ -150,9 +150,10 @@
                             @Html.DisplayFor(modelItem => item.DateClosed)
                         </td>
                     }
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.StoreId">Notes</a>
-                    </td>
+                        <td>
+                            
+                            <a asp-action="Details" asp-route-id="@item.StoreId" data-toggle="tooltip" title="See Notes"><img src="~/images/creative-process.svg" alt="See Store Notes" class="img-responsive inline" width="25" /></a>
+                        </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.LastOrderDate)
                     </td>
