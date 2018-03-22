@@ -409,7 +409,8 @@ namespace RepPortal.Controllers
                     Long = s.Long,
                     StreetAddress = s.StreetAddress,
                     CityStateZip = $"{ s.City}, {s.State.Name} { s.Zipcode}",
-                    StatusId = s.StatusId
+                    StatusId = s.StatusId,
+                    LastOrderDate = s.LastOrderDate
                 };
 
                 SmallStores.Add(SmallStore);

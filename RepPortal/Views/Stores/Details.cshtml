@@ -5,7 +5,7 @@
 }
 
 <h2>
-    <a asp-action="Index"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
+    <a asp-action="Index"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true" data-toggle="tooltip" title="Back to Stores list"></span></a>
     Store Details
 </h2>
 
@@ -16,10 +16,10 @@
         {
             <p>
                 <button class="btn btn-info" type="button" id="addressSearch"
-                        onclick="location.href='@Url.Action("AddFlag", "Stores", new { id = Model.Store.StoreId })'">
+                        onclick="location.href='@Url.Action("AddFlag", "Stores", new { id = Model.Store.StoreId })'" data-toggle="tooltip" title="Click to add reminder">
                     Follow Up?
                 </button>
-                Click to add reminder
+                
             </p>
         }
         <div class="store-details__Name">
@@ -38,8 +38,7 @@
                 @Html.DisplayNameFor(model => model.Store.Status)
             </dt>
             <dd>
-                <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", Model.Store.StatusId)' />
-                @Html.DisplayFor(model => model.Store.Status.Name)
+                <img src='@string.Format("/images/map-icons/Shopping_Bag_{0}.svg", Model.Store.StatusId)' data-toggle="tooltip" title="@Model.Store.Status.Name" />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Store.StreetAddress)

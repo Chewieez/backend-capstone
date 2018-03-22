@@ -1,7 +1,10 @@
 ﻿
 $(document).ready(function () {
     // initilize tooltips
-    $('[data-toggle="tooltip"]').tooltip(); 
+    $('[data-toggle="tooltip"]').tooltip({
+        delay: 400,
+        animation: true
+    }); 
 
     // check if the user is on the homepage/dashboard and if they are, run code to create a Google Map view
     if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
@@ -52,7 +55,7 @@ $(document).ready(function () {
                                             <h5>${s.name}</h5>
                                             <div>${s.streetAddress}</div>
                                             <div>${s.cityStateZip}</div>
-                                        
+                                            <div>Last Order: ${new Date(s.lastOrderDate).toLocaleDateString()}</div>
                                             <a href='./Stores/Details/${s.storeId}'>Details</a>                                     
                                             </div>`
                                 });
