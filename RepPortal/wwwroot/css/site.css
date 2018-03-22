@@ -54,6 +54,12 @@ h1, h2, h3, h4 {
     padding-right: 5px;
 }
 
+/* Class to center a Bootstrap column and remove float */
+.col-centered {
+    float: none;
+    margin: 0 auto;
+}
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
@@ -69,7 +75,6 @@ h1, h2, h3, h4 {
 #qrCode {
     margin: 15px;
 }
-
 
 
 /* Google Maps Styles */
@@ -244,6 +249,14 @@ h1, h2, h3, h4 {
 .store-flags__storeName {
     font-size: 1.3em;
 }
+
+/* -- About page styles -- */
+
+.about-content {
+    
+    
+}
+
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
