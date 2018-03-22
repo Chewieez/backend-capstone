@@ -66,11 +66,9 @@
                 <input asp-for="@Model.Store.DateAdded" class="form-control" />
                 <span asp-validation-for="@Model.Store.DateAdded" class="text-danger"></span>
             </div>
-            @* Remove this dropdown for Status at some later time *@
-            <div class="form-group">
-                <label asp-for="@Model.Store.StatusId" class="control-label"></label>
-                <select asp-for="@Model.Store.StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
-            </div>
+            @* This field is hidden because the website will dynamically set the Store Status based on the store's last order *@
+            <input type="hidden" asp-for="@Model.Store.StatusId" />
+           
             <div class="form-group">
                 <label asp-for="@Model.Store.DateClosed" class="control-label"></label>
                 <input asp-for="@Model.Store.DateClosed" class="form-control" />

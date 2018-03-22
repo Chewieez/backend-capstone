@@ -243,7 +243,7 @@ h1, h2, h3, h4 {
     height: 140px;
     overflow: auto;
     width: 100%;
-    padding: 5px;
+    padding: 5px;   
 }
 
 .store-flags__storeName {
@@ -252,10 +252,6 @@ h1, h2, h3, h4 {
 
 /* -- About page styles -- */
 
-.about-content {
-    
-    
-}
 
 
 /* Hide/rearrange for smaller screens */

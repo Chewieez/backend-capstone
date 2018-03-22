@@ -149,6 +149,9 @@ namespace RepPortal.Controllers
         public async Task<IActionResult> Create()
         {
             CreateStoreViewModel createStoreViewModel = new CreateStoreViewModel();
+            createStoreViewModel.Store = new Store();
+            // set the store status to 1 for new stores. The input field is hidden for this. Site will control this status based on the store's Last Order. 
+            createStoreViewModel.Store.StatusId = 1;
 
             ViewBag.SalesReps = _context.Users.OrderBy(u => u.FirstName)
                 .Select(u => new SelectListItem() { Text = $"{ u.FirstName} { u.LastName}", Value = u.Id }).ToList();
@@ -245,6 +248,7 @@ namespace RepPortal.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CreateStoreViewModel storeModel)
         {
