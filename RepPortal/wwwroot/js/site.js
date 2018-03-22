@@ -56,7 +56,7 @@ $(document).ready(function () {
                                             <div>${s.streetAddress}</div>
                                             <div>${s.cityStateZip}</div>
                                             <div>Last Order: ${new Date(s.lastOrderDate).toLocaleDateString()}</div>
-                                            <a href='./Stores/Details/${s.storeId}'>Details</a>                                     
+                                            <a href='./Stores/Details/${s.storeId}'>Details</a>                                                                         
                                             </div>`
                                 });
 
@@ -150,9 +150,12 @@ $(document).ready(function () {
                                     pixelOffset: new google.maps.Size(-22, 0),
                                     content: `<div>
                                     <h5>${place.name}</h5>
-                                    <div>${place.formatted_address}</div>                            
+                                    <div>${place.formatted_phone_number}</div>
+                                    <div>${place.formatted_address}</div> 
+                                    <a href='${place.url}' target="_blank">View On Google Maps</a> 
                                   </div>`
                                 });
+                                
 
                                 // Create a marker for each place.
                                 let newMarker = new google.maps.Marker({
