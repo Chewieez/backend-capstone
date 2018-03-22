@@ -1,7 +1,7 @@
 # Freshie & Zero Sales Rep Portal
 
 ## Summary and Features
-This application will serve as a way for Sales Reps and business owners (Administrators) to visualize their current Whole Sale accounts and quickly see the status of each store, each store's location on a map and when each store last ordered. 
+This application will serve as a way for Sales Reps(Users) and business owners (Administrators) to visualize their current Wholesale accounts(Stores) and quickly see the status of each store, each store's location on a map and when each store placed an order last. 
 
 * Users/Sales Reps can see a display of the stores that they service that sell Freshie and Zero jewelry on a Google Map. 
   - The color of the store pin indicates the status of the store. 
