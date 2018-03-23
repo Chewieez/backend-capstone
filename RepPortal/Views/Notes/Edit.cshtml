@@ -17,13 +17,13 @@
             @*
         <input asp-for="ToUser" class="form-control" />
         <span asp-validation-for="ToUser" class="text-danger"></span>*@
-            <label asp-for="ToUserId" class="control-label"></label>
+            <label class="control-label">To</label>
             @Html.DropDownListFor(model => model.ToUserId,
                             ViewBag.Users as IEnumerable<SelectListItem>, "Select Recipient", new { @class = "form-control" })
 
             <div class="form-group">
                 <label asp-for="Note.Content" class="control-label"></label>
-                <input asp-for="Note.Content" class="form-control" />
+                <textarea asp-for="Note.Content" rows="5" class="form-control" placeholder="Enter content here... "></textarea>
                 <span asp-validation-for="Note.Content" class="text-danger"></span>
             </div>
 

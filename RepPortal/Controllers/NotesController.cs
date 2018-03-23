@@ -150,6 +150,9 @@ namespace RepPortal.Controllers
 
             if (ModelState.IsValid)
             {
+                // attach the user object for the user that was selected as the recipient 
+                noteViewModel.Note.ToUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == noteViewModel.ToUserId);
+
                 try
                 {
                     _context.Update(noteViewModel.Note);
