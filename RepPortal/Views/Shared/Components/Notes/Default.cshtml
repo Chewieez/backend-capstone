@@ -12,15 +12,15 @@
                 <span class="note__date">@n.DateCreated</span>
                 @if (Model.CurrentUser.Id == n.User.Id)
                 {
-                <span class="pull-right">
-                    <a asp-controller="Notes" asp-action="Edit" asp-route-id="@n.NoteId" data-toggle="tooltip" title="Edit"><span class="note__edit glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                    <a asp-controller="Notes" asp-action="Delete" asp-route-id="@n.NoteId"  data-toggle="tooltip" title="Delete"><span class="note__delete glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                </span>
+                    <span class="pull-right">
+                        <a asp-controller="Notes" asp-action="Edit" asp-route-id="@n.NoteId" data-toggle="tooltip" title="Edit"><span class="note__edit glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a asp-controller="Notes" asp-action="Delete" asp-route-id="@n.NoteId" data-toggle="tooltip" title="Delete"><span class="note__delete glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                    </span>
                 }
             </div>
-            @if (User.IsInRole("Administrator"))
+            @if (User.IsInRole("Administrator") && n.ToUser != null)
             {
-            <div class="note__recepient"><span class="bold">To:</span> @n.ToUser.FirstName  @n.ToUser.LastName</div>
+                <div class="note__recepient"><span class="bold">To:</span> @n.ToUser.FirstName  @n.ToUser.LastName</div>
             }
             <div class="note__content"><span>@n.Content</span></div>
             <hr />
@@ -36,11 +36,11 @@
     {
         <div class="form-group">
             @Html.DropDownListFor(model => model.ToUserId,
-                                      ViewBag.Users as IEnumerable<SelectListItem>, "Select Recipient", new { @class = "form-control" })
+                                           ViewBag.Users as IEnumerable<SelectListItem>, "Select Recipient", new { @class = "form-control" })
         </div>
     }
     <div class="form-group">
-        
+
         <textarea asp-for="@Model.Note.Content" rows="5" class="form-control" placeholder="Enter content here... "></textarea>
         <span asp-validation-for="@Model.Note.Content" class="text-danger"></span>
     </div>
