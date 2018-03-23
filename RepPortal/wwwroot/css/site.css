@@ -6,7 +6,6 @@ body {
     background-color: #79e5cb;
 }
 
-
 .inline {
     display: inline;
 }
@@ -51,9 +50,11 @@ h1, h2, h3, h4 {
     color: white;
 }
 
-    .back-arrow:hover {
-        color: #75caeb;
-    }
+.back-arrow:hover {
+    color: #75caeb;
+}
+
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -83,6 +84,15 @@ h1, h2, h3, h4 {
     margin: 15px;
 }
 
+/* -- Navbar Styles -- */
+.navbar {
+    border: none;
+    font-size: 1.3em;
+}
+
+.navbar-inverse .btn-link {
+   font-size: .8em;
+}
 
 /* Google Maps Styles */
 .mapContainer {
