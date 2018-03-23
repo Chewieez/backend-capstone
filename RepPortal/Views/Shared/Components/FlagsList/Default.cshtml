@@ -1,24 +1,28 @@
-﻿@model IEnumerable<RepPortal.Models.StoreViewModels.StoreFlagViewModel>
+﻿@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<RepPortal.Models.StoreViewModels.StoreFlagViewModel>
 
 <h4>Follow up Reminders:</h4>
 
 <div class="store-flags rounded white-background">
     @foreach (var sfvm in Model)
     {
-        @if (sfvm.Flag != null)
+        // get current user to only show Flag for stores that have the current user as a Sales Rep 
+        var userId = UserManager.GetUserId(User);
+    
+        @if (sfvm.Flag != null && userId == sfvm.Store.SalesRep.Id)
         {
-    <div class="store-flag">
-        <span class="store-flag__flag">
-            <img src="~/images/flag.svg" alt="Follow Up" class="img-responsive inline" width="25" />         
-        </span> - <span class="store-flags__storeName"><a asp-controller="Stores" asp-action="Details" asp-route-id="@sfvm.Store.StoreId"> @sfvm.Store.Name</a></span>
-        @if (User.IsInRole("Administrator"))
-    {
-        <span class="store-flag__salesRep">- Rep: @sfvm.Store.SalesRep.FirstName @sfvm.Store.SalesRep.LastName</span>
-}
-        <a asp-controller="Stores" asp-action="DeleteFlag" asp-route-id="@sfvm.Flag.FlagId">
-            <span class="store-flag__delete glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </a>
-    </div>
+            <div class="store-flag">
+                <span class="store-flag__flag">
+                    <img src="~/images/flag.svg" alt="Follow Up" class="img-responsive inline" width="25" />
+                </span> - <span class="store-flags__storeName"><a asp-controller="Stores" asp-action="Details" asp-route-id="@sfvm.Store.StoreId"> @sfvm.Store.Name</a></span>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <span class="store-flag__salesRep">- Rep: @sfvm.Store.SalesRep.FirstName @sfvm.Store.SalesRep.LastName</span>
+                }
+                <a asp-controller="Stores" asp-action="DeleteFlag" asp-route-id="@sfvm.Flag.FlagId">
+                    <span class="store-flag__delete glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+            </div>
 
         }
     }
