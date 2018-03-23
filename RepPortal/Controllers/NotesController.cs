@@ -138,26 +138,26 @@ namespace RepPortal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NoteId,ToUserId,Content,DateCreated")] Note note)
+        public async Task<IActionResult> Edit(int id, CreateNoteViewModel noteViewModel)
         {
-            if (id != note.NoteId)
+            if (id != noteViewModel.Note.NoteId)
             {
                 return NotFound();
             }
 
             // remove user from model state
-            ModelState.Remove("store.User");
+            ModelState.Remove("note.User");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(note);
+                    _context.Update(noteViewModel.Note);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NoteExists(note.NoteId))
+                    if (!NoteExists(noteViewModel.Note.NoteId))
                     {
                         return NotFound();
                     }
@@ -168,7 +168,7 @@ namespace RepPortal.Controllers
                 }
                 return RedirectToAction("Index", "Home");
             }
-            return View(note);
+            return View(noteViewModel.Note);
         }
 
         // GET: Notes/Delete/5
