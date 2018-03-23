@@ -9,7 +9,7 @@
         // get current user to only show Flag for stores that have the current user as a Sales Rep 
         var userId = UserManager.GetUserId(User);
     
-        @if (sfvm.Flag != null && userId == sfvm.Store.SalesRep.Id)
+        @if (sfvm.Flag != null && (userId == sfvm.Store.SalesRep.Id || User.IsInRole("Administrator")))
         {
             <div class="store-flag">
                 <span class="store-flag__flag">
