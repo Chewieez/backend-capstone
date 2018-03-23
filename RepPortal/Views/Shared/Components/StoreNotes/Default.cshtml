@@ -10,10 +10,12 @@
             @*<span class="store-note__date">@Html.DisplayFor(modelItem => item.DateCreated)</span>*@
             <span class="store-note__date">@item.DateCreated</span>
 
-            @if (Model.CurrentUser.Id == item.User.Id)
+            @if (Model.CurrentUser.Id == item.User.Id || User.IsInRole("Administrator"))
             {
-                <span class="store-note__edit"><a asp-controller="StoreNotes" asp-action="Edit" asp-route-id="@item.StoreNoteId">Edit</a></span><text> | </text>
-                <span class="store-note__delete"><a asp-controller="StoreNotes" asp-action="Delete" asp-route-id="@item.StoreNoteId">Delete</a></span>
+                <span class="pull-right">
+                    <span class="store-note__edit"><a asp-controller="StoreNotes" asp-action="Edit" asp-route-id="@item.StoreNoteId">Edit</a></span><text> | </text>
+                    <span class="store-note__delete"><a asp-controller="StoreNotes" asp-action="Delete" asp-route-id="@item.StoreNoteId">Delete</a></span>
+                </span>
             }
 
             <div class="store-note__content"> @Html.DisplayFor(modelItem => item.Content)</div>

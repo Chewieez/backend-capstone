@@ -38,7 +38,6 @@ delete-btn-text {
     font-weight: 600;
 }
 
-
 .white-background {
     background-color: white;
     opacity: .9;
@@ -48,6 +47,13 @@ h1, h2, h3, h4 {
     color: white;
 }
 
+.back-arrow {
+    color: white;
+}
+
+    .back-arrow:hover {
+        color: #75caeb;
+    }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {

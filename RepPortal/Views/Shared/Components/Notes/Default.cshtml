@@ -12,10 +12,16 @@
                 <span class="note__date">@n.DateCreated</span>
                 @if (Model.CurrentUser.Id == n.User.Id)
                 {
-                <span class="note__edit"><a asp-controller="Notes" asp-action="Edit" asp-route-id="@n.NoteId">Edit</a></span><text> | </text>
-                <span class="note__delete"><a asp-controller="Notes" asp-action="Delete" asp-route-id="@n.NoteId">Delete</a></span>
+                <span class="pull-right">
+                    <span class="note__edit"><a asp-controller="Notes" asp-action="Edit" asp-route-id="@n.NoteId">Edit</a></span><text> | </text>
+                    <span class="note__delete"><a asp-controller="Notes" asp-action="Delete" asp-route-id="@n.NoteId">Delete</a></span>
+                </span>
                 }
             </div>
+            @if (User.IsInRole("Administrator"))
+            {
+            <div class="note__recepient"><span class="bold">To:</span> @n.ToUser.FirstName  @n.ToUser.LastName</div>
+            }
             <div class="note__content"><span>@n.Content</span></div>
             <hr />
         </div>
