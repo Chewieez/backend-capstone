@@ -91,7 +91,8 @@ h1, h2, h3, h4 {
 }
 
 .navbar-inverse .btn-link {
-   font-size: .8em;
+    padding-top: .2em;
+   font-size: 1em;
 }
 
 /* Google Maps Styles */
@@ -234,7 +235,12 @@ h1, h2, h3, h4 {
     font-weight: bold;
 }
 
-.dashboard-notes hr {
+.note__edit,
+.note__delete {
+    padding: 2px 4px;
+}
+
+.notes hr {
     margin: 4px 0;
 }
 
@@ -250,17 +256,22 @@ h1, h2, h3, h4 {
     font-weight: bold;
 }
 
-.storeNotes__list hr {
+.store-notes__list hr {
     margin: 4px 0;
 }
 
-/* -- Store Flags View Component -- */
+.store-note__edit,
+.store-note__delete {
+    padding: 2px 4px;
+}
 
+
+/* -- Store Flags View Component -- */
 .store-flags {
     height: 140px;
     overflow: auto;
     width: 100%;
-    padding: 5px;   
+    padding: 5px;
 }
 
 .store-flags__storeName {

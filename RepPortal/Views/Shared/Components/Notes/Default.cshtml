@@ -13,8 +13,8 @@
                 @if (Model.CurrentUser.Id == n.User.Id)
                 {
                 <span class="pull-right">
-                    <span class="note__edit"><a asp-controller="Notes" asp-action="Edit" asp-route-id="@n.NoteId">Edit</a></span><text> | </text>
-                    <span class="note__delete"><a asp-controller="Notes" asp-action="Delete" asp-route-id="@n.NoteId">Delete</a></span>
+                    <a asp-controller="Notes" asp-action="Edit" asp-route-id="@n.NoteId" data-toggle="tooltip" title="Edit"><span class="note__edit glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <a asp-controller="Notes" asp-action="Delete" asp-route-id="@n.NoteId"  data-toggle="tooltip" title="Delete"><span class="note__delete glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </span>
                 }
             </div>

@@ -7,14 +7,14 @@
     {
         <div class="store-note" id=@item.StoreNoteId>
             <span class="store-note__author">@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</span>
-            @*<span class="store-note__date">@Html.DisplayFor(modelItem => item.DateCreated)</span>*@
+           
             <span class="store-note__date">@item.DateCreated</span>
 
             @if (Model.CurrentUser.Id == item.User.Id || User.IsInRole("Administrator"))
             {
                 <span class="pull-right">
-                    <span class="store-note__edit"><a asp-controller="StoreNotes" asp-action="Edit" asp-route-id="@item.StoreNoteId">Edit</a></span><text> | </text>
-                    <span class="store-note__delete"><a asp-controller="StoreNotes" asp-action="Delete" asp-route-id="@item.StoreNoteId">Delete</a></span>
+                    <a asp-controller="StoreNotes" asp-action="Edit" asp-route-id="@item.StoreNoteId" data-toggle="tooltip" title="Edit"><span class="store-note__edit glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <a asp-controller="StoreNotes" asp-action="Delete" asp-route-id="@item.StoreNoteId" data-toggle="tooltip" title="Delete"><span class="store-note__delete glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </span>
             }
 
