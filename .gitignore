@@ -8,6 +8,9 @@ RepPortal.db
 RepPortal2.db
 RepPortal3.db
 
+.vscode
+.DS_Store
+
 # User-specific files
 *.suo
 *.user
