@@ -10,8 +10,7 @@ namespace RepPortal.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
@@ -32,23 +31,24 @@ namespace RepPortal.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
+            // This was for SQLite and not SQL Server
             // Have database make the DateCreated for each new db entry automactically when a new entry is created. 
 
-            builder.Entity<Store>()
-                .Property(s => s.DateCreated)
-                .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            // builder.Entity<Store>()
+            //     .Property(s => s.DateCreated)
+            //     .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
-            builder.Entity<StoreNote>()
-               .Property(sn => sn.DateCreated)
-               .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            // builder.Entity<StoreNote>()
+            //    .Property(sn => sn.DateCreated)
+            //    .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
-            builder.Entity<StoreFlag>()
-               .Property(sf => sf.DateCreated)
-               .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            // builder.Entity<StoreFlag>()
+            //    .Property(sf => sf.DateCreated)
+            //    .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
-            builder.Entity<Note>()
-               .Property(n => n.DateCreated)
-               .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            // builder.Entity<Note>()
+            //    .Property(n => n.DateCreated)
+            //    .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
 
         }

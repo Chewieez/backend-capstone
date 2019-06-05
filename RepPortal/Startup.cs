@@ -18,9 +18,18 @@ namespace RepPortal
 {
     public class Startup
     {
+        // protected IHostingEnvironment _HostingEnvironment;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
+            //_HostingEnvironment = hostingEnvironment;
+
+            // var builder = new ConfigurationBuilder()
+            //     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            //     .AddJsonFile($"appsettings.{_HostingEnvironment.EnvironmentName}.json", optional: true)
+            //     .AddEnvironmentVariables();
+            // Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -29,7 +38,7 @@ namespace RepPortal
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -52,8 +61,10 @@ namespace RepPortal
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context)
         {
+            context.Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

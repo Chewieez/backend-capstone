@@ -190,6 +190,9 @@ namespace RepPortal.Controllers
                 // Add current user to store listing
                 storeModel.Store.User = user;
 
+                // Add a creation date
+                storeModel.Store.DateCreated = 12/12/2002 00:00:00;
+
                 // save store to context
                 _context.Add(storeModel.Store);
                 // save context file to database
