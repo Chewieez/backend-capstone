@@ -191,7 +191,7 @@ namespace RepPortal.Controllers
                 storeModel.Store.User = user;
 
                 // Add a creation date
-                storeModel.Store.DateCreated = 12/12/2002 00:00:00;
+                storeModel.Store.DateCreated = DateTime.Now;
 
                 // save store to context
                 _context.Add(storeModel.Store);

@@ -34,21 +34,21 @@ namespace RepPortal.Data
             // This was for SQLite and not SQL Server
             // Have database make the DateCreated for each new db entry automactically when a new entry is created. 
 
-            // builder.Entity<Store>()
-            //     .Property(s => s.DateCreated)
-            //     .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            builder.Entity<Store>()
+                .Property(s => s.DateCreated)
+                .HasDefaultValueSql("getdate()");
 
-            // builder.Entity<StoreNote>()
-            //    .Property(sn => sn.DateCreated)
-            //    .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            builder.Entity<StoreNote>()
+               .Property(sn => sn.DateCreated)
+               .HasDefaultValueSql("getdate()");
 
-            // builder.Entity<StoreFlag>()
-            //    .Property(sf => sf.DateCreated)
-            //    .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            builder.Entity<StoreFlag>()
+               .Property(sf => sf.DateCreated)
+               .HasDefaultValueSql("getdate()");
 
-            // builder.Entity<Note>()
-            //    .Property(n => n.DateCreated)
-            //    .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
+            builder.Entity<Note>()
+               .Property(n => n.DateCreated)
+               .HasDefaultValueSql("getdate()");
 
 
         }
